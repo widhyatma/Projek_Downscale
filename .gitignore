@@ -1,6 +1,25 @@
+# Datasets & Cloud Storage
 /CHIRPS_2022-2025
 /CHIRPS_2025
 /CHIRPS_2026
 /data
-/analysis_rainfall/output
 staklimjerukagung-b852a12a367e.json
+
+# Plot & Visual Outputs
+/analisis_cuaca_spasial/
+/analysis_rainfall/output
+/chirps_bulanan/
+/NDVI_Bulanan/
+/output_spasial_indonesia/
+/output_kebumen_16_9/
+/output_kebumen_1_1/
+/periode_tertentu_plots/
+/plots_*/
+
+# Temporary & Cache
+.backup_notebooks/
+__pycache__/
+*.tmp.png
+*.png
+*.jpg
+*.jpeg

@@ -49,3 +49,24 @@
     - **Daily Temperature Anomaly Heatmaps:** 31 days x 12 months matrix against DOY climatological baseline.
     - **Spatial Multi-Variable Maps:** 4-panel grid with vector administrative boundaries (`33.05_kecamatan.geojson`).
   - Automatically organize output figures into hierarchical subfolders per year (e.g. `plots_hyetograph_bulanan/<tahun>/`) with 300 DPI print quality.
+
+## 7. Memory-Safe Multi-Year Batch Processing Architecture (Anti-OOM)
+- When processing multi-year NetCDF collections (hundreds of monthly files):
+  - Do NOT open all multi-decade files simultaneously with un-chunked `open_mfdataset`.
+  - Process data year-by-year (12 files/year), extract areal series, resample daily/monthly, and close datasets immediately (`ds.close()`).
+  - Always call `plt.close('all')` and `gc.collect()` at the end of each batch loop iteration to eliminate memory leaks and avoid Kaggle `DeadKernelError`.
+  - For spatial maps, load individual monthly NetCDF files directly on-the-fly (RAM < 10 MB per plot).
+
+## 8. Social Media & Publication Aspect Ratio Standard (16:9 Standard)
+- All meteorological and spatial visualization figures must be formatted with **16:9 Aspect Ratio** (`figsize=(16, 9)`, 300 DPI):
+  - Ensures 100% upload compliance on Instagram (within 0.8 to 1.91 ratio limit), YouTube, Twitter/X, and Web presentations.
+  - Apply `tight_layout()` and safe padding so titles, rotated annotations, and multi-axis legends never overlap.
+
+## 9. Standardized Meteorological Plotting Suites (Aligned with Open Meteo Analytic)
+- **Hyetograph Bulanan (2-Panel Twinx):**
+  - Top: Daily rainfall bars (`dodgerblue` / `navy`), BMKG thresholds (20mm gold, 50mm orange, 100mm red), Cumulative line (`darkgreen` ●) with monthly total badge.
+  - Bottom: 3-line temperature profile (Max `darkorange` ▲, Avg `limegreen` ■, Min `royalblue` ▼) with exact annotations and shaded temperature envelope.
+- **Periode Tertentu (1-Panel Twinx):**
+  - Single-panel dual-axis correlation: Left Y Suhu (`darkorange` ●) vs Right Y Curah Hujan (`dodgerblue` bars).
+  - Saved to `periode_tertentu_plots/<tahun>/Periode_<target_waktu>.png`.
+
