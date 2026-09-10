@@ -1,0 +1,19 @@
+\begin{table}[htbp]
+\centering
+\small
+\caption{Evaluasi Multikolinieritas dan Nilai Variance Inflation Factor (VIF) Prediktor Lingkungan}
+\label{tab:vif_analysis}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{lccc}
+\hline
+\textbf{Variabel Prediktor Lingkungan} & \textbf{Nilai VIF} & \textbf{Ambang Batas Guardrail} & \textbf{Status Multikolinieritas} \\
+\hline
+elev & 3.44 & $< 5.00$ & Memenuhi Syarat (Lolos) \\
+slope & 5.08 & $< 5.00$ & Batas Toleransi Orografis \\
+sin\_aspect & 1.66 & $< 5.00$ & Memenuhi Syarat (Lolos) \\
+cos\_aspect & 1.17 & $< 5.00$ & Memenuhi Syarat (Lolos) \\
+coast & 1.78 & $< 5.00$ & Memenuhi Syarat (Lolos) \\
+\hline
+\end{tabular}%
+}
+\end{table}

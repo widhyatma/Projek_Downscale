@@ -70,3 +70,99 @@
   - Single-panel dual-axis correlation: Left Y Suhu (`darkorange` ●) vs Right Y Curah Hujan (`dodgerblue` bars).
   - Saved to `periode_tertentu_plots/<tahun>/Periode_<target_waktu>.png`.
 
+## 10. Workspace Scratch Code Management
+- **Wajib menyimpan seluruh skrip sementara/scratch di folder `scratch/`**:
+  - Path folder: `d:\Github\Projek_Downscale\scratch/`
+  - Dilarang membuat skrip verifikasi, tes sementara, atau kode inspeksi langsung di root direktori repositori.
+  - Setiap eksekusi skrip scratch harus memanggil file dari direktori `scratch/<nama_script>.py`.
+  - Bersihkan atau kelola file dalam `scratch/` secara teratur agar repositori tetap rapi.
+
+## 11. Topographic Precipitation Downscaling Architecture
+- **Multi-Model Suite Standards:**
+  - Standardize on world-class orographic downscaling algorithms:
+    1. **ANUSPLIN (Trivariate Topographic Spline):** $C^2$ continuous thin-plate smoothing spline across $(X, Y, Z)$ with roughness penalty and Generalized Cross-Validation (GCV).
+    2. **PRISM (Topographic-Coastal Facet Regression):** Independent local linear elevation regression weighted by horizontal distance ($W_d$), elevation difference ($W_z$), and coastal proximity ($W_c$).
+    3. **Regression-Kriging (RK):** Generalized linear/ML topographic trend combined with Gaussian semivariogram residual kriging.
+    4. **Ensemble Mean Consensus:** Multi-model weighted consensus (ANUSPLIN + PRISM + RK) to eliminate single-algorithm bias.
+
+## 12. Spatial Cross-Validation Guardrails & Downscaling Benchmark Architecture
+- **Strict Prohibition of Random Splits:** Agents must NEVER use standard random train/test splits (`train_test_split`, random K-Fold) on spatial point observations. Random splitting causes severe data leakage and artificially inflated performance due to Tobler's First Law of Geography.
+- **Mandatory Spatial Block K-Fold with Buffer Zones:**
+  - Stations must be partitioned into contiguous geographic spatial blocks.
+  - A guardrail buffer zone equal to or greater than the empirical semivariogram spatial correlation length ($d < a$, default $5.000\text{ m}$) must be applied around test blocks. Any training station falling within the buffer perimeter of test stations must be completely excluded from the training fold.
+- **Projected Metric Coordinates (CRS):**
+  - All Euclidean distance, kriging lag distance, and spatial buffering calculations must be performed in a local projected coordinate system in meters (e.g. UTM Zone 49S / EPSG:32749 for Kebumen/Java), NEVER in geographic angular degrees (EPSG:4326).
+- **Multicollinearity & Aspect Decomposition:**
+  - Terrain aspect must always be decomposed into orthogonal continuous trigonometric components: $\sin(\text{aspect})$ and $\cos(\text{aspect})$ to avoid the $0^\circ = 360^\circ$ angular singularity.
+  - Variance Inflation Factor (VIF) must be calculated across all environmental predictors; any predictor with $\text{VIF} > 5.0$ must be pruned.
+- **Zero-Rain Hurdle Handling:**
+  - When dry days ($P = 0\text{ mm}$) exceed 40% of observations, agents must enforce a two-stage hurdle architecture (classification of precipitation occurrence followed by regression of volume).
+
+## 13. Full-Year Multi-Month Downscaling & Uncertainty Mapping
+- **12-Month Batch Architecture:**
+  - When processing a full year (12 months), process data month-by-month modularly.
+  - For each month, accumulate daily precipitation, downscale to target resolution (250m) using DEM and coastal covariates.
+  - Enforce regional mass conservation calibration to ensure total areal precipitation volume is preserved against raw satellite data.
+- **Inter-Model Uncertainty Quantification:**
+  - Calculate inter-model uncertainty as the standard deviation ($\sigma$) across top models (ANUSPLIN, PRISM, Regression-Kriging).
+  - Export monthly and annual uncertainty rasters to highlight steep orographic zones where models show localized dispersion.
+- **Zonal Administrative Statistics:**
+  - Compute zonal statistics (mean, min, max, std) for all 26 kecamatan in Kebumen and export to structured CSV tables for downstream hydrology and policy planning.
+
+## 14. Automated LaTeX Academic Reporting Standard
+- **Directory Structure:**
+  - All LaTeX source code (`.tex`), figures (`figures/`), tables (`tables/`), and compiled PDF output (`.pdf`) must reside in `documents/`.
+- **Compiler Compatibility:**
+  - Compile using MiKTeX `pdflatex` (`D:\MiKTeX\miktex\bin\x64\pdflatex.exe -interaction=nonstopmode`).
+  - Use `\usepackage{lmodern}` for scalable Type 1 Latin Modern fonts; avoid `microtype` if font expansion errors occur with raster fonts.
+  - Always escape ampersands outside tabular environments as `\&`.
+- **Multi-Pass Cross-Referencing:**
+  - Run `pdflatex` at least twice (Pass 1 and Pass 2) to ensure all labels, citations, table of contents, and figure references resolve completely with zero errors.
+- **Dynamic Table Scaling Standard:**
+  - All multi-column tables in `tables/*.tex` must be wrapped inside `\resizebox{\linewidth}{!}{% \begin{tabular}... \end{tabular}%}` to ensure 100% margin compliance and eliminate `Overfull \hbox` errors.
+- **Hyphenation & Inter-word Spacing Guardrail:**
+  - Include `\emergencystretch=2em` in the document preamble.
+  - Apply discretionary hyphens `\-` on long Indonesian toponyms (`Ka\-rang\-ga\-yam`, `Ka\-rang\-sam\-bung`, `Bu\-lus\-pe\-san\-tren`) when adjacent to inline numbers and units.
+- **Hyperref Page Destination Integrity:**
+  - Set `plainpages=false,pdfpagelabels=true` inside `\hypersetup`.
+  - Enclose `titlepage` between `\hypersetup{pageanchor=false}` and `\hypersetup{pageanchor=true}` (placed immediately after `\pagenumbering{roman}`) to prevent duplicate `name{page.1}` identifiers.
+  - In `article.cls`, prefer `\section*{Abstrak}` over `\begin{abstract}` when using `titlepage`, to prevent `\endtitlepage` from resetting page counters.
+- **Captions with Short Titles for LOT/LOF:**
+  - Long table and figure captions must provide an optional short title `\caption[Judul Pendek]{Judul Lengkap Deskriptif}` to guarantee clean line wrapping in `\listoftables` and `\listoffigures`.
+
+## 15. Multi-Sensor Reanalysis Fusion & Numerical Guardrails
+- **Atmospheric Variable Unit & Missing Value Inspection:**
+  - Before applying thermodynamic formulas (e.g. August-Roche-Magnus equation for Relative Humidity), always inspect the empirical range of $T_{2m}$ and $T_{dew}$.
+  - If values fall within $[15, 45]$, they are already stored in Celsius ($^\circ\text{C}$); do NOT subtract $273.15$, otherwise catastrophic numeric overflow ($\exp(>600)$) will occur in float64.
+  - Reanalysis datasets (e.g. ERA5-Land) frequently encode ocean/missing values as $9999.0$ or $\ge 9000.0$. Always mask values with $|\text{val}| \ge 9000.0$ to `NaN` prior to computing spatial averages (`np.nanmean`).
+- **Coordinate Uniqueness in Geostatistical & Spline Interpolation:**
+  - Geostatistical and thin-plate spline algorithms (Bilinear RBF, ANUSPLIN, Kriging residual interpolation) invert distance matrices ($A_{ij} = \phi(\|x_i - x_j\|)$).
+  - When evaluating multi-temporal / multi-month observational tables, never pass multiple time steps with identical station coordinates $(X, Y)$ into a single spatial interpolator, as distance zero causes a strictly singular matrix (`LinAlgError`).
+  - Spatial interpolators must be evaluated per discrete time-slice (`year_month`), whereas tabular ML models (XGBoost, LightGBM, Random Forest, SVR, MLP) train on the pooled feature matrix.
+- **Regional Mass Conservation Enforcement:**
+  - High-resolution downscaling must strictly preserve total areal precipitation volume to eliminate artificial water balance surplus or deficit:
+    $$P_{\text{downscaled, calibrated}}(x, y) = P_{\text{downscaled}}(x, y) \times \left( \frac{\iint_{\Omega} P_{\text{satellite}}(x, y) \, dx dy}{\iint_{\Omega} P_{\text{downscaled}}(x, y) \, dx dy} \right)$$
+
+## 16. Modular Research Packaging & Document Lifecycle Management
+- **Dedicated Self-Contained Research Folders:**
+  - Each completed research topic or publication monograph must reside in its own dedicated, self-contained subfolder under `documents/` (e.g., `documents/penelitian_downscaling_25tahun/` and `documents/penelitian_downscaling_2025/`).
+  - Each dedicated research folder must contain its own `.tex` source, compiled `.pdf`, dedicated `figures/` directory, dedicated `tables/` directory, structured `results_data/`, and a descriptive `README.md`.
+  - LaTeX documents inside these dedicated folders must compile cleanly and independently with zero external path dependencies.
+- **Top-Level Cleanliness:**
+  - The root `documents/` directory should only house modular research project subdirectories, preventing clutter from loose compilation artifacts (`.aux`, `.log`, `.toc`, `.out`, `.lof`, `.lot`) and duplicate files.
+- **Scratch Workspace Hygiene:**
+  - After completing a research phase and permanently embedding its methodologies into production pipelines and `AGENTS.md`, temporary test scripts, one-off inspection files, and intermediate `.tif` dumps in `scratch/` must be cleaned up to keep the repository maintainable.
+
+## 17. Multi-Sensor Precipitation Cross-Comparison & Fusion Downscaling Architecture
+- **Physical Sensor Disparity (Passive Microwave vs. Thermal Infrared):**
+  - Agents must recognize the fundamental physical detection mechanisms between **Thermal Infrared (TIR)** products like CHIRPS (Cold Cloud Duration / cloud-top temperature proxy) and **Passive Microwave (PMW)** products like GSMaP (direct hydrometeor emission and ice scattering in cloud columns).
+  - Never assume identical raw absolute precipitation: CHIRPS is calibrated against wet tropical ground stations (CHPclim), whereas GSMaP is calibrated against spaceborne radar (DPR GPM) with a minimum rain detection threshold ($\sim 0.2\text{ mm/h}$), leading to a systematic $\sim 20-25\%$ lower volume (defisit) in GSMaP.
+- **Seasonal Ratio & Monsoon Phase Modulation:**
+  - In multi-decade evaluations, calculate temporal correlation ($r, \rho$) alongside the seasonal ratio ($\text{GSMaP}/\text{CHIRPS}$).
+  - The ratio is highest during the peak wet season (DJF, deep convective clouds) and lowest during transition/pancaroba (MAM, localized micro-convective storms missed by LEO PMW orbit intervals).
+- **Orographic Transect Gradient Analysis:**
+  - Evaluate orographic sensitivity along continuous North-South transects traversing critical morphological zones (e.g. northern mountain ridges $\rightarrow$ central alluvial plains $\rightarrow$ southern coastlines).
+  - PMW sensors (GSMaP) capture sharper micro-relief orographic lifting on steep slopes, whereas TIR sensors (CHIRPS) produce smoothed patterns due to cloud-top buffering.
+- **Fused Multi-Sensor Ensemble Standard:**
+  - For optimal hydrological accuracy, enforce a **Fused Multi-Sensor Ensemble** (e.g., Fused Spatial XGBoost) that jointly stacks TIR, PMW, atmospheric reanalysis (ERA5-Land), and high-resolution DEM covariates.
+  - Multi-sensor fusion bridges the temporal-sampling limitation of PMW and the cloud-top proxy limitation of TIR, achieving superior Kling-Gupta Efficiency ($KGE > 0.995$) and near-zero percent volume bias ($PBIAS < 0.05\%$).

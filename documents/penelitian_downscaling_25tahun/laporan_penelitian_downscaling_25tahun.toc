@@ -1,0 +1,28 @@
+\babel@toc {indonesian}{}\relax 
+\contentsline {section}{Abstrak}{iv}{section*.4}%
+\contentsline {section}{Abstract}{iv}{section*.5}%
+\contentsline {section}{\numberline {1}Pendahuluan}{1}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Latar Belakang dan Urgensi Penelitian}{1}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Keterbatasan Data Satelit Kasar dan Peluang Fusi Sensor}{1}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.3}Tujuan dan Kebaruan Penelitian}{2}{subsection.1.3}%
+\contentsline {section}{\numberline {2}Data dan Wilayah Penelitian}{2}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Karakteristik Wilayah Studi Kabupaten Kebumen}{2}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Kompilasi Multi-Dataset 25 Tahun (2001--2025)}{3}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Penanganan Data Hilang dan Rekonstruksi Parameter Atmosfer}{4}{subsection.2.3}%
+\contentsline {section}{\numberline {3}Metodologi dan Protokol Validasi Spasial}{5}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Proyeksi Koordinat Metrik dan Dekomposisi Aspek Topografi}{5}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Protokol Validasi Spasial Tanpa Kebocoran (Spatial Block CV + Buffer 5 km)}{5}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Arsitektur 12 Algoritma Downscaling yang Dibandingkan}{6}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Penegakan Pelestarian Konservasi Massa Regional}{7}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}Metrik Evaluasi Kinerja Kuantitatif}{7}{subsection.3.5}%
+\contentsline {section}{\numberline {4}Hasil dan Pembahasan}{8}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Peringkat Evaluasi Akurasi 12 Algoritma Downscaling}{8}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Analisis Feature Importance dan Interaksi Prediktor Multi-Sensor}{9}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Atlas Klimatologi Presipitasi 25 Tahun (2001--2025) Resolusi 250m}{10}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}Analisis Tren Spasial Perubahan Iklim (Sen's Slope Estimator)}{11}{subsection.4.4}%
+\contentsline {subsection}{\numberline {4.5}Respon Spasial Terhadap Kejadian Iklim Ekstrem ENSO}{12}{subsection.4.5}%
+\contentsline {subsection}{\numberline {4.6}Evaluasi Statistik Zonal Komparatif 26 Kecamatan}{13}{subsection.4.6}%
+\contentsline {section}{\numberline {5}Kesimpulan dan Rekomendasi Kebijakan}{15}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Kesimpulan Utama}{15}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Rekomendasi Kebijakan dan Mitigasi Daerah}{16}{subsection.5.2}%
+\contentsline {section}{Daftar Pustaka}{17}{section*.20}%

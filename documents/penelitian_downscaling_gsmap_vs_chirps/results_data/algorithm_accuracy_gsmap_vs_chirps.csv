@@ -1,0 +1,13 @@
+Config_Name,Sensor_Source,Algorithm,KGE,RMSE_mm,MAE_mm,R2,PBIAS_pct
+Fused Multi-Sensor XGBoost,FUSED,xgboost_fused,0.9968,4.81,3.78,0.999,-0.31
+CHIRPS - Spatial XGBoost,CHIRPS,xgboost,0.9961,5.09,4.03,0.9988,-0.25
+CHIRPS - LightGBM,CHIRPS,lightgbm,0.9953,6.59,4.88,0.9981,-0.13
+GSMaP - Spatial XGBoost,GSMAP,xgboost,0.995,5.34,4.22,0.9987,-0.3
+GSMaP - Regression-Kriging,GSMAP,rk,0.9938,11.72,6.19,0.9939,0.04
+CHIRPS - Regression-Kriging,CHIRPS,rk,0.9938,11.72,6.19,0.9939,0.04
+GSMaP - LightGBM,GSMAP,lightgbm,0.9895,13.17,6.86,0.9923,-0.1
+Fused Hybrid Consensus,FUSED,ensemble_fused,0.9755,5.57,4.45,0.9986,0.0
+CHIRPS - PRISM Facet,CHIRPS,prism,0.9629,34.12,25.77,0.9482,-0.01
+GSMaP - PRISM Facet,GSMAP,prism,0.9427,42.26,33.98,0.9204,-0.01
+GSMaP - ANUSPLIN Spline,GSMAP,anusplin,0.4176,165.19,75.98,-0.2154,14.56
+CHIRPS - ANUSPLIN Spline,CHIRPS,anusplin,0.4176,165.19,75.98,-0.2154,14.56

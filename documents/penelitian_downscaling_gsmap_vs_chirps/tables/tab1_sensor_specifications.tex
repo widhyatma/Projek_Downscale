@@ -1,0 +1,22 @@
+\begin{table}[htbp]
+\centering
+\caption{Spesifikasi Teknis Sensor Presipitasi Satelit dan Kovariat Lingkungan}
+\label{tab:sensor_specifications}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{p{3.2cm}p{3.8cm}p{4.2cm}p{3.2cm}}
+\hline
+\textbf{Atribut / Parameter} & \textbf{CHIRPS v2.0 (USGS/CHC)} & \textbf{GSMaP v8 (JAXA/EORC)} & \textbf{ERA5-Land (ECMWF)} \\
+\hline
+Konstelasi / Satelit & GEO Satellites (GOES, Meteosat) & GPM Core, TRMM, DMSP, NOAA & Reanalisis Global (IFS Cy45r1) \\
+Domain Sensor & Thermal Infrared (TIR, 10.8 $\mu\text{m}$) & Passive Microwave (PMW) + TIR & Asimilasi Multi-Sensor Fisik \\
+Prinsip Estimasi & Cold Cloud Duration (CCD, $T_b < 235\text{K}$) & Scattering/Emisi Hidrometeor & Persamaan Termodinamika Lahan \\
+Resolusi Spasial Asli & $0.05^\circ \times 0.05^\circ$ ($\sim 5.5\text{ km}$) & $0.10^\circ \times 0.10^\circ$ ($\sim 11.1\text{ km}$) & $0.10^\circ \times 0.10^\circ$ ($\sim 9.0\text{ km}$) \\
+Resolusi Temporal Asli & Bulanan / Pentad / Harian & Per Jam (Hourly) / Harian & Per Jam / Bulanan \\
+Kalibrasi Permukaan & Regresi Stasiun Global (CHPclim) & Dual-Frequency Precip Radar (DPR) & Asimilasi Stasiun WMO Global \\
+Sensitivitas Orografis & Rentan Underestimate Hujan Hangat & Deteksi Es \& Tetes Awan Curang & Represif terhadap Lembah Sempit \\
+Target Downscale & $250\text{ m} \times 250\text{ m}$ (UTM 49S) & $250\text{ m} \times 250\text{ m}$ (UTM 49S) & Resampled Bilinear $250\text{ m}$ \\
+Rentang Waktu & 25 Tahun (2001--2025, 300 bln) & 25 Tahun (2001--2025, 300 bln) & 25 Tahun (2001--2025, 300 bln) \\
+\hline
+\end{tabular}%
+}
+\end{table}

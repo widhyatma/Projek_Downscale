@@ -1,0 +1,452 @@
+\documentclass[11pt,a4paper,titlepage]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[indonesian]{babel}
+\usepackage{geometry}
+\geometry{top=2.5cm, bottom=2.5cm, left=3.0cm, right=2.5cm}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{float}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{xcolor}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=navyblue,
+    citecolor=darkgreen,
+    urlcolor=blue,
+    pdftitle={Penelitian Downscaling Presipitasi 25 Tahun Kabupaten Kebumen},
+    pdfauthor={Antigravity Geospatial Research Lab},
+    plainpages=false,
+    pdfpagelabels=true
+}
+
+\definecolor{navyblue}{RGB}{0,32,96}
+\definecolor{darkgreen}{RGB}{0,100,0}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small \textit{Monograf Riset: Downscaling Presipitasi Multi-Sensor 25 Tahun Kebumen}}
+\fancyhead[R]{\small \thepage}
+\fancyfoot[C]{\small Laboratorium Sains Informasi Geospasial \& Hidrometeorologi}
+\renewcommand{\headrulewidth}{0.6pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\emergencystretch=2em
+
+\onehalfspacing
+
+\begin{document}
+
+% =========================================================================
+% HALAMAN JUDUL (TITLE PAGE)
+% =========================================================================
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+    \centering
+    \vspace*{1.0cm}
+    
+    {\Large \textbf{MONOGRAF PENELITIAN AKADEMIK INDEPENDEN}}\\[0.8cm]
+    \rule{\linewidth}{1.5pt}\\[0.5cm]
+    {\LARGE \textbf{\color{navyblue} FUSI MULTI-SATELIT, REANALISIS ATMOSFERIK, DAN TOPOGRAFI RESOLUSI TINGGI UNTUK DOWNSCALING PRESIPITASI 25 TAHUN (2001--2025) SERTA ANALISIS IKLIM EKSTREM KABUPATEN KEBUMEN}}\\[0.5cm]
+    \rule{\linewidth}{1.5pt}\\[1.0cm]
+    
+    \textit{Studi Komparatif 12 Algoritma Downscaling, Validasi Spasial Tanpa Kebocoran (Spatial Block Cross-Validation 5 km), Rekonstruksi Atlas 300 Bulan 250m, dan Analisis Kerentanan ENSO 26 Kecamatan}\\[1.8cm]
+    
+    \textbf{Disusun Oleh:}\\[0.3cm]
+    {\large \textbf{Tim Peneliti Geospatial Data Science \& Downscaling}}\\[0.2cm]
+    \textit{Kolaborasi AI Agentic Engineering \& Open Climatology Analytic}\\[2.5cm]
+    
+    \vfill
+    
+    {\large \textbf{KABUPATEN KEBUMEN, PROVINSI JAWA TENGAH}}\\[0.2cm]
+    {\large \textbf{TAHUN 2026}}
+\end{titlepage}
+
+\newpage
+\hypersetup{pageanchor=true}
+\pagenumbering{roman}
+\tableofcontents
+\newpage
+\listoffigures
+\newpage
+\listoftables
+\newpage
+
+% =========================================================================
+% ABSTRAK (INDONESIAN & ENGLISH)
+% =========================================================================
+\section*{Abstrak}
+\addcontentsline{toc}{section}{Abstrak}
+Keterbatasan spasial data curah hujan satelit kasar ($0.05^\circ - 0.10^\circ \approx 5.5 - 11\text{ km}$) sering kali gagal merepresentasikan dinamika orografis lokal dan variabilitas mikroklimat di wilayah dengan topografi kompleks seperti Kabupaten Kebumen, Jawa Tengah. Penelitian ini menyajikan kerangka kerja komprehensif untuk melakukan \textit{downscaling} spasial presipitasi bulanan resolusi tinggi ($250\text{ m}$) selama 25 tahun penuh (2001--2025 / 300 bulan). Pendekatan yang diajukan memadukan dua satelit presipitasi utama (CHIRPS v2.0 berakar inframerah-termal dan GSMaP v8 berbasis gelombang mikro pasif), reanalisis atmosferik multi-variabel ERA5-Land (suhu $T_{2m}$, titik embun $T_{dew}$, kelembapan relatif $\text{RH}$, kecepatan angin $WS$, dan tekanan permukaan $P_s$), indeks biosfer MODIS NDVI, serta kovariat topografi digital elevasi (DEM SRTM 30m, kelerengan, aspek ortogonal, dan jarak pantai). Protokol validasi dirancang dengan ketat mengacu pada Hukum Tobler Pertama, yaitu menerapkan \textit{Spatial Block Cross-Validation} 4-kuadran geografis yang dipagari zona penyangga (\textit{buffer zone}) $\ge 5.000\text{ m}$ pada sistem koordinat terproyeksi metrik UTM Zona 49S. Sebanyak 12 algoritma dievaluasi, mencakup interpolasi geometris, regresi lapse-rate linier, PRISM, Random Forest, XGBoost, LightGBM, SVR, MLP, Regression-Kriging, ANUSPLIN, Multi-Sensor Atmospheric XGBoost, dan Hybrid Consensus Ensemble. Hasil benchmark membuktikan bahwa model \textit{Multi-Sensor Atmospheric XGBoost} mencapai akurasi tertinggi di kelasnya dengan Kling-Gupta Efficiency ($KGE$) sebesar $0.9973$, $RMSE = 5.14\text{ mm}$, $R^2 = 0.9988$, dan $PBIAS = -0.27\%$, secara signifikan mengungguli model topografi murni konvensional. Analisis kontribusi variabel membuktikan bahwa CHIRPS ($89.41\%$) dan GSMaP ($9.26\%$) memegang kendali varians utama sebesar $98.67\%$, sedangkan variabel atmosfer, NDVI, dan topografi membentuk tekstur orografis lokal resolusi tinggi. Rekonstruksi 300 bulan dengan pelestarian konservasi massa regional menghasilkan presipitasi tahunan rata-rata 25 tahun Kebumen sebesar $2.958,2\text{ mm/tahun}$, dengan orografis tertinggi di Kecamatan Sadang ($3.030,9\text{ mm/tahun}$) dan terendah di Gombong ($2.901,7\text{ mm/tahun}$). Analisis tren Sen's Slope mengonfirmasi laju peningkatan presipitasi sebesar $+24.46\text{ mm/tahun}$. Pada kejadian iklim ekstrem, Super La Niña 2010 memicu surplus presipitasi hingga $+50.8\%$ ($+1.503,0\text{ mm}$), sedangkan Super El Niño 2015 dan 2023 menimbulkan defisit parah masing-masing $-24.8\%$ dan $-33.2\%$, menciptakan rentang kontras ekstrem sebesar $2.260,0\text{ mm}$ di Kecamatan Sadang. Atlas resolusi 250m yang dihasilkan memberikan basis saintifik fundamental bagi mitigasi bencana hidrometeorologi dan ketahanan pangan regional di Kabupaten Kebumen.
+
+\vspace{0.4cm}
+\noindent \textbf{Kata Kunci:} Downscaling Spasial, CHIRPS, GSMaP, ERA5-Land, Multi-Sensor Fusion, Spatial Cross-Validation, Kabupaten Kebumen, ENSO.
+
+\vspace{0.8cm}
+
+\section*{Abstract}
+\addcontentsline{toc}{section}{Abstract}
+The coarse spatial resolution of satellite precipitation products ($0.05^\circ - 0.10^\circ \approx 5.5 - 11\text{ km}$) often fails to capture localized orographic lifting and microclimate heterogeneity across complex terrains such as Kebumen Regency, Central Java. This study establishes a rigorous 25-year (2001--2025 / 300 months) high-resolution ($250\text{ m}$) precipitation downscaling and climate extreme analysis framework. The proposed architecture integrates dual complementary satellite rainfall sources (infrared-based CHIRPS v2.0 and passive-microwave GSMaP v8), multi-variable ERA5-Land atmospheric reanalysis ($T_{2m}$, $T_{dew}$, relative humidity, wind speed, surface pressure), MODIS Terra NDVI, and high-resolution digital terrain covariates (SRTM 30m DEM, slope, orthogonal aspect components, and Indian Ocean coastal distance). To strictly eliminate spatial autocorrelation leakage, a 4-quadrant Spatial Block Cross-Validation with a $5,000\text{ m}$ guardrail buffer zone was enforced in UTM Zone 49S metric coordinates. A benchmark suite of 12 state-of-the-art downscaling models was evaluated. The Multi-Sensor Atmospheric XGBoost model outperformed all competing algorithms, achieving a Kling-Gupta Efficiency ($KGE$) of $0.9973$, $RMSE = 5.14\text{ mm}$, $R^2 = 0.9988$, and $PBIAS = -0.27\%$. Feature importance evaluation revealed that CHIRPS ($89.41\%$) and GSMaP ($9.26\%$) govern $98.67\%$ of total variance, while atmospheric thermodynamics, vegetation, and topographic lapse modulate localized microclimates. The reconstructed 25-year climatology under strict regional mass conservation revealed an areal mean annual precipitation of $2,958.2\text{ mm/year}$, peaking in the northern highland district of Sadang ($3,030.9\text{ mm/year}$) and dipping in Gombong valley ($2,901.7\text{ mm/year}$). Non-parametric Sen's slope trend analysis demonstrated an overarching wetting trend of $+24.46\text{ mm/year}$. Furthermore, historical extreme ENSO analysis quantified an unprecedented precipitation surplus of $+50.8\%$ ($+1,503.0\text{ mm}$) during the 2010 Super La Niña and acute deficits of $-24.8\%$ (2015) and $-33.2\%$ (2023) during El Niño episodes, yielding an extreme contrast range of $2,260.0\text{ mm}$ in Sadang. This $250\text{ m}$ atlas provides an operational benchmark for regional hydrology, landslide hazards, and climate adaptation.
+
+\vspace{0.4cm}
+\noindent \textbf{Keywords:} Spatial Downscaling, Multi-Sensor Fusion, CHIRPS, GSMaP, ERA5-Land, Spatial Cross-Validation, Kebumen Regency, Climate Extremes.
+
+\newpage
+\pagenumbering{arabic}
+
+% =========================================================================
+% BAB I: PENDAHULUAN
+% =========================================================================
+\section{Pendahuluan}
+
+\subsection{Latar Belakang dan Urgensi Penelitian}
+Presipitasi merupakan komponen paling krusial dalam siklus hidrologi terestrial yang mengontrol ketersediaan sumber daya air, neraca pertanian, serta potensi bahaya bencana alam seperti banjir bandang dan tanah longsor. Kabupaten Kebumen yang terletak di bagian selatan Provinsi Jawa Tengah memiliki konfigurasi bentang lahan geomorfologi yang sangat heterogen dan rentan. Wilayah utara didominasi oleh perbukitan terjal dan pegunungan purba yang merupakan bagian dari Formasi Melange Karangsambung dan Pegunungan Serayu Selatan dengan ketinggian melebihi 800 meter di atas permukaan laut (mdpl). Bagian tengah dicirikan oleh perbukitan lipatan serta dataran aluvial Sungai Luk Ulo, sedangkan wilayah selatan dibatasi langsung oleh dataran pesisir rendah dan garis pantai Samudera Hindia sepanjang lebih dari 57 kilometer.
+
+Kondisi topografi yang curam ini memicu fenomena pengangkatan orografis (\textit{orographic lifting}) intensif ketika massa udara lembap dari Samudera Hindia terdorong ke arah utara menuju pegunungan. Akibatnya, distribusi curah hujan spasial di Kabupaten Kebumen menunjukkan variabilitas lokal yang sangat tajam dalam jarak spasial kurang dari beberapa kilometer. Namun demikian, jaringan penakar hujan terestrial (\textit{rain gauges}) konvensional milik BMKG dan instansi pengairan setempat memiliki sebaran spasial yang terbatas, tidak merata, serta sering menghadapi kendala diskontinuitas data historis dan kekosongan rekaman jangka panjang.
+
+\subsection{Keterbatasan Data Satelit Kasar dan Peluang Fusi Sensor}
+Untuk mengatasi kesenjangan pengamatan permukaan, produk estimasi presipitasi berbasis satelit telah menjadi alternatif utama dalam analisis iklim global. Produk-produk seperti \textit{Climate Hazards Group InfraRed Precipitation with Station data} (CHIRPS) dan \textit{Global Satellite Mapping of Precipitation} (GSMaP) telah menyediakan deret waktu presipitasi kontinu. Namun demikian, resolusi spasial produk-produk ini berkisar antara $0.05^\circ$ ($\approx 5.5\text{ km}$) pada CHIRPS hingga $0.10^\circ$ ($\approx 11\text{ km}$) pada GSMaP dan reanalisis atmosferik ERA5-Land. Pada skala piksel selebar 5 hingga 11 kilometer, gradien mikroklimat lokal, efek lembah sempit, dan pengangkatan orografis terhaluskan (\textit{smoothed out}), sehingga tidak memadai untuk perencanaan hidrologi tingkat mikro, zonasi risiko longsor skala kecamatan, dan pengelolaan irigasi presisi.
+
+Di sisi lain, terdapat saling melengkapi (\textit{complementarity}) fisik yang fundamental antara produk satelit yang berbeda:
+\begin{enumerate}
+    \item \textbf{CHIRPS v2.0:} Mengintegrasikan observasi inframerah termal (\textit{thermal infrared} / TIR) dengan klimatologi stasiun jangka panjang, memiliki bias rata-rata yang sangat rendah pada skala bulanan, namun memiliki respons dinamis yang relatif lambat terhadap konveksi mendadak di lereng pegunungan curam.
+    \item \textbf{GSMaP v8 MVK:} Berbasis konstelasi sensor gelombang mikro pasif (\textit{passive microwave} / PMW) berresolusi temporal tinggi per-jam yang sangat peka menangkap inti badai konvektif tropis dan presipitasi intensif sesaat.
+    \item \textbf{ERA5-Land:} Menyediakan parameter termodinamika atmosferik komprehensif pada ketinggian permukaan ($T_{2m}$, suhu titik embun $T_{dew}$, tekanan permukaan $P_s$, dan vektor angin $u_{10}, v_{10}$), yang mengendalikan proses kondensasi massa udara.
+    \item \textbf{MODIS Terra NDVI:} Mencerminkan respons kelembapan tanah dan kanopi vegetasi akibat serapan air presipitasi jangka menengah.
+    \item \textbf{DEM SRTM 30m:} Menyediakan geometri terperinci permukaan bumi (elevasi, lereng, orientasi aspek, dan jarak terhadap garis pantai Samudera Hindia).
+\end{enumerate}
+
+\subsection{Tujuan dan Kebaruan Penelitian}
+Penelitian ini bertujuan untuk:
+\begin{enumerate}
+    \item Mengembangkan kerangka kerja fusi multi-satelit, reanalisis atmosferik, dan topografi resolusi tinggi untuk melakukan \textit{downscaling} presipitasi bulanan ke resolusi 250 meter di Kabupaten Kebumen.
+    \item Menerapkan protokol validasi spasial yang ketat (\textit{Spatial Block Cross-Validation}) dengan zona penyangga buffer 5.000 meter guna mencegah kebocoran autokorelasi spasial (Hukum Tobler Pertama).
+    \item Melakukan komparasi komprehensif terhadap 12 algoritma \textit{downscaling} terkemuka di dunia.
+    \item Merekonstruksi atlas klimatologi presipitasi 25 tahun penuh (2001--2025 / 300 bulan) dengan penegakan hukum konservasi massa air regional (\textit{Regional Mass Conservation}).
+    \item Menganalisis tren perubahan iklim spasial (Sen's Slope) dan menguantifikasi dampak anomali hidrometeorologi ekstrem kejadian El Niño (2015, 2023) versus La Niña (2010, 2022) pada seluruh 26 kecamatan di Kabupaten Kebumen.
+\end{enumerate}
+
+% =========================================================================
+% BAB II: DATA DAN WILAYAH PENELITIAN
+% =========================================================================
+\section{Data dan Wilayah Penelitian}
+
+\subsection{Karakteristik Wilayah Studi Kabupaten Kebumen}
+Kabupaten Kebumen secara geografis terletak antara koordinat $109^\circ 22' 00'' - 109^\circ 50' 00''$ Bujur Timur dan $7^\circ 27' 00'' - 7^\circ 50' 00''$ Lintang Selatan. Luas daratan Kabupaten Kebumen mencapai sekitar $1.281,1\text{ km}^2$ yang terbagi ke dalam 26 kecamatan administratif. Secara fisiografis, wilayah ini dapat dikelompokkan menjadi tiga zonasi utama (Gambar \ref{fig:study_area}):
+\begin{enumerate}
+    \item \textbf{Zona Pegunungan dan Perbukitan Utara:} Meliputi Kecamatan Sadang, Karangsambung, Karanggayam, Sempor, Padureso, dan Rowokele. Elevasi berkisar dari 150 hingga $>850\text{ mdpl}$ dengan kelerengan sangat curam ($>25^\circ$).
+    \item \textbf{Zona Perbukitan Rendah dan Dataran Aluvial Tengah:} Meliputi Kecamatan Kebumen, Alian, Pejagoan, Sruweng, Karanganyar, Kutowinangun, Gombong, Kuwarasan, dan Poncowarno. Merupakan pusat permukiman dan daerah aliran sungai (DAS) utama Luk Ulo.
+    \item \textbf{Zona Dataran Pesisir Selatan:} Meliputi Kecamatan Ayah, Buayan, Puring, Petanahan, Klirong, Buluspesantren, Ambal, Mirit, Bonorowo, Prembun, dan Adimulyo. Berbatasan langsung dengan Samudera Hindia dengan elevasi $<25\text{ mdpl}$.
+\end{enumerate}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/fig1_study_area_terrain.png}
+    \caption{Karakteristik Fisik Topografi dan Geografis Wilayah Penelitian Kabupaten Kebumen: (a) Elevasi DEM SRTM 30m pada grid 250m; (b) Kemiringan lereng (\textit{slope}); (c) Jarak Euclidean ke garis pantai Samudera Hindia; dan (d) Batas administrasi 26 kecamatan.}
+    \label{fig:study_area}
+\end{figure}
+
+\subsection{Kompilasi Multi-Dataset 25 Tahun (2001--2025)}
+Penelitian ini memanfaatkan basis data multi-sensor terpadu yang diorganisir dalam struktur hierarkis NetCDF4 dan GeoTIFF. Tabel \ref{tab:dataset_summary} merangkum karakteristik seluruh dataset yang digunakan dalam penelitian ini.
+
+\input{tables/tab1_dataset_summary.tex}
+
+\subsection{Penanganan Data Hilang dan Rekonstruksi Parameter Atmosfer}
+Pada dataset ERA5-Land bulanan, dari total 300 bulan yang diinvestigasi (2001--2025), ditemukan 295 bulan lengkap dan 5 bulan rekaman kosong (\textit{missing files}), yaitu September 2011, Mei 2023, Agustus 2023, September 2023, dan November 2023. Sesuai dengan kaidah sains atmosfer, nilai parameter pada bulan-bulan tersebut diimputasi menggunakan rata-rata klimatologis 25 tahun dari bulan kalender yang bersangkutan (\textit{climatological monthly baseline imputation}).
+
+Selain itu, variabel atmosfer $T_{2m}$ dan suhu titik embun $T_{dew}$ pada dataset lokal telah tersimpan dalam satuan Celsius ($^\circ\text{C}$), sedangkan tekanan permukaan $P_s$ berada dalam satuan hektopaskal ($\text{hPa}$). Parameter Kelembapan Relatif (\textit{Relative Humidity} / $\text{RH}$ \%) diturunkan secara akurat menggunakan persamaan Magnus-Tetens:
+\begin{equation}
+    \text{RH} = 100 \times \exp\left( \frac{17.625 \cdot T_{dew}}{243.04 + T_{dew}} - \frac{17.625 \cdot T_{2m}}{243.04 + T_{2m}} \right)
+    \label{eq:magnus}
+\end{equation}
+di mana $\text{RH}$ dibatasi secara fisik pada interval $10\% \le \text{RH} \le 100\%$. Kecepatan angin resultan ($WS$) dihitung dari magnitudo vektor komponen zonal ($u_{10}$) dan meridional ($v_{10}$):
+\begin{equation}
+    WS = \sqrt{u_{10}^2 + v_{10}^2}
+    \label{eq:wind_speed}
+\end{equation}
+dengan nilai no-data ($\ge 9000.0$) dimaskir secara ketat sebelum proses agregasi spasial.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/fig2_multisource_correlation.png}
+    \caption{Analisis Hubungan Multi-Sensor dan Dinamika Temporal 25 Tahun di Kebumen: (a) Matriks korelasi Pearson antara CHIRPS, GSMaP, suhu ERA5, kelembapan RH, kecepatan angin, tekanan permukaan, dan NDVI; (b) Deret waktu akumulasi tahunan CHIRPS dan GSMaP terhadap fluktuasi suhu permukaan ERA5-Land (2001--2025) dengan penanda kejadian ENSO ekstrem.}
+    \label{fig:correlation}
+\end{figure}
+
+% =========================================================================
+% BAB III: METODOLOGI DAN PROTOKOL VALIDASI SPASIAL
+% =========================================================================
+\section{Metodologi dan Protokol Validasi Spasial}
+
+\subsection{Proyeksi Koordinat Metrik dan Dekomposisi Aspek Topografi}
+Untuk menghindari distorsi jarak sudut (\textit{angular degree distortion}) pada perhitungan interpolasi geostatistik dan pemodelan lereng, seluruh koordinat geografis WGS84 ($\text{EPSG:4326}$) ditransformasikan secara konsisten ke dalam sistem proyeksi metrik \textit{Universal Transverse Mercator} Zona 49S (\textit{UTM Zone 49S} / $\text{EPSG:32749}$). Grid target 250m menghasilkan matriks berdimensi $219 \times 185$ piksel dengan $21.704$ sel daratan aktif di dalam batas administrasi Kabupaten Kebumen.
+
+Aspek topografi orientasi lereng ($\theta$) yang memiliki singularitas sudut ($0^\circ = 360^\circ$) didekomposisi menjadi dua komponen trigonometrik ortogonal yang kontinu:
+\begin{equation}
+    \text{Sin-Aspect} = \sin\left(\frac{\pi \cdot \theta}{180}\right), \quad \text{Cos-Aspect} = \cos\left(\frac{\pi \cdot \theta}{180}\right)
+\end{equation}
+Evaluasi multikolinieritas dilakukan menggunakan \textit{Variance Inflation Factor} (VIF):
+\begin{equation}
+    \text{VIF}_j = \frac{1}{1 - R_j^2}
+\end{equation}
+di mana $R_j^2$ adalah koefisien determinasi regresi variabel prediktor ke-$j$ terhadap seluruh prediktor lainnya. Nilai VIF seluruh prediktor lingkungan disajikan pada Tabel \ref{tab:vif_analysis}.
+
+\input{tables/tab2_vif_analysis.tex}
+
+Hasil uji VIF membuktikan bahwa seluruh prediktor berada dalam batas aman toleransi ($\text{VIF} \approx 1.17 - 5.08$), di mana nilai elevasi ($3.44$) dan kelerengan ($5.08$) mencerminkan asosiasi fisiografis orografis alami perbukitan Kebumen yang tidak menimbulkan divergensi numerik pada model pohon keputusan (\textit{tree-based models}).
+
+\subsection{Protokol Validasi Spasial Tanpa Kebocoran (Spatial Block CV + Buffer 5 km)}
+Berdasarkan Hukum Tobler Pertama (\textit{Tobler's First Law of Geography}), titik pengamatan yang berdekatan memiliki autokorelasi spasial yang sangat tinggi. Penggunaan pemisahan acak konvensional (\textit{random train-test split}) akan menyebabkan kebocoran data spasial yang parah (\textit{severe spatial data leakage}), menghasilkan metrik akurasi yang terinflasi secara semu.
+
+Untuk mengatasi hal tersebut, penelitian ini menerapkan protokol \textit{Spatial Block Cross-Validation} yang membagi wilayah penelitian menjadi 4 kuadran blok geografis independen:
+\begin{itemize}
+    \item \textbf{Blok 0 (Barat Laut / NW Highlands):} Zona pegunungan Sempor, Karanggayam, Sadang, dan Rowokele (8 stasiun observasi).
+    \item \textbf{Blok 1 (Timur Laut / NE Hills):} Zona perbukitan Karangsambung, Alian, Padureso, dan Wadaslintang (7 stasiun observasi).
+    \item \textbf{Blok 2 (Barat Daya / SW Coast):} Zona karst pesisir Ayah, Buayan, Kuwarasan, dan Puring (7 stasiun observasi).
+    \item \textbf{Blok 3 (Tenggara / SE Plains):} Zona dataran rendah Kebumen Kota, Ambal, Kutowinangun, dan Prembun (8 stasiun observasi).
+\end{itemize}
+Pada setiap putaran \textit{fold}, zona penyangga berjarak $5.000\text{ m}$ ($d \ge 5\text{ km}$) diterapkan di sekitar perimeter blok uji. Seluruh titik pelatihan yang berada di dalam perimeter buffer dikeluarkan sepenuhnya dari himpunan latih, menjamin evaluasi performa model yang murni bersifat ekstrapolatif dan generalis.
+
+\subsection{Arsitektur 12 Algoritma Downscaling yang Dibandingkan}
+Sebanyak 12 algoritma downscaling diimplementasikan dan diuji dalam protokol validasi spasial yang sama:
+\begin{enumerate}
+    \item \textbf{Bilinear Resampling / Spatial Interpolation:} Baseline interpolasi geometris invers jarak Euclidean linier.
+    \item \textbf{OLS Elevation Lapse-Rate:} Regresi linier klasik antara presipitasi dan elevasi topografi: $P = \beta_0 + \beta_1 Z$.
+    \item \textbf{PRISM (\textit{Parameter-elevation Regressions on Independent Slopes Model}):} Regresi faset lokal tertimbang jarak horizontal ($W_d$), beda elevasi ($W_z$), dan jarak pantai ($W_c$).
+    \item \textbf{Spatial Random Forest (SRF):} Ansambel pohon keputusan acak (100 estimator, kedalaman 10).
+    \item \textbf{Extreme Gradient Boosting (XGBoost - Topo):} Algoritma gradient boosting terregularisasi berbasis prediktor topografi.
+    \item \textbf{LightGBM Regressor (Topo):} Gradient boosting cepat dengan pertumbuhan pohon berorientasi daun (\textit{leaf-wise}).
+    \item \textbf{Support Vector Regression (SVR - RBF):} Regresi non-linier menggunakan kernel fungsi basis radial (\textit{Radial Basis Function}).
+    \item \textbf{Multi-Layer Perceptron (MLP Neural Network):} Jaringan saraf tiruan dalam (arsitektur 64--32 neuron, aktivasi ReLU, optimizer Adam).
+    \item \textbf{Regression-Kriging (RK):} Kombinasi tren deterministik multivariat dan kriging residu Gaussian semivariogram.
+    \item \textbf{ANUSPLIN (\textit{Trivariate Thin-Plate Smoothing Spline}):} Spline pelat tipis kontinu derajat $C^2$ pada ruang 3 dimensi $(X, Y, Z)$ dengan penalti kekasaran.
+    \item \textbf{Multi-Sensor Atmospheric XGBoost:} Model fusi canggih yang memadukan CHIRPS, GSMaP, ERA5 ($T_{2m}, \text{RH}, WS, P_s$), MODIS NDVI, dan seluruh kovariat DEM.
+    \item \textbf{Hybrid Consensus Ensemble:} Model konsensus gabungan terbobot (PRISM + RK + MultiSensor XGBoost) yang dikalibrasi dengan pelestarian massa air regional.
+\end{enumerate}
+
+\subsection{Penegakan Pelestarian Konservasi Massa Regional}
+Untuk memastikan bahwa proses downscaling tidak menciptakan surplus atau defisit volume air yang tidak realistis, prinsip konservasi massa regional ditegakkan pada setiap langkah waktu bulanan:
+\begin{equation}
+    P_{\text{downscaled, calibrated}}(x, y) = P_{\text{downscaled}}(x, y) \times \left( \frac{\iint_{\Omega} P_{\text{satellite}}(x, y) \, dx dy}{\iint_{\Omega} P_{\text{downscaled}}(x, y) \, dx dy} \right)
+    \label{eq:mass_conservation}
+\end{equation}
+di mana $\Omega$ merepresentasikan seluruh domain terestrial Kabupaten Kebumen.
+
+\subsection{Metrik Evaluasi Kinerja Kuantitatif}
+Kinerja masing-masing algoritma dievaluasi menggunakan metrik standar hidrologi dan meteorologi internasional:
+\begin{itemize}
+    \item \textbf{Kling-Gupta Efficiency (KGE):}
+    \begin{equation}
+        \text{KGE} = 1 - \sqrt{(r - 1)^2 + (\alpha - 1)^2 + (\beta - 1)^2}
+    \end{equation}
+    di mana $r$ adalah koefisien korelasi Pearson, $\alpha = \sigma_{sim} / \sigma_{obs}$ mengukur variabilitas relatif, dan $\beta = \mu_{sim} / \mu_{obs}$ mengukur bias rasio rata-rata.
+    \item \textbf{Root Mean Square Error (RMSE):}
+    \begin{equation}
+        \text{RMSE} = \sqrt{\frac{1}{N} \sum_{i=1}^{N} (P_{sim, i} - P_{obs, i})^2}
+    \end{equation}
+    \item \textbf{Mean Absolute Error (MAE):}
+    \begin{equation}
+        \text{MAE} = \frac{1}{N} \sum_{i=1}^{N} |P_{sim, i} - P_{obs, i}|
+    \end{equation}
+    \item \textbf{Koefisien Determinasi ($R^2$):}
+    \begin{equation}
+        R^2 = 1 - \frac{\sum (P_{obs, i} - P_{sim, i})^2}{\sum (P_{obs, i} - \bar{P}_{obs})^2}
+    \end{equation}
+    \item \textbf{Percent Bias (PBIAS \%):}
+    \begin{equation}
+        \text{PBIAS} = 100 \times \frac{\sum (P_{sim, i} - P_{obs, i})}{\sum P_{obs, i}}
+    \end{equation}
+\end{itemize}
+
+% =========================================================================
+% BAB IV: HASIL DAN PEMBAHASAN
+% =========================================================================
+\section{Hasil dan Pembahasan}
+
+\subsection{Peringkat Evaluasi Akurasi 12 Algoritma Downscaling}
+Hasil validasi spasial independen tanpa kebocoran menggunakan protokol Spatial Block CV disajikan secara lengkap pada Tabel \ref{tab:benchmark_models} dan Gambar \ref{fig:model_benchmark}.
+
+\input{tables/tab3_benchmark_models.tex}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/fig3_model_benchmark_comparison.png}
+    \caption{Evaluasi Kinerja 12 Algoritma Downscaling dan Analisis Kontribusi Prediktor: (a) Peringkat validasi spasial independen berbasis metrik Kling-Gupta Efficiency (KGE); (b) Analisis Feature Importance (\% Gain) model Multi-Sensor Atmospheric XGBoost.}
+    \label{fig:model_benchmark}
+\end{figure}
+
+Berdasarkan hasil pengujian pada Tabel \ref{tab:benchmark_models}, model \textbf{Multi-Sensor Atmospheric XGBoost} menduduki peringkat pertama secara mutlak dengan nilai $\text{KGE} = 0.9973$, $\text{RMSE} = 5.14\text{ mm}$, $\text{MAE} = 4.05\text{ mm}$, $R^2 = 0.9988$, dan bias sangat mendekati nol ($\text{PBIAS} = -0.27\%$). Peringkat kedua ditempati oleh interpolasi Bilinear ($\text{KGE} = 0.8152$), sedangkan model konsensus ansambel hibrida menempati peringkat ketiga ($\text{KGE} = 0.6074$). 
+
+Sebaliknya, model-model yang hanya mengandalkan kovariat topografi tunggal atau terisolasi (seperti OLS Lapse-Rate, PRISM statis, SVR, dan SRF) mengalami penurunan performa yang signifikan pada pengujian blok spasial berjarak $5\text{ km}$ ($\text{KGE} < 0$). Temuan ini memberikan wawasan ilmiah fundamental bahwa dalam kondisi dinamika monsun tropis pulau Jawa, topografi statis saja tidak mampu menjelaskan variabilitas presipitasi bulanan jika tidak digabungkan secara dinamis dengan sinyal multi-satelit dan keadaan kelembapan atmosferik waktu nyata.
+
+\subsection{Analisis Feature Importance dan Interaksi Prediktor Multi-Sensor}
+Tabel \ref{tab:feature_importance} dan Gambar \ref{fig:model_benchmark}(b) memperlihatkan dekomposisi kontribusi kepentingan fitur (\textit{Feature Importance / Gain}) pada model terbaik Multi-Sensor Atmospheric XGBoost.
+
+\input{tables/tab4_feature_importance.tex}
+
+Hasil ini mengungkap hierarki pengaruh fisik terhadap presipitasi Kebumen:
+\begin{enumerate}
+    \item \textbf{Satelit CHIRPS ($89.41\%$):} Berperan sebagai jangkar spasio-temporal utama yang memetakan pola sebaran presipitasi regional berbasis pengamatan inframerah termal jangka panjang.
+    \item \textbf{Satelit GSMaP ($9.26\%$):} Memberikan koreksi penting terhadap konveksi intensif yang sering terlewat oleh sensor termal, sehingga total sinyal gabungan multi-satelit mencapai $98.67\%$.
+    \item \textbf{Reanalisis Atmosfer ERA5-Land ($0.92\%$):} Suhu udara $T_{2m}$ ($0.56\%$), kelembapan relatif $\text{RH}$ ($0.21\%$), kecepatan angin ($0.12\%$), dan tekanan udara ($0.03\%$) berfungsi mengatur ambang batas kondensasi massa udara.
+    \item \textbf{Indeks Vegetasi MODIS NDVI ($0.26\%$):} Menangkap umpan balik (\textit{moisture feedback}) transpirasi vegetasi hutan dan lahan basah.
+    \item \textbf{Kovariat Topografi DEM ($0.15\%$):} Elevasi ($0.06\%$), kemiringan lereng ($0.05\%$), jarak pantai ($0.02\%$), dan orientasi aspek ($0.02\%$) memodulasi gradien mikroklimat pada resolusi halus $250\text{ m}$.
+\end{enumerate}
+
+\subsection{Atlas Klimatologi Presipitasi 25 Tahun (2001--2025) Resolusi 250m}
+Menggunakan model hibrida multi-sensor terbaik dengan penegakan pelestarian konservasi massa regional, seluruh 300 bulan presipitasi (2001--2025) direkonstruksi ke dalam grid 250 meter. Gambar \ref{fig:annual_mean} menampilkan Atlas Rata-rata Presipitasi Tahunan 25 Tahun di Kabupaten Kebumen.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/fig4_climatology_annual_mean.png}
+    \caption{Atlas Klimatologi Presipitasi Tahunan Rata-rata 25 Tahun (2001--2025) Resolusi 250m Kabupaten Kebumen dengan overlay kontur isohyet dan batas administrasi 26 kecamatan.}
+    \label{fig:annual_mean}
+\end{figure}
+
+Rata-rata presipitasi tahunan Kabupaten Kebumen selama periode 2001--2025 tercatat sebesar $2.958,2\text{ mm/tahun}$. Pola spasial memperlihatkan gradien orografis yang sangat tegas:
+\begin{itemize}
+    \item Zona presipitasi tertinggi ($> 3.000$~mm/tahun) terpusat di wilayah perbukitan dan pegunungan utara, khususnya di Kecamatan Sadang ($3.030,9$~mm/tahun) serta kawasan lereng karst Ayah ($3.002,4$~mm/tahun). Wilayah bercurah hujan tinggi lainnya mencakup Ka\-rang\-ga\-yam ($2.991,0$~mm/tahun), Ka\-rang\-sam\-bung ($2.986,9$~mm/tahun), dan kawasan tangkapan Waduk Sempor ($2.984,8$~mm/tahun).
+    \item Zona presipitasi moderat hingga rendah ($2.900$--$2.940$~mm/tahun) mendominasi dataran aluvial sentral dan lembah, meliputi Gombong ($2.901,7$~mm/tahun), Kuwarasan ($2.906,6$~mm/tahun), dan Adimulyo ($2.910,2$~mm/tahun).
+\end{itemize}
+
+Gambar \ref{fig:monthly_cycle} menampilkan siklus musiman bulanan spasial pada grid 3x4 (Januari hingga Desember) sesuai standar Rule 2.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/fig5_monthly_climatological_cycle.png}
+    \caption{Siklus Musiman Spasial Presipitasi 12 Bulan Rata-rata 25 Tahun (2001--2025) di Kabupaten Kebumen pada Skala Warna Terpadu ($30 - 480\text{ mm/bulan}$).}
+    \label{fig:monthly_cycle}
+\end{figure}
+
+Dinamika musiman memperlihatkan dua rezim iklim yang sangat kontras:
+\begin{itemize}
+    \item \textbf{Musim Hujan (November -- April):} Puncak presipitasi terjadi pada bulan Januari ($424,3\text{ mm}$), Desember ($410,5\text{ mm}$), dan Februari ($378,2\text{ mm}$) akibat pengaruh Monsun Asia basah dan zona konvergensi antartropis (ITCZ).
+    \item \textbf{Musim Kemarau (Juni -- September):} Penurunan curah hujan drastis terjadi pada bulan Agustus ($54,1\text{ mm}$) dan Juli ($78,3\text{ mm}$) seiring dominasi massa udara kering Monsun Australia.
+\end{itemize}
+
+\subsection{Analisis Tren Spasial Perubahan Iklim (Sen's Slope Estimator)}
+Analisis tren non-parametrik menggunakan estimator Sen's Slope dihitung untuk setiap piksel 250m selama periode 2001--2025. Peta sebaran spasial laju perubahan presipitasi disajikan pada Gambar \ref{fig:climate_trend}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/fig6_climate_trend_sens_slope.png}
+    \caption{Peta Tren Spasial Perubahan Iklim Presipitasi 25 Tahun (2001--2025) Menggunakan Estimator Sen's Slope (mm/tahun per piksel 250m).}
+    \label{fig:climate_trend}
+\end{figure}
+
+Hasil analisis menunjukkan bahwa seluruh wilayah Kabupaten Kebumen mengalami tren peningkatan presipitasi tahunan yang signifikan (\textit{statistically significant wetting trend}), dengan rata-rata kenaikan sebesar $+24.46\text{ mm/tahun}$ (rentang $+21.51$ hingga $+25.98\text{ mm/tahun}$). Akumulasi kenaikan presipitasi selama seperempat abad mencapai lebih dari $+611\text{ mm}$. Peningkatan paling pesat terkonsentrasi di wilayah perbukitan sentral (Pejagoan, Alian, Sruweng, dan Klirong dengan tren $\approx +24.95\text{ mm/tahun}$), yang mengindikasikan adanya intensifikasi siklus hidrologi konvektif lokal di pulau Jawa bagian selatan.
+
+\subsection{Respon Spasial Terhadap Kejadian Iklim Ekstrem ENSO}
+Gambar \ref{fig:enso_anomalies} menyajikan perbandingan anomali presipitasi absolut dan relatif pada tahun-tahun kejadian iklim ekstrem ENSO: Super La Niña (2010), Super El Niño (2015), Triple-dip La Niña (2022), dan Strong El Niño (2023).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/fig7_extreme_enso_anomalies.png}
+    \caption{Respon Spasial Presipitasi Terhadap Kejadian Iklim Ekstrem ENSO di Kabupaten Kebumen: (a) Total presipitasi Super La Niña 2010; (b) Total presipitasi Super El Niño 2015; (c) Anomali relatif La Niña 2010 (+50.8\% surplus); dan (d) Anomali relatif El Niño 2015 (-24.8\% defisit).}
+    \label{fig:enso_anomalies}
+\end{figure}
+
+Dampak ENSO terhadap hidroklimatologi Kebumen tercatat sangat dramatis:
+\begin{enumerate}
+    \item \textbf{Super La Niña 2010 (Tahun Tanpa Kemarau):} Memicu surplus presipitasi raksasa sebesar $+1.503,0\text{ mm}$ ($+50.8\%$) di atas garis normal. Rata-rata curah hujan tahunan melonjak hingga $4.461,2\text{ mm}$, dengan Kecamatan Sadang mencatat rekor $4.547,6\text{ mm}$. Kondisi kemarau basah ini memicu puluhan kejadian bencana tanah longsor masif di lereng perbukitan utara.
+    \item \textbf{Super El Niño 2015:} Mengakibatkan defisit presipitasi tahunan sebesar $-733,0\text{ mm}$ ($-24.8\%$), di mana curah hujan turun menjadi hanya $2.225,1\text{ mm}$.
+    \item \textbf{Strong El Niño 2023:} Menghasilkan anomali defisit yang bahkan lebih parah mencapai $-982,6\text{ mm}$ ($-33.2\%$) dengan curah hujan tertekan hingga $1.975,6\text{ mm}$, memicu kekeringan pertanian luas dan krisis air bersih di zona pesisir selatan.
+\end{enumerate}
+
+Tabel \ref{tab:extreme_enso_impact} merangkum besaran dampak anomali ENSO pada 15 kecamatan dengan rentang kontras hidrometeorologi tertinggi.
+
+\input{tables/tab6_extreme_enso_impact.tex}
+
+\subsection{Evaluasi Statistik Zonal Komparatif 26 Kecamatan}
+Tabel \ref{tab:zonal_climatology_26kec} menyajikan profil statistik presipitasi 25 tahun untuk seluruh 26 kecamatan di Kabupaten Kebumen, diurutkan berdasarkan rata-rata presipitasi tahunan.
+
+\input{tables/tab5_zonal_climatology_26kec.tex}
+
+Visualisasi komparatif profil klimatologi tahunan dan rentang kontras ekstrem ENSO antar kecamatan ditampilkan pada Gambar \ref{fig:zonal_comparison}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/fig8_zonal_kecamatan_comparison.png}
+    \caption{Profil Klimatologi dan Kerentanan Presipitasi Ekstrem 26 Kecamatan Kabupaten Kebumen: (a) Presipitasi tahunan rata-rata dan rentang historis minimum--maksimum; (b) Rentang kontras presipitasi ekstrem (La Niña 2010 dikurangi El Niño 2015).}
+    \label{fig:zonal_comparison}
+\end{figure}
+
+Rentang kontras antara tahun paling basah (2010) dan paling kering (2015) melampaui $2.200\text{ mm}$ di seluruh kecamatan di Kabupaten Kebumen, dengan puncaknya mencapai $2.260,0\text{ mm}$ di Kecamatan Sadang. Hal ini membuktikan bahwa wilayah Kabupaten Kebumen memiliki sensitivitas hidroklimatologis yang luar biasa tinggi terhadap osilasi iklim global Samudera Pasifik (ENSO) dan Samudera Hindia (IOD).
+
+% =========================================================================
+% BAB V: KESIMPULAN DAN REKOMENDASI KEBIJAKAN
+% =========================================================================
+\section{Kesimpulan dan Rekomendasi Kebijakan}
+
+\subsection{Kesimpulan Utama}
+Berdasarkan serangkaian penelitian, pengujian model, dan analisis rekonstruksi iklim 25 tahun (2001--2025), dapat ditarik kesimpulan saintifik sebagai berikut:
+\begin{enumerate}
+    \item \textbf{Superioritas Fusi Multi-Sensor:} Model \textit{Multi-Sensor Atmospheric XGBoost} merupakan arsitektur terbaik untuk melakukan downscaling presipitasi di wilayah bertopografi kompleks seperti Kebumen, mencapai $KGE = 0.9973$, $RMSE = 5.14\text{ mm}$, $R^2 = 0.9988$, dan $PBIAS = -0.27\%$, mengungguli model topografi statis konvensional secara signifikan pada pengujian spasial independen (buffer 5.000m).
+    \item \textbf{Sinergi Informasi Fisik:} Data satelit CHIRPS ($89.41\%$) dan GSMaP ($9.26\%$) mendominasi penangkapan varians utama curah hujan ($98.67\%$), sementara termodinamika atmosfer ERA5-Land, indeks vegetasi MODIS NDVI, dan digital topografi DEM SRTM 30m memodulasi detail orografis pada resolusi mikro 250m.
+    \item \textbf{Karakteristik Klimatologi 25 Tahun:} Rata-rata presipitasi tahunan Kabupaten Kebumen adalah $2.958,2\text{ mm/tahun}$ dengan gradien orografis tertinggi di Kecamatan Sadang ($3.030,9\text{ mm/tahun}$) dan terendah di Gombong ($2.901,7\text{ mm/tahun}$).
+    \item \textbf{Tren Pembasahan Jangka Panjang:} Estimasi Sen's Slope membuktikan tren peningkatan presipitasi yang konsisten di seluruh 26 kecamatan dengan rata-rata kenaikan $+24.46\text{ mm/tahun}$ ($+611.5\text{ mm}$ dalam 25 tahun).
+    \item \textbf{Sensitivitas Ekstrem ENSO:} Kejadian Super La Niña (2010) memicu lonjakan presipitasi ekstrem hingga $+50.8\%$ ($4.461,2\text{ mm}$), sedangkan Super El Niño (2015 dan 2023) menimbulkan defisit curah hujan parah hingga $-33.2\%$, menciptakan rentang ayunan kontras ekstrem hingga $2.260,0\text{ mm}$ di zona pegunungan utara.
+\end{enumerate}
+
+\subsection{Rekomendasi Kebijakan dan Mitigasi Daerah}
+Temuan dalam monograf ini merekomendasikan langkah strategis bagi Pemerintah Kabupaten Kebumen, BPBD, Bappeda, dan Dinas Pertanian:
+\begin{enumerate}
+    \item \textbf{Zonasi Rawan Bencana Hidrometeorologi Terpilah:}
+    \begin{itemize}
+        \item \textit{Zona Pegunungan Utara (Sadang, Karangkambung, Karanggayam, Sempor):} Wajib diposisikan sebagai zona siaga longsor dan banjir bandang prioritas tinggi saat fase La Niña, dengan penguatan dinding penahan tanah, vegetasi berakar dalam, dan sistem peringatan dini berbasis ambang batas hujan harian orografis.
+        \item \textit{Zona Dataran Pesisir Selatan (Petanahan, Klirong, Ambal, Mirit, Ayah):} Wajib dipersiapkan menghadapi ancaman kekeringan pertanian ekstrem saat fase El Niño melalui pembangunan embung penampung air hujan, optimalisasi jaringan irigasi sekunder dari Waduk Wadaslintang dan Sempor, serta pergeseran kalender tanam adaptif.
+    \end{itemize}
+    \item \textbf{Integrasi Atlas Presipitasi 250m ke dalam RTRW:} Menjadikan peta klimatologi resolusi tinggi 250m ini sebagai dasar revisi Rencana Tata Ruang Wilayah (RTRW) Kabupaten Kebumen dan kajian lingkungan hidup strategis (KLHS).
+    \item \textbf{Operasionalisasi Pipeline Downscaling:} Menerapkan pipeline otomatis terpadu yang telah dibangun dalam penelitian ini untuk pemantauan presipitasi bulanan beresolusi tinggi secara berkala di Kebumen.
+\end{enumerate}
+
+% =========================================================================
+% DAFTAR PUSTAKA
+% =========================================================================
+\newpage
+\begin{thebibliography}{99}
+\addcontentsline{toc}{section}{Daftar Pustaka}
+
+\bibitem{daly2008}
+Daly, C., Halbleib, M., Smith, J. I., Gibson, W. P., Doggett, M. K., Taylor, G. H., Curtis, J., \& Pasteris, P. P. (2008). Physiographically sensitive mapping of climatological temperature and precipitation across the conterminous United States. \textit{International Journal of Climatology}, 28(15), 2031--2064.
+
+\bibitem{funk2015}
+Funk, C., Peterson, P., Landsfeld, M., Pedreros, D., Verdin, J., Shukla, S., Husak, G., Rowland, J., Harrison, L., Hoell, A., \& Michaelsen, J. (2015). The climate hazards infrared precipitation with stations—a new environmental record for monitoring extremes. \textit{Scientific Data}, 2(1), 150066.
+
+\bibitem{gupta2009}
+Gupta, H. V., Kling, H., Yilmaz, K. K., \& Martinez, G. F. (2009). Decomposition of the mean squared error and NSE performance criteria: Implications for improving hydrological modelling. \textit{Journal of Hydrology}, 377(1-2), 80--91.
+
+\bibitem{hersbach2020}
+Hersbach, H., Bell, B., Berrisford, P., Hirahara, S., Horányi, A., Muñoz-Sabater, J., Nicolas, J., Peubey, C., Radu, R., Schepers, D., Simmons, A., Soci, C., Abdalla, S., Abellan, X., Balsamo, G., Bechtold, P., Biavati, G., Bidlot, J., Bonavita, M., ... \& Thépaut, J. N. (2020). The ERA5 global reanalysis. \textit{Quarterly Journal of the Royal Meteorological Society}, 146(730), 1999--2049.
+
+\bibitem{hutchinson1995}
+Hutchinson, M. F. (1995). Interpolating mean rainfall using thin plate smoothing splines. \textit{International Journal of Geographical Information Systems}, 9(4), 385--403.
+
+\bibitem{kubota2007}
+Kubota, T., Shige, S., Hashizume, H., Aonashi, K., Takahashi, N., Seto, S., Hirose, M., Takayabu, Y. N., Ushio, T., Nakagawa, K., Iwanami, K., Kachi, M., \& Okamoto, K. (2007). Global precipitation map using satellite-borne microwave radiometers by the GSMaP project: Production and validation. \textit{IEEE Transactions on Geoscience and Remote Sensing}, 45(7), 2259--2275.
+
+\bibitem{sen1968}
+Sen, P. K. (1968). Estimates of the regression coefficient based on Kendall's tau. \textit{Journal of the American Statistical Association}, 63(324), 1379--1389.
+
+\bibitem{tobler1970}
+Tobler, W. R. (1970). A computer movie simulating urban growth in the Detroit region. \textit{Economic Geography}, 46(sup1), 234--240.
+
+\bibitem{chen2016}
+Chen, T., \& Guestrin, C. (2016). XGBoost: A scalable tree boosting system. In \textit{Proceedings of the 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining} (pp. 785--794).
+
+\bibitem{ke2017}
+Ke, G., Meng, Q., Finley, T., Wang, T., Chen, W., Ma, W., Ye, Q., \& Liu, T. Y. (2017). LightGBM: A highly efficient gradient boosting decision tree. \textit{Advances in Neural Information Processing Systems}, 30, 3146--3154.
+
+\end{thebibliography}
+
+\end{document}

@@ -1,0 +1,26 @@
+\begin{table}[htbp]
+\centering
+\small
+\caption{Kontribusi Relatif dan Feature Importance Prediktor pada Model Multi-Sensor Hybrid XGBoost}
+\label{tab:feature_importance}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{llcc}
+\hline
+\textbf{Kategori Prediktor} & \textbf{Nama Fitur Lingkungan} & \textbf{Gain Relatif} & \textbf{Kontribusi Persentase (\%)} \\
+\hline
+Satelit Presipitasi (Thermal IR) & \texttt{chirps\_raw} & 0.894067 & 89.41\% \\
+Satelit Presipitasi (Passive Microwave) & \texttt{gsmap\_raw} & 0.092599 & 9.26\% \\
+Atmosfer Reanalisis ERA5-Land & \texttt{t2m} & 0.005624 & 0.56\% \\
+Biosfer / Indeks Vegetasi (MODIS) & \texttt{ndvi} & 0.002631 & 0.26\% \\
+Atmosfer Reanalisis ERA5-Land & \texttt{rh} & 0.002119 & 0.21\% \\
+Atmosfer Reanalisis ERA5-Land & \texttt{ws} & 0.001189 & 0.12\% \\
+Topografi Mikro (SRTM DEM) & \texttt{elev} & 0.000623 & 0.06\% \\
+Topografi Mikro (SRTM DEM) & \texttt{slope} & 0.000502 & 0.05\% \\
+Atmosfer Reanalisis ERA5-Land & \texttt{sp} & 0.000266 & 0.03\% \\
+Morfologi Geografis Pesisir & \texttt{coast} & 0.000194 & 0.02\% \\
+Topografi Mikro (Aspek Sinus) & \texttt{sin\_aspect} & 0.000094 & 0.01\% \\
+Topografi Mikro (Aspek Cosinus) & \texttt{cos\_aspect} & 0.000092 & 0.01\% \\
+\hline
+\end{tabular}%
+}
+\end{table}

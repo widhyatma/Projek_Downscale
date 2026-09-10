@@ -1,0 +1,27 @@
+\babel@toc {indonesian}{}\relax 
+\contentsline {section}{Abstrak}{i}{section*.1}%
+\contentsline {section}{\numberline {1}Pendahuluan}{1}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Latar Belakang dan Pertanyaan Penelitian}{1}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Tujuan Penelitian}{1}{subsection.1.2}%
+\contentsline {section}{\numberline {2}Landasan Teori dan Karakteristik Fisik Sensor}{2}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Perbedaan Spektral: Passive Microwave (PMW) vs Thermal Infrared (TIR)}{2}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Karakteristik Topografi dan Jaringan Observasi Kebumen}{2}{subsection.2.2}%
+\contentsline {section}{\numberline {3}Metodologi Penelitian}{4}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Arsitektur Pipeline Ekstraksi Multi-Sensor 25 Tahun}{4}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Protokol Validasi Spasial Tanpa Kebocoran}{4}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Algoritma Downscaling yang Diuji}{4}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Penegakan Konservasi Massa Regional}{5}{subsection.3.4}%
+\contentsline {section}{\numberline {4}Hasil Penelitian dan Analisis Komparatif}{5}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Korelasi Temporal dan Analisis Discrepancy 25 Tahun}{5}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Evaluasi Kinerja Algoritma Downscaling: CHIRPS vs GSMaP vs Fused}{6}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Distribusi Spasial Klimatologi 25 Tahun pada Resolusi 250m}{7}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}Analisis Transekt Orografis Utara--Selatan (Sadang ke Pesisir)}{8}{subsection.4.4}%
+\contentsline {subsection}{\numberline {4.5}Dinamika Musiman Discrepancy Satelit}{9}{subsection.4.5}%
+\contentsline {subsection}{\numberline {4.6}Respon terhadap Kejadian Iklim Ekstrem ENSO}{11}{subsection.4.6}%
+\contentsline {subsection}{\numberline {4.7}Statistik Zonal Komparatif 26 Kecamatan}{12}{subsection.4.7}%
+\contentsline {section}{\numberline {5}Pembahasan Mendalam}{13}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Mengapa Hasil Downscaling GSMaP Tidak Sama dengan CHIRPS?}{13}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Implikasi Terhadap Aplikasi Praktis}{13}{subsection.5.2}%
+\contentsline {section}{\numberline {6}Kesimpulan dan Saran}{14}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Kesimpulan}{14}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Saran dan Arah Penelitian Lanjutan}{14}{subsection.6.2}%

@@ -1,0 +1,13 @@
+Model,KGE,RMSE (mm),MAE (mm),R2,PBIAS (%)
+11. Multi-Sensor Atmospheric XGBoost,0.9973,5.14,4.05,0.9988,-0.27
+1. Bilinear Interpolation,0.8152,53.0,35.81,0.8777,11.49
+12. Hybrid Consensus Ensemble (PRISM+RK+ML),0.6074,119.77,74.11,0.3756,1.04
+10. ANUSPLIN (Trivariate Spline),0.4784,155.47,71.78,-0.052,12.83
+8. Multi-Layer Perceptron (MLP),-0.1159,169.64,139.7,-0.2526,-1.38
+3. PRISM (Topographic-Coastal Facet),-0.3692,151.5,127.05,0.001,-0.02
+6. LightGBM Regressor,-0.3716,151.51,127.12,0.0008,-0.21
+2. OLS Elevation Lapse-Rate,-0.3719,151.52,127.03,0.0007,0.08
+5. Extreme Gradient Boosting (XGBoost),-0.3763,151.53,127.15,0.0006,-0.29
+7. Support Vector Regression (SVR),-0.3786,152.28,125.97,-0.0094,5.4
+4. Spatial Random Forest (SRF),-0.3827,151.55,127.01,0.0003,0.22
+9. Regression-Kriging (RK),-0.4501,345.87,180.64,-4.2069,17.18

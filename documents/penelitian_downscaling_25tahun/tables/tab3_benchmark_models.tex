@@ -1,0 +1,26 @@
+\begin{table}[htbp]
+\centering
+\small
+\caption{Peringkat Evaluasi Akurasi 12 Algoritma Downscaling Berdasarkan Spatial Block Cross-Validation (Buffer 5.000m)}
+\label{tab:benchmark_models}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{clccccc}
+\hline
+\textbf{Peringkat} & \textbf{Nama Algoritma / Arsitektur} & \textbf{KGE} & \textbf{RMSE (mm)} & \textbf{MAE (mm)} & \textbf{$R^2$} & \textbf{PBIAS (\%)} \\
+\hline
+1 & \textbf{Multi-Sensor Atmospheric XGBoost} & \textbf{0.9973} & 5.14 & 4.05 & 0.9988 & -0.27 \\
+2 & \textbf{Bilinear Interpolation} & \textbf{0.8152} & 53.00 & 35.81 & 0.8777 & +11.49 \\
+3 & \textbf{Hybrid Consensus Ensemble (PRISM+RK+ML)} & \textbf{0.6074} & 119.77 & 74.11 & 0.3756 & +1.04 \\
+4 & ANUSPLIN (Trivariate Spline) & 0.4784 & 155.47 & 71.78 & -0.0520 & +12.83 \\
+5 & Multi-Layer Perceptron (MLP) & -0.1159 & 169.64 & 139.70 & -0.2526 & -1.38 \\
+6 & PRISM (Topographic-Coastal Facet) & -0.3692 & 151.50 & 127.05 & 0.0010 & -0.02 \\
+7 & LightGBM Regressor & -0.3716 & 151.51 & 127.12 & 0.0008 & -0.21 \\
+8 & OLS Elevation Lapse-Rate & -0.3719 & 151.52 & 127.03 & 0.0007 & +0.08 \\
+9 & Extreme Gradient Boosting (XGBoost) & -0.3763 & 151.53 & 127.15 & 0.0006 & -0.29 \\
+10 & Support Vector Regression (SVR) & -0.3786 & 152.28 & 125.97 & -0.0094 & +5.40 \\
+11 & Spatial Random Forest (SRF) & -0.3827 & 151.55 & 127.01 & 0.0003 & +0.22 \\
+12 & Regression-Kriging (RK) & -0.4501 & 345.87 & 180.64 & -4.2069 & +17.18 \\
+\hline
+\end{tabular}%
+}
+\end{table}

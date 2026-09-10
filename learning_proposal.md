@@ -1,47 +1,46 @@
-# Learning Proposal: Integrasi Analisis Cuaca & Meteorologi Spasial (ERA5-Land + CHIRPS)
+# Learning Proposal: Standarisasi Typesetting, Tabel Dinamis, dan Guardrail LaTeX
 
-## 1. Konteks & Analisis Kebutuhan
-Proyek ini mengintegrasikan dua dataset utama dari Google Earth Engine (GEE) yang telah diunduh ke dalam folder `data/`:
-1. **ERA5-Land Reanalysis (Hourly):** 6 parameter atmosfer (`precipitation`, `temperature_2m`, `dewpoint_temperature_2m`, `u_wind_10m`, `v_wind_10m`, `surface_pressure`).
-2. **CHIRPS Satellite (Daily/Monthly):** Observasi presipitasi curah hujan beresolusi tinggi (`precipitation`).
-
-Pola analisis mengadopsi standar laporan meteorologi operasional BMKG/WMO (seperti pada `Open Meteo Analytic.ipynb`) dengan peningkatan kemampuan analisis spasial resolusi tinggi untuk Kabupaten Kebumen.
-
----
-
-## 2. Parameter Fisik & Formula Derivasi Atmosfer
-- **Kelembapan Relatif (Relative Humidity - RH %):**
-  Dihitung secara presisi dari Suhu Udara ($T$) dan Suhu Titik Embun ($T_{dew}$) menggunakan persamaan August-Roche-Magnus:
-  $$e_s(T) = 6.112 \times \exp\left(\frac{17.625 \cdot T}{243.04 + T}\right)$$
-  $$e(T_{dew}) = 6.112 \times \exp\left(\frac{17.625 \cdot T_{dew}}{243.04 + T_{dew}}\right)$$
-  $$RH = \text{clip}\left(\frac{e(T_{dew})}{e_s(T)} \times 100\%, 0, 100\right)$$
-
-- **Kecepatan Angin ($WS$ m/s):**
-  $$WS = \sqrt{u_{10m}^2 + v_{10m}^2}$$
+## 1. Identifikasi Masalah & Rationale
+Selama penulisan dan kompilasi monograf penelitian akademik di folder `documents/` (`penelitian_downscaling_2025`, `penelitian_downscaling_25tahun`, dan `penelitian_downscaling_gsmap_vs_chirps`), ditemukan beberapa masalah typesetting berulang:
+1. **Tabel Melebihi Margin (*Overfull \hbox*):** Tabel dengan banyak kolom atau teks nama kecamatan panjang sering kali tumpah ke luar margin kanan kertas A4 jika menggunakan lebar kolom statis.
+2. **Spasi dan Teks Spasial Bahasa Indonesia:** Nama geografis majemuk (*Karanggayam*, *Karangsambung*, *Buluspesantren*) yang berdampingan dengan nilai numerik dan satuan presipitasi ($3.030,9$~mm) menyebabkan LaTeX gagal memotong baris secara alami.
+3. **Peringatan Duplikasi Halaman Hyperref (*Duplicate Destination Identifier*):** Penomoran halaman romawi pada bagian awal (*front matter*) dan arab pada batang tubuh sering memicu peringatan duplikat `name{page.1}` dan `name{page.i}` jika `titlepage` dan `\begin{abstract}` tidak diatur secara tepat dalam kelas `article`.
+4. **Daftar Tabel & Gambar (*LOT/LOF*) yang Melebihi Margin:** Judul caption yang terlalu panjang tumpah di halaman Daftar Tabel/Gambar bila tidak menyertakan judul pendek opsional `\caption[Short]{Long}`.
 
 ---
 
-## 3. Standar Visualisasi & Laporan Meteorologi
-1. **Laporan Bulanan Hyetograph HD 3-Panel:**
-   - **Panel 1:** Curah hujan harian (CHIRPS) dengan diagram batang berlabel nilai.
-   - **Panel 2:** Akumulasi curah hujan bulanan kumulatif (*fill area*).
-   - **Panel 3:** Profil suhu udara harian (Maksimum, Rata-rata, Minimum) dengan area arsir (*shaded area*).
-2. **Boxplot Variabilitas Suhu Jam-jaman:**
-   - Menampilkan sebaran statistik 24 jam untuk setiap tanggal dalam sebulan.
-3. **Heatmap Matriks Anomali Suhu Harian (Hari 1–31 $\times$ Bulan 1–12):**
-   - Dihitung terhadap baseline rata-rata harian (DOY climatology) dengan diverging colormap (`RdBu_r`).
-4. **Peta Spasial 4-Panel Multi-Variabel:**
-   - Menampilkan sebaran spasial Curah Hujan, Suhu Rata-rata, Kelembapan Relatif (RH), dan Kecepatan Angin dengan batas administratif kecamatan Kebumen.
-5. **Hierarki Penyimpanan Plot Otomatis:**
-   - Seluruh grafik otomatis disimpan ke subfolder per tahun dalam resolusi 300 DPI:
-     - `analisis_cuaca_spasial/plots_hyetograph_bulanan/<tahun>/`
-     - `analisis_cuaca_spasial/plots_boxplot_suhu/<tahun>/`
-     - `analisis_cuaca_spasial/plots_heatmap_anomali_suhu/`
-     - `analisis_cuaca_spasial/plots_spasial_cuaca/<tahun>/`
+## 2. Klasifikasi Pembelajaran
+- **Tipe:** Rule Update
+- **Target:** `Rule 14. Automated LaTeX Academic Reporting Standard` pada file [AGENTS.md](file:///d:/Github/Projek_Downscale/.agents/AGENTS.md).
 
 ---
 
-## 4. Rencana Pembaruan Rule / Skill
-Setelah konfirmasi, pola ini akan ditambahkan ke:
-- **`.agents/rules/` atau `.agents/AGENTS.md`**: Menambahkan bagian standardisasi analisis gabungan cuaca & presipitasi.
-- **`.agents/skills/geospatial-raster-analysis/SKILL.md`**: Menambahkan alur kerja derivasi atmosfer (RH, Wind Speed) dan template grafik Hyetograph 3-Panel.
+## 3. Rincian Usulan Perubahan Rule (Proposed Addition)
+
+```markdown
+## 14. Automated LaTeX Academic Reporting Standard
+- **Directory Structure:**
+  - All LaTeX source code (`.tex`), figures (`figures/`), tables (`tables/`), and compiled PDF output (`.pdf`) must reside in `documents/`.
+- **Compiler Compatibility:**
+  - Compile using MiKTeX `pdflatex` (`D:\MiKTeX\miktex\bin\x64\pdflatex.exe -interaction=nonstopmode`).
+  - Use `\usepackage{lmodern}` for scalable Type 1 Latin Modern fonts; avoid `microtype` if font expansion errors occur with raster fonts.
+  - Always escape ampersands outside tabular environments as `\&`.
+- **Multi-Pass Cross-Referencing:**
+  - Run `pdflatex` at least twice (Pass 1 and Pass 2) to ensure all labels, citations, table of contents, and figure references resolve completely with zero errors.
+- **Dynamic Table Scaling Standard:**
+  - All multi-column tables in `tables/*.tex` must be wrapped inside `\resizebox{\linewidth}{!}{% \begin{tabular}... \end{tabular}%}` to ensure 100% margin compliance and eliminate `Overfull \hbox` errors.
+- **Hyphenation & Inter-word Spacing Guardrail:**
+  - Include `\emergencystretch=2em` in the document preamble.
+  - Apply discretionary hyphens `\-` on long Indonesian toponyms (`Ka\-rang\-ga\-yam`, `Ka\-rang\-sam\-bung`, `Bu\-lus\-pe\-san\-tren`) when adjacent to inline numbers and units.
+- **Hyperref Page Destination Integrity:**
+  - Set `plainpages=false,pdfpagelabels=true` inside `\hypersetup`.
+  - Enclose `titlepage` between `\hypersetup{pageanchor=false}` and `\hypersetup{pageanchor=true}` (placed immediately after `\pagenumbering{roman}`) to prevent duplicate `name{page.1}` identifiers.
+  - In `article.cls`, prefer `\section*{Abstrak}` over `\begin{abstract}` when using `titlepage`, to prevent `\endtitlepage` from resetting page counters.
+- **Captions with Short Titles for LOT/LOF:**
+  - Long table and figure captions must provide an optional short title `\caption[Judul Pendek]{Judul Lengkap Deskriptif}` to guarantee clean line wrapping in `\listoftables` and `\listoffigures`.
+```
+
+---
+
+## 4. Konfirmasi Pengguna
+Apakah Anda menyetujui pembaruan Rule 14 di [AGENTS.md](file:///d:/Github/Projek_Downscale/.agents/AGENTS.md) sesuai proposal di atas?

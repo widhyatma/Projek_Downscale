@@ -1,0 +1,20 @@
+\begin{table}[htbp]
+\centering
+\small
+\caption{Karakteristik Komprehensif Multi-Dataset Satelit, Reanalisis Atmosferik, dan Topografi (2001--2025)}
+\label{tab:dataset_summary}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{lccccc}
+\hline
+\textbf{Nama Produk / Sumber} & \textbf{Tipe Data} & \textbf{Resolusi Asli} & \textbf{Domain Waktu} & \textbf{Variabel Utama} & \textbf{Format} \\
+\hline
+CHIRPS v2.0 (UCSB/USGS) & Satelit IR + Stasiun & $0.05^\circ$ ($\approx 5.5$ km) & 2001--2025 (300 bln) & Presipitasi Harian & NetCDF4 \\
+GSMaP v8 MVK (JAXA) & Satelit Microwave & $0.10^\circ$ ($\approx 11$ km) & 2001--2025 (300 bln) & Presipitasi Per-Jam & NetCDF4 \\
+ERA5-Land (ECMWF) & Reanalisis Atmosfer & $0.10^\circ$ ($\approx 11$ km) & 2001--2025 (300 bln) & $T_{2m}$, $T_{dew}$, $u/v$, $P_s$ & NetCDF4 \\
+MODIS Terra (MOD13A3) & Reflektansi Satelit & 1 km resampled 250m & 2001--2025 (300 bln) & NDVI Rata-rata Bulanan & GeoTIFF \\
+SRTM DEM (NASA/USGS) & Radar Topografi & 30m target 250m & Statis (Baseline) & Elevasi, Slope, Aspect & GeoTIFF \\
+BPS / BIG Kebumen & Vektor Administrasi & Skala 1:25.000 & 2024 (Terkini) & Batas 26 Kecamatan & GeoJSON \\
+\hline
+\end{tabular}%
+}
+\end{table}

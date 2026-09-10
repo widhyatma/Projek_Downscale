@@ -1,0 +1,31 @@
+station_id,date,station_name,kecamatan,longitude,latitude,elevation_m,rainfall_mm
+ST_01,2020-01-01,Pos Hujan Ayah Pesisir,Ayah,109.43969,-7.69769,350.0,37.6
+ST_02,2020-01-01,Pos Hujan Buayan,Buayan,109.47271,-7.64872,159.0,37.5
+ST_03,2020-01-01,Pos Hujan Rowokele,Rowokele,109.42121,-7.65175,17.0,39.4
+ST_04,2020-01-01,Pos Hujan Sempor Waduk,Sempor,109.48118,-7.55757,78.0,33.5
+ST_05,2020-01-01,Pos Hujan Sempor Hulu,Sempor,109.50092,-7.58426,25.0,31.1
+ST_06,2020-01-01,Pos Hujan Gombong Kota,Gombong,109.52569,-7.63553,14.0,31.6
+ST_07,2020-01-01,Pos Hujan Kuwarasan,Kuwarasan,109.50431,-7.67911,8.0,36.6
+ST_08,2020-01-01,Pos Hujan Puring,Puring,109.51652,-7.70433,11.0,34.0
+ST_09,2020-01-01,Pos Hujan Petanahan,Petanahan,109.57289,-7.73008,8.0,30.3
+ST_10,2020-01-01,Pos Hujan Klirong,Klirong,109.63629,-7.78374,6.0,33.5
+ST_11,2020-01-01,Pos Hujan Karanganyar,Karanganyar,109.58032,-7.63386,18.0,34.1
+ST_12,2020-01-01,Pos Hujan Karanggayam Lereng,Karanggayam,109.59207,-7.60258,250.0,42.5
+ST_13,2020-01-01,Pos Hujan Karanggayam Puncak,Karanggayam,109.63868,-7.5556,63.0,32.5
+ST_14,2020-01-01,Pos Hujan Sadang Kulon,Sadang,109.70679,-7.49279,385.0,40.2
+ST_15,2020-01-01,Pos Hujan Sadang Wetan,Sadang,109.7296,-7.52571,149.0,35.6
+ST_16,2020-01-01,Pos Hujan Pejagoan,Pejagoan,109.66435,-7.58315,130.0,29.9
+ST_17,2020-01-01,Stasiun Klimatologi Kebumen Kota,Kebumen,109.67162,-7.70396,15.0,33.9
+ST_18,2020-01-01,Pos Hujan Alian,Alian,109.68469,-7.62856,34.0,35.1
+ST_19,2020-01-01,Pos Hujan Padureso Waduk,Padureso,109.76825,-7.61473,144.0,36.2
+ST_20,2020-01-01,Pos Hujan Wadaslintang Bendungan,Wadaslintang,109.81835,-7.72027,8.0,31.5
+ST_21,2020-01-01,Pos Hujan Poncowarno,Poncowarno,109.76215,-7.641,139.0,29.6
+ST_22,2020-01-01,Pos Hujan Kutowinangun,Kutowinangun,109.76918,-7.72765,10.0,30.7
+ST_23,2020-01-01,Pos Hujan Prembun,Prembun,109.79275,-7.72654,11.0,31.1
+ST_24,2020-01-01,Pos Hujan Bonorowo,Bonorowo,109.83178,-7.75192,10.0,29.0
+ST_25,2020-01-01,Pos Hujan Mirit,Mirit,109.77948,-7.79442,20.0,31.1
+ST_26,2020-01-01,Pos Hujan Ambal,Ambal,109.75273,-7.75236,11.0,33.6
+ST_27,2020-01-01,Pos Hujan Buluspesantren,Buluspesantren,109.7032,-7.74437,9.0,39.4
+ST_28,2020-01-01,Pos Hujan Adimulyo,Adimulyo,109.57791,-7.67035,18.0,33.9
+ST_29,2020-01-01,Pos Hujan Sempor Lereng Barat,Sempor,109.51496,-7.56868,103.0,37.1
+ST_30,2020-01-01,Pos Hujan Alian Perbukitan,Alian,109.68851,-7.63141,69.0,34.3

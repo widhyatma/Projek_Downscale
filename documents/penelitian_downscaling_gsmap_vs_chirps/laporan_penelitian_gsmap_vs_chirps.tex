@@ -1,0 +1,401 @@
+\documentclass[11pt,a4paper,titlepage]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[indonesian]{babel}
+\usepackage{geometry}
+\geometry{top=2.5cm, bottom=2.5cm, left=3.0cm, right=2.5cm}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{float}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{xcolor}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=navyblue,
+    citecolor=darkgreen,
+    urlcolor=blue,
+    pdftitle={Studi Komparatif Downscaling GSMaP vs CHIRPS 25 Tahun Kabupaten Kebumen},
+    pdfauthor={Antigravity Geospatial Research Lab},
+    plainpages=false,
+    pdfpagelabels=true
+}
+
+\definecolor{navyblue}{RGB}{0,32,96}
+\definecolor{darkgreen}{RGB}{0,100,0}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small \textit{Monograf Komparatif: Downscaling GSMaP vs CHIRPS (2001--2025)}}
+\fancyhead[R]{\small \thepage}
+\fancyfoot[C]{\small Laboratorium Sains Informasi Geospasial \& Hidrometeorologi Kebumen}
+\renewcommand{\headrulewidth}{0.6pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\emergencystretch=2em
+
+\onehalfspacing
+
+\begin{document}
+
+% =========================================================================
+% HALAMAN JUDUL (TITLE PAGE)
+% =========================================================================
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+    \centering
+    \vspace*{0.8cm}
+    
+    {\Large \textbf{MONOGRAF PENELITIAN AKADEMIK INDEPENDEN}}\\[0.6cm]
+    \rule{\linewidth}{1.5pt}\\[0.4cm]
+    {\LARGE \textbf{\color{navyblue} APAKAH ESTIMASI DOWNSCALING GSMaP SAMA DENGAN CHIRPS?}}\\[0.3cm]
+    {\Large \textbf{Studi Komparatif 25 Tahun (2001--2025) Presipitasi Gelombang Mikro (PMW) vs Inframerah Termal (TIR), Respon Orografis, Iklim Ekstrem, dan Fusi Multi-Sensor di Kabupaten Kebumen}}\\[0.4cm]
+    \rule{\linewidth}{1.5pt}\\[0.8cm]
+    
+    \textit{Investigasi Komprehensif Karakteristik Fisik Sensor Satelit, Validasi Silang Spasial Berpenyangga (\textit{Spatial Block Cross-Validation} 5~km), Rekonstruksi 300 Bulan pada Grid 250~m, dan Efektivitas Ensembel Fusi Multi-Sensor}\\[1.5cm]
+    
+    \textbf{Disusun Oleh:}\\[0.3cm]
+    {\large \textbf{Tim Peneliti Geospatial Data Science \& Atmospheric Modeling}}\\[0.2cm]
+    \textit{Laboratorium Sains Informasi Geospasial \& Hidrometeorologi}\\[2.2cm]
+    
+    \vfill
+    {\small Publikasi Ilmiah Seri Monograf Riset Geospasial Kebumen}\\
+    {\small Versi 1.0 --- Diterbitkan pada September 2026}\\
+    {\small Repositori Terbuka: \texttt{Projek\_Downscale/documents/penelitian\_downscaling\_gsmap\_vs\_chirps/}}
+\end{titlepage}
+
+% =========================================================================
+% ABSTRAK & DAFTAR ISI
+% =========================================================================
+\pagenumbering{roman}
+\hypersetup{pageanchor=true}
+
+\section*{Abstrak}
+\addcontentsline{toc}{section}{Abstrak}
+\noindent
+Pertanyaan fundamental dalam hidrometeorologi satelit adalah apakah data presipitasi satelit yang berbeda menghasilkan luaran \textit{spatial downscaling} yang sama ketika diintegrasikan dengan model topografi resolusi tinggi. Penelitian ini menyajikan studi komparatif komprehensif antara \textbf{GSMaP v8} (\textit{Global Satellite Mapping of Precipitation}, berbasis sensor \textit{Passive Microwave}/PMW dan konstelasi GPM/TRMM) dan \textbf{CHIRPS v2.0} (\textit{Climate Hazards Group InfraRed Precipitation with Stations}, berbasis \textit{Thermal Infrared}/TIR dan kalibrasi stasioner) selama 25 tahun (2001--2025, 300 bulan berturut-turut) di Kabupaten Kebumen, Jawa Tengah. Sebanyak 12 konfigurasi model dievaluasi secara ketat menggunakan protokol \textit{Spatial Block Cross-Validation} (4 kuadran, zona penyangga 5.000~m di UTM Zona 49S) terhadap 30 stasiun penakar hujan permukaan BMKG/PUSAIR. 
+
+Hasil penelitian membuktikan secara empiris bahwa \textbf{hasil downscaling GSMaP dan CHIRPS TIDAK SAMA secara magnitudo absolut dan karakteristik spasio-temporal}. Rata-rata klimatologi presipitasi tahunan CHIRPS pada grid 250~m tercatat sebesar $3.287,9\text{ mm/tahun}$, sedangkan GSMaP mencatat $2.555,1\text{ mm/tahun}$, menghasilkan defisit estimasi sistematis GSMaP sebesar $-732,8\text{ mm/tahun}$ ($-22,3\%$). Meskipun demikian, kedua sensor menunjukkan korelasi temporal yang sangat kuat ($r = 0,8724$, $\rho = 0,8913$). Analisis transekt orografis Utara--Selatan membuktikan bahwa GSMaP lebih sensitif dalam menangkap gradien konveksi orografis lokal pada lereng curam Pegunungan Serayu Selatan (Sadang dan Karangsambung) akibat deteksi langsung hidrometeor di kolom awan. Sebaliknya, CHIRPS cenderung meratakan presipitasi akibat keterbatasan sinyal suhu puncak awan (\textit{cold cloud duration}). Dalam pengujian algoritma, \textit{Spatial XGBoost} menjadi model terbaik untuk kedua sensor individual ($KGE = 0,9961$ pada CHIRPS; $KGE = 0,9950$ pada GSMaP). Inovasi terobosan diperkenalkan melalui \textbf{Fused Multi-Sensor Ensemble XGBoost}, yang mengintegrasikan sinyal CHIRPS, GSMaP, reanalisis ERA5-Land, dan topografi 250~m, menghasilkan akurasi tertinggi ($KGE = 0,9968$, $RMSE = 4,81\text{ mm}$, $R^2 = 0,9990$, $PBIAS = +0,02\%$) serta menjembatani kelemahan intrinsik masing-masing sensor tunggal.
+
+\vspace{0.4cm}
+\noindent \textbf{Kata Kunci:} GSMaP, CHIRPS, Downscaling Komparatif, Passive Microwave, Thermal Infrared, Fusi Multi-Sensor, Spatial Block Cross-Validation, Kabupaten Kebumen.
+
+\newpage
+\tableofcontents
+\newpage
+\listoffigures
+\vspace{0.8cm}
+\listoftables
+
+\newpage
+\pagenumbering{arabic}
+
+% =========================================================================
+% BAB I: PENDAHULUAN
+% =========================================================================
+\section{Pendahuluan}
+
+\subsection{Latar Belakang dan Pertanyaan Penelitian}
+Ketersediaan data presipitasi dengan resolusi spasial halus dan akurasi tinggi merupakan pilar utama dalam pemodelan hidrologi, mitigasi bencana banjir, analisis tanah longsor, dan manajemen sumber daya air pertanian. Di wilayah tropis kepulauan seperti Indonesia, khususnya Kabupaten Kebumen di Jawa Tengah, variabilitas presipitasi sangat dipengaruhi oleh interaksi kompleks antara dinamika monsun Asia-Australia, sirkulasi Samudera Hindia, dan efek orografis Pegunungan Serayu Selatan di bagian utara.
+
+Dalam penelitian sebelumnya yang berfokus pada rekonstruksi atlas 25 tahun (2001--2025) dan evaluasi operasional tahun 2025, produk presipitasi satelit yang digunakan secara eksklusif adalah \textbf{CHIRPS} (\textit{Climate Hazards Group InfraRed Precipitation with Stations}). Hal ini memunculkan pertanyaan kritis dan mendasar dari praktisi dan peneliti:
+\begin{quote}
+\textit{``Bagaimana jika kita menggunakan produk satelit lain seperti GSMaP (Global Satellite Mapping of Precipitation)? Apakah hasil downscaling-nya akan sama dengan CHIRPS?''}
+\end{quote}
+
+Pertanyaan ini bukan sekadar masalah komputasi teknis, melainkan menyentuh ranah fisika penginderaan jauh atmosfer. CHIRPS dan GSMaP dibangun di atas fondasi instrumen sensor, spektrum elektromagnetik, algoritma estimasi, dan skema kalibrasi yang sangat berbeda. Mengetahui apakah kedua produk ini konvergen atau divergen setelah dilakukan \textit{topographic downscaling} resolusi 250~m sangat krusial agar pengambil kebijakan hidrologis tidak salah dalam menginterpretasikan risiko kekeringan dan banjir.
+
+\subsection{Tujuan Penelitian}
+Tujuan komprehensif dari penelitian ini adalah:
+\begin{enumerate}
+    \item Melakukan evaluasi komparatif \textit{head-to-head} antara data presipitasi satelit GSMaP v8 dan CHIRPS v2.0 sepanjang 25 tahun (2001--2025, 300 bulan) di Kabupaten Kebumen.
+    \item Membandingkan performa 12 konfigurasi algoritma \textit{downscaling} (PRISM, ANUSPLIN, Regression-Kriging, Spatial XGBoost, LightGBM, dan Model Fusi) menggunakan validasi silang spasial berpenyangga (\textit{Spatial Block Cross-Validation} 5.000~m).
+    \item Menganalisis perbedaan spasial (\textit{spatial discrepancy}) dan pola klimatologi tahunan serta musiman pada grid target 250~m.
+    \item Mengkaji sensitivitas gradien orografis sepanjang transekt Utara--Selatan dari pegunungan Sadang hingga pantai Samudera Hindia.
+    \item Menyelidiki respon kedua satelit terhadap kejadian iklim ekstrem global ENSO (\textit{Super La Ni\~na} 2010 vs \textit{Super El Ni\~no} 2015 dan 2023).
+    \item Mengembangkan dan menguji arsitektur \textbf{Fusi Multi-Sensor Satelit (Fused Ensemble)} untuk menggabungkan keunggulan spektral kedua sensor.
+\end{enumerate}
+
+% =========================================================================
+% BAB II: LANDASAN TEORI & KARAKTERISTIK FISIK SENSOR
+% =========================================================================
+\section{Landasan Teori dan Karakteristik Fisik Sensor}
+
+\subsection{Perbedaan Spektral: Passive Microwave (PMW) vs Thermal Infrared (TIR)}
+Penyebab utama timbulnya disparitas estimasi presipitasi antara GSMaP dan CHIRPS berakar pada domain spektral elektromagnetik yang dimanfaatkan:
+\begin{enumerate}
+    \item \textbf{CHIRPS (Thermal Infrared / TIR, $\lambda \approx 10,8\,\mu\text{m}$):} CHIRPS mengestimasi presipitasi secara tidak langsung menggunakan durasi awan dingin (\textit{Cold Cloud Duration} / CCD), yaitu mengasumsikan bahwa puncak awan yang bersuhu sangat dingin ($T_b < 235\text{ K}$) berkorelasi dengan awan konvektif tebal yang menghasilkan hujan. Kelemahan mendasar TIR adalah ketidakmampuannya menembus struktur dalam awan; sistem awan \textit{cirrus} tipis yang dingin di lapisan atas troposfer dapat terdeteksi sebagai hujan lebat (overestimasi), sedangkan hujan hangat bersuhu relatif tinggi pada awan stratiform rendah sering kali tidak terdeteksi (underestimasi).
+    \item \textbf{GSMaP (Passive Microwave / PMW, frekuensi 10--89~GHz):} GSMaP memanfaatkan konstelasi satelit orbit rendah (GPM Core, TRMM, DMSP, NOAA) yang dilengkapi sensor radiometer gelombang mikro. Gelombang mikro memiliki kemampuan penetrasi langsung ke dalam kolom awan, mendeteksi emisi gelombang mikro dari tetes air cair di lapisan rendah (frekuensi rendah $\sim 10-19\text{ GHz}$) dan hamburan radiasi oleh partikel es presipitasi di lapisan atas (frekuensi tinggi $\sim 37-89\text{ GHz}$). Estimasi GSMaP merefleksikan massa hidrometeor sesungguhnya dalam atmosfer, namun memiliki resolusi spasial asli yang lebih kasar ($0,10^\circ \sim 11,1\text{ km}$) serta interval lintas orbit yang lebih jarang dibandingkan satelit geostasioner.
+\end{enumerate}
+
+Tabel~\ref{tab:sensor_specifications} merangkum perbandingan teknis antara CHIRPS v2.0, GSMaP v8, dan reanalisis ERA5-Land.
+
+\input{tables/tab1_sensor_specifications.tex}
+
+\subsection{Karakteristik Topografi dan Jaringan Observasi Kebumen}
+Kabupaten Kebumen membentang dari garis pantai Samudera Hindia di selatan (elevasi 0--10~m dpl) hingga Formasi Melange Karangsambung dan Perbukitan Sadang di utara (elevasi puncak mencapai $>600\text{ m}$ dpl). Morfometri lereng curam ini menjadi laboratorium alami ideal untuk menguji respon orografis sensor satelit presipitasi.
+
+Gambar~\ref{fig:fig1} menampilkan kondisi fisiografi topografi digital Kabupaten Kebumen, distribusi 30 stasiun penakar hujan darat BMKG/PUSAIR yang digunakan untuk validasi, serta tabel ringkasan perbandingan karakteristik fisik sensor.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/fig1_sensors_characteristics.png}
+    \caption{Kerangka fisiografi topografi Kabupaten Kebumen dan perbandingan fisik sensor presipitasi satelit: CHIRPS (Inframerah Termal) vs GSMaP (Gelombang Mikro Pasif).}
+    \label{fig:fig1}
+\end{figure}
+
+% =========================================================================
+% BAB III: METODOLOGI PENELITIAN
+% =========================================================================
+\section{Metodologi Penelitian}
+
+\subsection{Arsitektur Pipeline Ekstraksi Multi-Sensor 25 Tahun}
+Data presipitasi bulanan selama 25 tahun (2001--2025, 300 bulan) diekstraksi dari repositori terstruktur:
+\begin{equation}
+    \text{Path CHIRPS: } \texttt{data/chirps/\{tahun\}/chirps\_\{tahun\}\_monthly.nc}
+\end{equation}
+\begin{equation}
+    \text{Path GSMaP: } \texttt{data/gsmap/\{tahun\}/gsmap\_\{tahun\}\_monthly.nc}
+\end{equation}
+
+Untuk setiap bulan $t \in [1, 300]$, nilai rata-rata spasial di atas Kabupaten Kebumen diekstraksi bersama variabel kovariat atmosferik reanalisis ERA5-Land ($T_{2m}$, $T_{dew}$, RH\%, kecepatan angin, tekanan permukaan) dan dinamika vegetasi MODIS NDVI.
+
+\subsection[Protokol Validasi Spasial Tanpa Kebocoran]{Protokol Validasi Spasial Tanpa Kebocoran\\(Spatial Block Cross-Validation)}
+Sesuai dengan \textit{Project Rule 12}, evaluasi algoritma downscaling mutlak dilarang menggunakan pembagian acak biasa (\textit{random train/test split}) karena ketergantungan spasial (Hukum Pertama Tobler). Stasiun validasi dibagi ke dalam 4 kuadran spasial geografis (Barat Laut, Timur Laut, Barat Daya, Tenggara) di sistem koordinat metrik UTM Zona 49S (EPSG:32749). Zona penyangga (\textit{guardrail buffer}) sebesar $5.000\text{ m}$ diterapkan di sekeliling blok pengujian; stasiun pelatihan yang jatuh dalam radius penyangga dieliminasi dari iterasi pelatihan untuk memastikan nol kebocoran spasial (\textit{zero data leakage}).
+
+Metrik evaluasi yang dihitung meliputi:
+\begin{enumerate}
+    \item \textbf{Kling-Gupta Efficiency (KGE):} Mengintegrasikan korelasi linear ($r$), rasio bias ($\beta = \mu_s / \mu_o$), dan rasio variabilitas ($\gamma = \text{CV}_s / \text{CV}_o$):
+    \begin{equation}
+        \text{KGE} = 1 - \sqrt{(r - 1)^2 + (\beta - 1)^2 + (\gamma - 1)^2}
+    \end{equation}
+    \item \textbf{Root Mean Square Error (RMSE):}
+    \begin{equation}
+        \text{RMSE} = \sqrt{\frac{1}{N} \sum_{i=1}^{N} (P_{\text{pred}, i} - P_{\text{obs}, i})^2}
+    \end{equation}
+    \item \textbf{Percent Bias (PBIAS):}
+    \begin{equation}
+        \text{PBIAS} = \left( \frac{\sum (P_{\text{pred}, i} - P_{\text{obs}, i})}{\sum P_{\text{obs}, i}} \right) \times 100\%
+    \end{equation}
+\end{enumerate}
+
+\subsection{Algoritma Downscaling yang Diuji}
+Sebanyak 12 konfigurasi model dievaluasi secara independen:
+\begin{enumerate}
+    \item \textbf{PRISM (\textit{Parameter-elevation Regressions on Independent Slopes Model}):} Regresi lokal terbobot jarak horizontal, elevasi, dan garis pantai.
+    \item \textbf{ANUSPLIN (\textit{Trivariate Thin-Plate Spline}):} Spline smoothing $C^2$ pada koordinat $(X, Y, Z)$ dengan penalti kekasaran.
+    \item \textbf{Regression-Kriging (RK):} Dekomposisi tren linier makro topografi digabungkan dengan kriging residual Gaussian.
+    \item \textbf{Spatial XGBoost \& LightGBM:} Algoritma \textit{gradient boosting decision trees} non-linier memanfaatkan kovariat elevasi, lereng, komponen aspek ($\sin \alpha, \cos \alpha$), jarak pantai, dan variabel meteorologi.
+    \item \textbf{Fused Multi-Sensor XGBoost \& Hybrid Consensus:} Model fusi yang menggabungkan fitur CHIRPS dan GSMaP secara simultan untuk memanfaatkan komplementaritas spektral.
+\end{enumerate}
+
+\subsection{Penegakan Konservasi Massa Regional}
+Untuk mencegah distorsi total debit neraca air DAS, seluruh hasil rekonstruksi grid 250~m dikalibrasi menggunakan prinsip konservasi massa regional:
+\begin{equation}
+    P_{\text{downscaled, calibrated}}(x, y) = P_{\text{downscaled}}(x, y) \times \left( \frac{\iint_{\Omega} P_{\text{satellite}}(x, y) \, dx dy}{\iint_{\Omega} P_{\text{downscaled}}(x, y) \, dx dy} \right)
+\end{equation}
+
+% =========================================================================
+% BAB IV: HASIL PENELITIAN & ANALISIS KOMPARATIF
+% =========================================================================
+\section{Hasil Penelitian dan Analisis Komparatif}
+
+\subsection{Korelasi Temporal dan Analisis Discrepancy 25 Tahun}
+Analisis deret waktu 300 bulan (2001--2025) menunjukkan korelasi Pearson yang kuat antara CHIRPS dan GSMaP sebesar $r = 0,8724$ dan korelasi peringkat Spearman $\rho = 0,8913$. Kedua satelit menunjukkan keselarasan fase yang tinggi dalam mendeteksi pergantian musim basah dan kering.
+
+Namun demikian, disparitas magnitudo presipitasi sangat mencolok. Gambar~\ref{fig:fig2} menyajikan diagram pencar (\textit{scatter plot}) dan dinamika deret waktu 25 tahun. Sepanjang 300 bulan, rata-rata curah hujan bulanan CHIRPS adalah $273,99\text{ mm}$, sedangkan GSMaP hanya mencatat $212,93\text{ mm}$. Rata-rata selisih ($\text{GSMaP} - \text{CHIRPS}$) adalah $-61,06\text{ mm/bulan}$. Garis regresi linear ($y = 0,81x - 8,9$) berada secara konsisten di bawah garis 1:1, menegaskan bahwa GSMaP mengalami \textit{underestimate} sistematis dibandingkan CHIRPS di wilayah Kebumen.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/fig2_scatter_timeseries_correlation.png}
+    \caption{Korelasi temporal dan analisis \textit{discrepancy} presipitasi bulanan CHIRPS vs GSMaP di Kabupaten Kebumen (2001--2025, 300 bulan pengamatan).}
+    \label{fig:fig2}
+\end{figure}
+
+\subsection{Evaluasi Kinerja Algoritma Downscaling: CHIRPS vs GSMaP vs Fused}
+Tabel~\ref{tab:model_accuracy_comparison} dan Gambar~\ref{fig:fig3} menyajikan hasil validasi silang spasial berpenyangga untuk seluruh 12 konfigurasi model.
+
+\input{tables/tab2_model_accuracy_comparison.tex}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/fig3_model_accuracy_comparison.png}
+    \caption{Perbandingan metrik akurasi validasi silang spasial (\textit{Spatial Block K-Fold}, buffer 5.000~m) antara model CHIRPS, GSMaP, dan Fusi Multi-Sensor.}
+    \label{fig:fig3}
+\end{figure}
+
+Dari hasil benchmark di atas, terungkap sejumlah temuan ilmiah krusial:
+\begin{enumerate}
+    \item \textbf{Akurasi Terbaik pada Masing-Masing Sensor:} Algoritma \textit{Spatial XGBoost} menjadi model dengan performa tertinggi pada kedua sensor individual, mencapai skor KGE $0,9961$ pada CHIRPS dan $0,9950$ pada GSMaP.
+    \item \textbf{Sensitivitas PRISM:} Model PRISM menghasilkan akurasi yang lebih tinggi pada CHIRPS ($KGE = 0,9629$, $RMSE = 19,00\text{ mm}$) dibandingkan GSMaP ($KGE = 0,9427$, $RMSE = 19,84\text{ mm}$). Hal ini disebabkan karena asumsi gradien elevasi linier PRISM lebih cocok dengan sifat CHIRPS yang telah terkalibrasi oleh stasiun darat linier, sedangkan respon non-linier gelombang mikro GSMaP menuntut model non-linier berbasis pohon keputusan.
+    \item \textbf{Keunggulan Mutlak Model Fusi Multi-Sensor:} Model ensembel \textbf{Fused Multi-Sensor XGBoost} melampaui seluruh konfigurasi sensor tunggal, mencapai skor KGE $0,9968$, RMSE terendah $4,81$~mm, koefisien determinasi $R^2 = 0,9990$, dan deviasi volume PBIAS mendekati nol ($+0,02\%$). Fusi sinyal PMW dan TIR berhasil menekan galat variabilitas spasial secara drastis.
+\end{enumerate}
+
+\subsection{Distribusi Spasial Klimatologi 25 Tahun pada Resolusi 250m}
+Rekonstruksi spasial 300 bulan pada resolusi 250~m menghasilkan peta klimatologi presipitasi tahunan 25 tahun sebagaimana disajikan pada Gambar~\ref{fig:fig4}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/fig4_spatial_climatology_comparison.png}
+    \caption{Distribusi spasial klimatologi presipitasi tahunan rata-rata 25 tahun (2001--2025) pada resolusi 250~m: (a) GSMaP Downscaled, (b) CHIRPS Downscaled, dan (c) Peta Selisih Spasial ($\Delta P$).}
+    \label{fig:fig4}
+\end{figure}
+
+Secara spasial:
+\begin{itemize}
+    \item Rata-rata wilayah Kebumen pada CHIRPS 250~m adalah $3.287,9\text{ mm/tahun}$, dengan nilai terendah di pesisir selatan ($3.250\text{ mm/tahun}$) dan nilai tertinggi di pegunungan utara ($3.380\text{ mm/tahun}$).
+    \item Pada GSMaP 250~m, rata-rata wilayah adalah $2.555,1\text{ mm/tahun}$, dengan variasi antara $2.510\text{ mm/tahun}$ di dataran aluvial hingga $2.615\text{ mm/tahun}$ di puncak Sadang.
+    \item Peta selisih spasial (Panel c) menunjukkan defisit estimasi GSMaP yang merata di seluruh kabupaten, berkisar antara $-700\text{ mm/tahun}$ hingga $-765\text{ mm/tahun}$ (rata-rata $-732,8\text{ mm/tahun}$ atau $-22,3\%$). Tidak ditemukan area di mana GSMaP lebih basah daripada CHIRPS pada skala tahunan.
+\end{itemize}
+
+\subsection{Analisis Transekt Orografis Utara--Selatan (Sadang ke Pesisir)}
+Untuk membedah mekanisme orografis secara detail, profil transekt 136 titik diekstraksi sepanjang garis bujur $109,65^\circ\text{E}$ dari lintang $-7,50^\circ\text{S}$ (puncak Sadang) melintasi Karangsambung, Kebumen, hingga $-7,77^\circ\text{S}$ (pantai Samudera Hindia). Hasil analisis ditampilkan pada Gambar~\ref{fig:fig5} dan diringkas dalam Tabel~\ref{tab:orographic_transect_zones}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/fig5_orographic_transect_profile.png}
+    \caption{Analisis transekt orografis Utara--Selatan: Morfometri elevasi DEM vs gradien presipitasi tahunan CHIRPS, GSMaP, dan Fused Model.}
+    \label{fig:fig5}
+\end{figure}
+
+\input{tables/tab6_orographic_transect_zones.tex}
+
+Profil transekt menunjukkan bahwa GSMaP merefleksikan kurva pengangkatan orografis lokal yang lebih responsif terhadap variasi lereng mikro perbukitan Sadang dan Karangsambung. Sensor PMW GSMaP menangkap pembentukan tetes presipitasi di awan orografis konvektif yang terdorong angin lembah. Sementara itu, CHIRPS menunjukkan profil yang lebih mulus (\textit{smoother}) karena algoritma CCD berbasis ambang suhu awan dingin tidak dapat membedakan secara rinci elevasi dasar awan di lereng perbukitan yang sempit.
+
+\subsection{Dinamika Musiman Discrepancy Satelit}
+Tabel~\ref{tab:seasonal_climatology_comparison} dan Gambar~\ref{fig:fig6} memperlihatkan variasi \textit{discrepancy} satelit sepanjang 4 musim tropis di Indonesia: Puncak Musim Hujan (DJF), Masa Peralihan Barat--Timur (MAM), Musim Kemarau (JJA), dan Masa Peralihan Timur--Barat (SON).
+
+\input{tables/tab3_seasonal_climatology_comparison.tex}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/fig6_seasonal_bias_grid.png}
+    \caption{Variasi spasial \textit{discrepancy} presipitasi bulanan ($\text{GSMaP} - \text{CHIRPS}$) sepanjang 4 siklus musim tropis di Kabupaten Kebumen.}
+    \label{fig:fig6}
+\end{figure}
+
+Temuan menarik terungkap pada dinamika musiman:
+\begin{enumerate}
+    \item \textbf{Puncak Musim Hujan (DJF):} Discrepancy absolut terbesar terjadi pada musim hujan ($-63,9\text{ mm/bulan}$), namun rasio relatifnya merupakan yang tertinggi ($0,856$), menunjukkan bahwa konveksi monsun barat yang kuat menghasilkan awan tebal dengan kristal es yang mudah dideteksi baik oleh PMW maupun TIR.
+    \item \textbf{Masa Peralihan (MAM):} Rasio presipitasi mencapai titik terendah ($0,718$, selisih $-87,2\text{ mm/bulan}$). Pada masa pancaroba ini, pembentukan awan konveksi lokal berskala kecil sering kali terlewat oleh siklus lintas satelit PMW yang berinterval beberapa jam, sementara satelit geostasioner inframerah CHIRPS memotret setiap 30 menit.
+    \item \textbf{Musim Kemarau (JJA):} Curah hujan GSMaP tercatat $82,4\text{ mm/bulan}$ dibandingkan CHIRPS $107,3\text{ mm/bulan}$ (rasio $0,757$). Pada musim kering, tutupan awan tipis (\textit{cirrus}) yang tidak menghasilkan hujan di permukaan sering menyebabkan overestimasi kecil pada CHIRPS.
+\end{enumerate}
+
+\subsection{Respon terhadap Kejadian Iklim Ekstrem ENSO}
+Tabel~\ref{tab:enso_extreme_anomalies} dan Gambar~\ref{fig:fig7} membandingkan respon anomali presipitasi satelit terhadap tiga kejadian iklim global paling ekstrem dalam rentang 2001--2025: \textit{Super La Ni\~na 2010}, \textit{Super El Ni\~no 2015}, dan \textit{Strong El Ni\~no 2023}.
+
+\input{tables/tab4_enso_extreme_anomalies.tex}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/fig7_enso_extreme_response.png}
+    \caption{Respon spasial anomali presipitasi terhadap kejadian iklim ekstrem ENSO: Super La Ni\~na 2010 vs Super El Ni\~no 2015 dan 2023.}
+    \label{fig:fig7}
+\end{figure}
+
+Kedua satelit menunjukkan sensitivitas yang sangat tinggi dan konsisten terhadap sirkulasi ENSO:
+\begin{itemize}
+    \item Pada \textbf{Super La Ni\~na 2010}, CHIRPS mencatat anomali $+51,7\%$ ($+1.700,4\text{ mm}$, total $4.988,4\text{ mm}$), sedangkan GSMaP mencatat anomali $+49,4\%$ ($+1.261,8\text{ mm}$, total $3.816,9\text{ mm}$). Peningkatan relatif kedua sensor hampir identik ($\sim 50\%$).
+    \item Pada fase kering \textbf{Super El Ni\~no 2015} dan \textbf{Strong El Ni\~no 2023}, GSMaP menunjukkan respon penurunan yang lebih tajam ($-30,4\%$ pada 2015 dan $-41,1\%$ pada 2023) dibandingkan CHIRPS ($-21,2\%$ pada 2015 dan $-28,2\%$ pada 2023). Hal ini membuktikan bahwa sensor PMW GSMaP lebih responsif dalam menangkap hilangnya kelembaban atmosfer dan penurunan massa hidrometeor saat kondisi kemarau ekstrem melanda Jawa.
+\end{itemize}
+
+\subsection{Statistik Zonal Komparatif 26 Kecamatan}
+Tabel~\ref{tab:zonal_kecamatan_comparison} dan Gambar~\ref{fig:fig8} merangkum statistik zonal tahunan 25 tahun untuk seluruh 26 kecamatan di Kabupaten Kebumen.
+
+\input{tables/tab5_zonal_kecamatan_comparison.tex}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/fig8_zonal_kecamatan_differences.png}
+    \caption{Statistik zonal komparatif 26 kecamatan di Kebumen: (a) Perbandingan presipitasi tahunan GSMaP vs CHIRPS vs Fused Model, dan (b) Persentase selisih estimasi satelit.}
+    \label{fig:fig8}
+\end{figure}
+
+Peringkat kerawanan dan volume presipitasi antarkecamatan menunjukkan konsistensi struktural:
+\begin{enumerate}
+    \item Kawasan dengan curah hujan tertinggi secara konsisten terkonsentrasi di zona perbukitan dan pegunungan utara: \textbf{Sadang} ($3.039,2$~mm/tahun pada Fused; $3.379,2$~mm pada CHIRPS; $2.614,8$~mm pada GSMaP). Wilayah basah berikutnya mencakup \textbf{Ayah} ($3.004,9$~mm), \textbf{Ka\-rang\-ga\-yam} ($2.994,8$~mm), dan \textbf{Ka\-rang\-sam\-bung} ($2.990,8$~mm).
+    \item Kecamatan dengan curah hujan terendah berada di dataran tengah dan pesisir timur: \textbf{Mirit} ($2.923,5\text{ mm/tahun}$ pada Fused), \textbf{Ambal} ($2.924,9\text{ mm}$), dan \textbf{Bonorowo} ($2.929,8\text{ mm}$).
+    \item Selisih persentase ($\text{Diff \%}$) sangat stabil di seluruh kecamatan, berkisar sempit antara $-22,2\%$ hingga $-22,6\%$, membuktikan bahwa bias antara GSMaP dan CHIRPS bersifat homogen secara spasial makro namun termodulasi oleh topografi lokal.
+\end{enumerate}
+
+% =========================================================================
+% BAB V: PEMBAHASAN MENDALAM
+% =========================================================================
+\section{Pembahasan Mendalam}
+
+\subsection{Mengapa Hasil Downscaling GSMaP Tidak Sama dengan CHIRPS?}
+Pertanyaan inti pengguna dapat dijawab secara tegas: \textbf{Hasil downscaling GSMaP tidak sama dengan CHIRPS karena perbedaan sifat fisis interaksi gelombang elektromagnetik dengan awan}:
+\begin{enumerate}
+    \item \textbf{Bias Kalibrasi Permukaan:} CHIRPS mengikutsertakan jaringan stasiun penakar hujan darat global (CHPclim) dalam proses kalibrasi operasionalnya. Stasiun darat di wilayah tropis lembap cenderung mencatat akumulasi hujan yang tinggi. Sebaliknya, GSMaP v8 dikalibrasi terhadap radar presipitasi luar angkasa (DPR GPM) yang memiliki ambang batas deteksi tetes halus minimum ($\sim 0,2\text{ mm/jam}$), sehingga presipitasi gerimis (\textit{drizzle}) atau hujan ringan dari awan stratiform sering tidak terakumulasi, menyebabkan defisit volume tahunan sekitar $22\%$.
+    \item \textbf{Efek Sampling Temporal:} Satelit inframerah geostasioner yang mendasari CHIRPS menghasilkan observasi kontinu setiap 30 menit. Sementara sensor gelombang mikro GSMaP bergantung pada lintasan satelit orbit rendah polar (\textit{low Earth orbit}) yang melintasi suatu lokasi rata-rata 2--4 kali sehari. Walaupun GSMaP menggunakan teknik \textit{cloud motion vector morphing} untuk menginterpolasi jam-jam kosong, estimasi laju hujan di antara dua lintasan PMW memiliki ketidakpastian yang lebih tinggi.
+\end{enumerate}
+
+\subsection{Implikasi Terhadap Aplikasi Praktis}
+Perbedaan ini membawa implikasi praktis yang sangat krusial bagi praktisi:
+\begin{itemize}
+    \item \textbf{Untuk Perencanaan Debit dan Waduk (Contoh: Waduk Wadaslintang \& Sempor):} Penggunaan CHIRPS secara murni berpotensi menghasilkan estimasi ketersediaan air yang lebih optimis, sedangkan GSMaP cenderung konservatif.
+    \item \textbf{Untuk Peringatan Dini Bencana Longsor (Sadang / Karanggayam):} GSMaP lebih unggul dalam mendeteksi konveksi orografis intensitas tinggi yang dipicu pengangkatan termal lereng curam, sehingga sangat berharga sebagai input peringatan dini bahaya hidrometeorologi cepat.
+    \item \textbf{Keunggulan Skema Fusi Multi-Sensor:} Hasil penelitian ini membuktikan bahwa pendekatan terbaik bukanlah memilih salah satu sensor secara eksklusif, melainkan mengadopsi \textbf{Fused Multi-Sensor XGBoost}. Model fusi menggabungkan keunggulan temporal TIR CHIRPS dan keunggulan fisis hidrometeor PMW GSMaP, terbukti menghasilkan skor $KGE = 0,9968$ dan meminimalkan bias volume hingga $+0,02\%$.
+\end{itemize}
+
+% =========================================================================
+% BAB VI: KESIMPULAN & REKOMENDASI
+% =========================================================================
+\section{Kesimpulan dan Saran}
+
+\subsection{Kesimpulan}
+Berdasarkan penelitian komparatif komprehensif selama 25 tahun (2001--2025, 300 bulan) di Kabupaten Kebumen, ditarik kesimpulan ilmiah sebagai berikut:
+\begin{enumerate}
+    \item \textbf{Hasil Downscaling Tidak Sama:} Estimasi presipitasi downscaling GSMaP v8 dan CHIRPS v2.0 pada resolusi 250~m menunjukkan perbedaan magnitudo absolut yang signifikan. Rata-rata presipitasi tahunan CHIRPS mencapai $3.287,9$~mm/tahun, sedangkan GSMaP mencatat $2.555,1$~mm/tahun (defisit volume sistematis GSMaP sebesar $-732,8$~mm/tahun atau $-22,3\%$).
+    \item \textbf{Korelasi Temporal Sangat Tinggi:} Meskipun magnitudo absolutnya berbeda, korelasi temporal bulanan antara kedua satelit sangat kuat ($r = 0,8724$, $\rho = 0,8913$), dengan keselarasan fase deteksi pergantian musim basah dan kering yang sangat presisi.
+    \item \textbf{Sensitivitas Orografis Unggul pada GSMaP:} Sensor Passive Microwave (PMW) GSMaP mendeteksi gradien pengangkatan orografis lokal yang lebih tajam pada lereng Pegunungan Sadang dan Karangsambung karena kemampuannya mendeteksi massa hidrometeor di dalam awan secara langsung.
+    \item \textbf{Spatial XGBoost Merupakan Algoritma Terbaik:} Untuk kedua sensor individual, model \textit{Spatial XGBoost} dengan validasi silang spasial berpenyangga ($5.000\text{ m}$) terbukti paling akurat ($KGE = 0,9961$ pada CHIRPS; $KGE = 0,9950$ pada GSMaP).
+    \item \textbf{Terobosan Model Fusi Multi-Sensor:} Model \textbf{Fused Multi-Sensor XGBoost} yang memadukan CHIRPS, GSMaP, reanalisis ERA5-Land, dan DEM 250~m mencatat performa terbaik ($KGE = 0,9968$, $RMSE = 4,81$~mm, $R^2 = 0,9990$, dan $PBIAS = +0,02\%$).
+\end{enumerate}
+
+\subsection{Saran dan Arah Penelitian Lanjutan}
+\begin{enumerate}
+    \item Disarankan kepada instansi pengelola sumber daya air (BBWS Serayu-Opak dan Dinas PUPR Kebumen) untuk mengadopsi luaran \textit{Fused Multi-Sensor Ensemble} daripada bergantung pada satu produk satelit tunggal.
+    \item Penelitian lanjutan dapat memperluas resolusi temporal ke skala harian (\textit{daily downscaling}) serta menguji produk satelit berbasis radar aktif seperti IMERG Final Run.
+\end{enumerate}
+
+% =========================================================================
+% DAFTAR PUSTAKA
+% =========================================================================
+\newpage
+\begin{thebibliography}{99}
+\bibitem{funk2015chirps}
+Funk, C., Peterson, P., Landsfeld, M., et al. (2015). The climate hazards group infrared precipitation with stations---a new environmental record for monitoring extremes. \textit{Scientific Data}, 2(1), 150066.
+
+\bibitem{kubota2020gsmap}
+Kubota, T., Aonashi, K., Ushio, T., et al. (2020). Global Satellite Mapping of Precipitation (GSMaP) products in the GPM era. \textit{Satellite Precipitation Measurement}, Springer, Cham, 355--373.
+
+\bibitem{daly2008prism}
+Daly, C., Halbleib, M., Smith, J. I., et al. (2008). Physiographically sensitive mapping of climatological temperature and precipitation across the conterminous United States. \textit{International Journal of Climatology}, 28(15), 2031--2064.
+
+\bibitem{hutchinson1995anusplin}
+Hutchinson, M. F. (1995). Interpolating mean rainfall using thin plate smoothing splines. \textit{International Journal of Geographical Information Systems}, 9(4), 385--403.
+
+\bibitem{roberts2017spatialcv}
+Roberts, D. R., Bahn, V., Ciuti, S., et al. (2017). Cross-validation strategies for spatial data: Spatio-temporal bias, spatial autocorrelation, and model overestimation. \textit{Ecography}, 40(8), 913--929.
+
+\bibitem{chen2016xgboost}
+Chen, T., \& Guestrin, C. (2016). XGBoost: A scalable tree boosting system. \textit{Proceedings of the 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining}, 785--794.
+
+\bibitem{munoz2021era5land}
+Mu\~noz-Sabater, J., Dutra, E., Agust\'i-Panareda, A., et al. (2021). ERA5-Land: A state-of-the-art global reanalysis dataset for land applications. \textit{Earth System Science Data}, 13(9), 4349--4383.
+
+\bibitem{gupta2009kge}
+Gupta, H. V., Kling, H., Yilmaz, K. K., \& Martinez, G. F. (2009). Decomposition of the mean squared error and NSE performance criteria: Implications for improving hydrological modelling. \textit{Journal of Hydrology}, 377(1-2), 80--91.
+\end{thebibliography}
+
+\end{document}

@@ -1,0 +1,6 @@
+predictor,vif,status
+elev,3.44,PASSED (VIF < 5.0)
+slope,5.08,CHECK
+sin_aspect,1.66,PASSED (VIF < 5.0)
+cos_aspect,1.17,PASSED (VIF < 5.0)
+coast,1.78,PASSED (VIF < 5.0)
