@@ -166,3 +166,19 @@
 - **Fused Multi-Sensor Ensemble Standard:**
   - For optimal hydrological accuracy, enforce a **Fused Multi-Sensor Ensemble** (e.g., Fused Spatial XGBoost) that jointly stacks TIR, PMW, atmospheric reanalysis (ERA5-Land), and high-resolution DEM covariates.
   - Multi-sensor fusion bridges the temporal-sampling limitation of PMW and the cloud-top proxy limitation of TIR, achieving superior Kling-Gupta Efficiency ($KGE > 0.995$) and near-zero percent volume bias ($PBIAS < 0.05\%$).
+
+## 18. Native Finest Temporal Resolution & Standalone CLI GEE Pipelines
+- **Dual Format Architecture (.ipynb & .py):**
+  - Every GEE downloader notebook (`GEE_<DATASET>.ipynb`) must maintain a synchronized, standalone production CLI counterpart (`GEE_<DATASET>.py`).
+  - Standalone scripts must support headless command-line arguments: `--start-year`, `--end-year`, `--start-month`, `--end-month`, `--output-dir`, and `--service-account`.
+- **Enforcement of Native Finest Temporal Resolution:**
+  - Downloader pipelines must strictly ingest and archive data at the smallest native sampling interval:
+    1. **CHIRPS:** Daily resolution (`time: 28..31` steps per monthly NetCDF).
+    2. **GSMaP:** 1-hour resolution (`time: 672..744` steps per monthly NetCDF).
+    3. **ERA5-Land:** 1-hour resolution (6 stacked atmospheric variables, `time: 672..744` steps).
+    4. **NASA GPM IMERG:** Half-hourly / 30-minute resolution (`time: 1344..1488` steps per monthly NetCDF).
+- **Sub-Monthly Chunking Guardrail for Half-Hourly Feeds:**
+  - For half-hourly collections (e.g. IMERG with 1,488 scenes/month exceeding GEE's 1024 band ceiling), export in two sequential 15-day sub-stacks (Day 1-15: 720 bands; Day 16-end: 624-768 bands), then assemble seamlessly into the unified monthly NetCDF file using `xarray.concat`.
+- **Incremental Cache Validation:**
+  - Scripts must verify existing files on disk and skip redundant downloads, only fetching missing periods or newly released real-time dates.
+

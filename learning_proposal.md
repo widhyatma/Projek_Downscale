@@ -1,46 +1,44 @@
-# Learning Proposal: Standarisasi Typesetting, Tabel Dinamis, dan Guardrail LaTeX
+# Learning Proposal: Standarisasi Script CLI GEE Standalone & Penegakan Resolusi Temporal Terkecil Asli
 
 ## 1. Identifikasi Masalah & Rationale
-Selama penulisan dan kompilasi monograf penelitian akademik di folder `documents/` (`penelitian_downscaling_2025`, `penelitian_downscaling_25tahun`, dan `penelitian_downscaling_gsmap_vs_chirps`), ditemukan beberapa masalah typesetting berulang:
-1. **Tabel Melebihi Margin (*Overfull \hbox*):** Tabel dengan banyak kolom atau teks nama kecamatan panjang sering kali tumpah ke luar margin kanan kertas A4 jika menggunakan lebar kolom statis.
-2. **Spasi dan Teks Spasial Bahasa Indonesia:** Nama geografis majemuk (*Karanggayam*, *Karangsambung*, *Buluspesantren*) yang berdampingan dengan nilai numerik dan satuan presipitasi ($3.030,9$~mm) menyebabkan LaTeX gagal memotong baris secara alami.
-3. **Peringatan Duplikasi Halaman Hyperref (*Duplicate Destination Identifier*):** Penomoran halaman romawi pada bagian awal (*front matter*) dan arab pada batang tubuh sering memicu peringatan duplikat `name{page.1}` dan `name{page.i}` jika `titlepage` dan `\begin{abstract}` tidak diatur secara tepat dalam kelas `article`.
-4. **Daftar Tabel & Gambar (*LOT/LOF*) yang Melebihi Margin:** Judul caption yang terlalu panjang tumpah di halaman Daftar Tabel/Gambar bila tidak menyertakan judul pendek opsional `\caption[Short]{Long}`.
+Pengunduhan data satelit dan reanalisis cuaca sering kali dilakukan di lingkungan Jupyter Notebook (`.ipynb`). Meskipun interaktif, penggunaan notebook memiliki limitasi untuk eksekusi terjadwal (*cron jobs*), otomatisasi *background pipeline*, dan pembaruan data bertahap (*incremental update*). Selain itu:
+1. **Pemisahan Script Standalone CLI (.py):** Setiap notebook downloader (`GEE_CHIRPS`, `GEE_GSMAP`, `GEE_ERA5_Land`, `GEE_IMERG`) wajib memiliki padanan script Python murni (`.py`) yang mendukung argumen baris perintah (`argparse` untuk tahun, bulan, path output, dan kredensial).
+2. **Penegakan Resolusi Waktu Terkecil Asli (*Native Finest Temporal Resolution*):**
+   - **CHIRPS:** Resolusi waktu asli terkecil adalah **Harian (Daily)** (`UCSB-CHC/CHIRPS/V3/DAILY_SAT` & `DAILY_RNL`).
+   - **GSMaP:** Resolusi waktu asli terkecil adalah **Per Jam (Hourly)** (`JAXA/GPM_L3/GSMaP/v8/operational`, band `hourlyPrecipRateGC`, 672--744 jam/bulan).
+   - **ERA5-Land:** Resolusi waktu asli terkecil adalah **Per Jam (Hourly)** (`ECMWF/ERA5_LAND/HOURLY`, 6 variabel atmosferik, 672--744 jam/bulan).
+   - **NASA GPM IMERG:** Resolusi waktu asli terkecil adalah **Setengah Jam (Half-Hourly / 30-menit)** (`NASA/GPM_L3/IMERG_V07`, 1.344--1.488 time-steps/bulan).
+3. **Guardrail Band Export GEE untuk Data Setengah Jam (Rule 5):**
+   - Karena citra 30-menit dalam 1 bulan menghasilkan 1.488 scene (>1024 band limit GEE), proses ekspor wajib dibagi menjadi dua interval 15-harian ($\le 768$ band), lalu digabungkan kembali (*concatenate*) secara lokal ke dalam satu file NetCDF bulanan utuh.
 
 ---
 
 ## 2. Klasifikasi Pembelajaran
-- **Tipe:** Rule Update
-- **Target:** `Rule 14. Automated LaTeX Academic Reporting Standard` pada file [AGENTS.md](file:///d:/Github/Projek_Downscale/.agents/AGENTS.md).
+- **Tipe:** Rule Update & New Rule Addition
+- **Target:** Menambahkan `Rule 18. Native Finest Temporal Resolution & Standalone CLI GEE Pipelines` pada [AGENTS.md](file:///d:/Github/Projek_Downscale/.agents/AGENTS.md).
 
 ---
 
-## 3. Rincian Usulan Perubahan Rule (Proposed Addition)
+## 3. Rincian Usulan Penambahan Rule (Proposed Addition)
 
 ```markdown
-## 14. Automated LaTeX Academic Reporting Standard
-- **Directory Structure:**
-  - All LaTeX source code (`.tex`), figures (`figures/`), tables (`tables/`), and compiled PDF output (`.pdf`) must reside in `documents/`.
-- **Compiler Compatibility:**
-  - Compile using MiKTeX `pdflatex` (`D:\MiKTeX\miktex\bin\x64\pdflatex.exe -interaction=nonstopmode`).
-  - Use `\usepackage{lmodern}` for scalable Type 1 Latin Modern fonts; avoid `microtype` if font expansion errors occur with raster fonts.
-  - Always escape ampersands outside tabular environments as `\&`.
-- **Multi-Pass Cross-Referencing:**
-  - Run `pdflatex` at least twice (Pass 1 and Pass 2) to ensure all labels, citations, table of contents, and figure references resolve completely with zero errors.
-- **Dynamic Table Scaling Standard:**
-  - All multi-column tables in `tables/*.tex` must be wrapped inside `\resizebox{\linewidth}{!}{% \begin{tabular}... \end{tabular}%}` to ensure 100% margin compliance and eliminate `Overfull \hbox` errors.
-- **Hyphenation & Inter-word Spacing Guardrail:**
-  - Include `\emergencystretch=2em` in the document preamble.
-  - Apply discretionary hyphens `\-` on long Indonesian toponyms (`Ka\-rang\-ga\-yam`, `Ka\-rang\-sam\-bung`, `Bu\-lus\-pe\-san\-tren`) when adjacent to inline numbers and units.
-- **Hyperref Page Destination Integrity:**
-  - Set `plainpages=false,pdfpagelabels=true` inside `\hypersetup`.
-  - Enclose `titlepage` between `\hypersetup{pageanchor=false}` and `\hypersetup{pageanchor=true}` (placed immediately after `\pagenumbering{roman}`) to prevent duplicate `name{page.1}` identifiers.
-  - In `article.cls`, prefer `\section*{Abstrak}` over `\begin{abstract}` when using `titlepage`, to prevent `\endtitlepage` from resetting page counters.
-- **Captions with Short Titles for LOT/LOF:**
-  - Long table and figure captions must provide an optional short title `\caption[Judul Pendek]{Judul Lengkap Deskriptif}` to guarantee clean line wrapping in `\listoftables` and `\listoffigures`.
+## 18. Native Finest Temporal Resolution & Standalone CLI GEE Pipelines
+- **Dual Format Architecture (.ipynb & .py):**
+  - Every GEE downloader notebook (`GEE_<DATASET>.ipynb`) must maintain a synchronized, standalone production CLI counterpart (`GEE_<DATASET>.py`).
+  - Standalone scripts must support headless command-line arguments: `--start-year`, `--end-year`, `--start-month`, `--end-month`, `--output-dir`, and `--service-account`.
+- **Enforcement of Native Finest Temporal Resolution:**
+  - Downloader pipelines must strictly ingest and archive data at the smallest native sampling interval:
+    1. **CHIRPS:** Daily resolution (`time: 28..31` steps per monthly NetCDF).
+    2. **GSMaP:** 1-hour resolution (`time: 672..744` steps per monthly NetCDF).
+    3. **ERA5-Land:** 1-hour resolution (6 stacked atmospheric variables, `time: 672..744` steps).
+    4. **NASA GPM IMERG:** Half-hourly / 30-minute resolution (`time: 1344..1488` steps per monthly NetCDF).
+- **Sub-Monthly Chunking Guardrail for Half-Hourly Feeds:**
+  - For half-hourly collections (e.g. IMERG with 1,488 scenes/month exceeding GEE's 1024 band ceiling), export in two sequential 15-day sub-stacks (Day 1-15: 720 bands; Day 16-end: 624-768 bands), then assemble seamlessly into the unified monthly NetCDF file using `xarray.concat`.
+- **Incremental Cache Validation:**
+  - Scripts must verify existing files on disk and skip redundant downloads, only fetching missing periods or newly released real-time dates.
 ```
 
 ---
 
 ## 4. Konfirmasi Pengguna
-Apakah Anda menyetujui pembaruan Rule 14 di [AGENTS.md](file:///d:/Github/Projek_Downscale/.agents/AGENTS.md) sesuai proposal di atas?
+Apakah Anda menyetujui penambahan Rule 18 pada [AGENTS.md](file:///d:/Github/Projek_Downscale/.agents/AGENTS.md) ini?
