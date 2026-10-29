@@ -17,9 +17,15 @@ import os
 import sys
 import glob
 import json
+import shutil
 import argparse
 import calendar
 from datetime import datetime, timedelta
+
+try:
+    sys.stdout.reconfigure(encoding='utf-8')
+except Exception:
+    pass
 
 import ee
 import geopandas as gpd
@@ -127,32 +133,108 @@ def prepare_geometry(geojson_path, buffer_deg=0.02):
     )
     return fc, ee_bbox, bounds
 
-def unduh_imerg_halfhourly_bulanan(tahun, bulan, batas_ee, ee_bbox, output_base_dir):
+def check_file_integrity(nc_path, year, month=None, expected_type='imerg'):
+    """
+    Tier 1: Validasi Integritas File NetCDF IMERG.
+    Memeriksa eksistensi, ukuran > 0, dimensi time, dan kelengkapan time steps:
+    - imerg (half-hourly): days_in_month * 48 steps (1344 - 1488)
+    - imerg_monthly: 12 steps (12 bulan akumulasi)
+    """
+    if not os.path.exists(nc_path):
+        return False, "File belum ada", 0
+    if os.path.getsize(nc_path) == 0:
+        return False, "File 0 byte (kosong/korup)", 0
+
+    if expected_type == 'imerg_monthly':
+        expected_steps = 12
+    else:
+        _, days_in_month = calendar.monthrange(year, month)
+        expected_steps = days_in_month * 48
+
+    try:
+        with xr.open_dataset(nc_path) as ds:
+            if 'time' not in ds.dims and 'time' not in ds.coords:
+                return False, "Dimensi 'time' tidak ditemukan", 0
+            actual_steps = ds.sizes.get('time', len(ds['time']))
+            if 'precipitation' not in ds.data_vars:
+                return False, "Variabel 'precipitation' tidak ditemukan", actual_steps
+            if actual_steps < expected_steps:
+                unit_label = "bulan" if expected_type == 'imerg_monthly' else "steps 30-menit"
+                return False, f"Time steps terpotong ({actual_steps}/{expected_steps} {unit_label})", actual_steps
+            unit_label = "bulan" if expected_type == 'imerg_monthly' else "steps 30-menit"
+            return True, f"Lengkap ({actual_steps}/{expected_steps} {unit_label})", actual_steps
+    except Exception as e:
+        return False, f"File rusak / korup ({e})", 0
+
+def check_disk_space(target_dir, min_free_gb=1.5):
+    """
+    Tier 3: Disk Space Guardrail.
+    Memeriksa sisa kapasitas penyimpanan sebelum ekspor citra.
+    """
+    try:
+        _, _, free = shutil.disk_usage(target_dir)
+        free_gb = free / (1024 ** 3)
+        if free_gb < min_free_gb:
+            print(f"  [DISK GUARD] Peringatan: Sisa ruang disk tinggal {free_gb:.2f} GB (< {min_free_gb} GB) di {target_dir}")
+            return False, free_gb
+        return True, free_gb
+    except Exception:
+        return True, 999.0
+
+def unduh_imerg_halfhourly_bulanan(tahun, bulan, batas_ee, ee_bbox, output_base_dir, force=False):
     """
     Mengunduh presipitasi NASA GPM IMERG v07 setengah jam (30-menit / half-hourly)
     selama 1 bulan penuh (1344 - 1488 citra).
     Mematuhi Rule 5: dibagi menjadi 2 sub-stack (Part 1: tgl 1-15, Part 2: tgl 16-akhir),
     masing-masing <= 768 band (<= 1024 band limit GEE), lalu digabungkan dengan xarray.
+    Dilengkapi 4-tier Pre-Flight Guardrails & Atomic Writing.
     """
     folder_tahun = os.path.join(output_base_dir, str(tahun))
     os.makedirs(folder_tahun, exist_ok=True)
 
     nc_path = os.path.join(folder_tahun, f"imerg_{tahun}_{bulan:02d}.nc")
-    if os.path.exists(nc_path):
-        print(f"[{tahun}-{bulan:02d}] File sudah ada: {nc_path} (Dilewati)")
+    nc_path_tmp = f"{nc_path}.tmp"
+
+    # Tier 1: Local Integrity Validation
+    is_valid, msg, actual_steps = check_file_integrity(nc_path, tahun, bulan, 'imerg')
+    if not force and is_valid:
+        print(f"[{tahun}-{bulan:02d}] [OK] File sudah lengkap ({actual_steps} steps 30-menit): {nc_path} (Dilewati)")
         return nc_path
 
-    num_days = calendar.monthrange(tahun, bulan)[1]
-    sub_ranges = [
-        ("part1", f"{tahun}-{bulan:02d}-01", f"{tahun}-{bulan:02d}-16"),
-        ("part2", f"{tahun}-{bulan:02d}-16", f"{tahun+1}-01-01" if bulan == 12 else f"{tahun}-{bulan+1:02d}-01")
-    ]
+    if actual_steps > 0 and not is_valid:
+        print(f"[{tahun}-{bulan:02d}] [PERIKSA GEE] File lokal terdeteksi tidak lengkap: {msg}. Memeriksa data di GEE...")
 
-    parts_da = []
-    temp_files = []
+    tgl_awal_bulan = f"{tahun}-{bulan:02d}-01"
+    tgl_akhir_bulan = f"{tahun+1}-01-01" if bulan == 12 else f"{tahun}-{bulan+1:02d}-01"
 
     print(f"[{tahun}-{bulan:02d}] Mengambil koleksi IMERG V07 30-menit (Native Finest Resolution)...")
     try:
+        # Tier 2: GEE Pre-Flight Metadata Check across full month
+        col_month = (ee.ImageCollection("NASA/GPM_L3/IMERG_V07")
+                     .filterBounds(ee_bbox)
+                     .filterDate(tgl_awal_bulan, tgl_akhir_bulan)
+                     .select('precipitation'))
+
+        total_gee_count = col_month.size().getInfo()
+        if total_gee_count == 0:
+            print(f"[{tahun}-{bulan:02d}] [INFO GEE] Tidak ada data IMERG di GEE untuk periode ini.")
+            return None
+
+        if not force and actual_steps > 0 and total_gee_count <= actual_steps:
+            print(f"[{tahun}-{bulan:02d}] [INFO GEE] File lokal sudah up-to-date dengan data GEE saat ini ({actual_steps}/{total_gee_count} steps). Dilewati.")
+            return nc_path
+
+        # Tier 3: Disk Space Check
+        check_disk_space(folder_tahun)
+
+        sub_ranges = [
+            ("part1", tgl_awal_bulan, f"{tahun}-{bulan:02d}-16"),
+            ("part2", f"{tahun}-{bulan:02d}-16", tgl_akhir_bulan)
+        ]
+
+        parts_da = []
+        temp_files = []
+
         for p_name, t_start, t_end in sub_ranges:
             tif_part = os.path.join(folder_tahun, f"temp_imerg_{tahun}_{bulan:02d}_{p_name}.tif")
             temp_files.append(tif_part)
@@ -172,7 +254,7 @@ def unduh_imerg_halfhourly_bulanan(tahun, bulan, batas_ee, ee_bbox, output_base_
 
             stacked_part = col_sub.toBands().clip(ee_bbox)
 
-            print(f"[{tahun}-{bulan:02d}] Ekspor {p_name} ({n_scenes} bands <= 1024) ke GeoTIFF...")
+            print(f"[{tahun}-{bulan:02d}] Ekspor {p_name} ({n_scenes} bands <= 1024) ke GeoTIFF temporer...")
             geemap.ee_export_image(
                 stacked_part,
                 filename=tif_part,
@@ -188,7 +270,7 @@ def unduh_imerg_halfhourly_bulanan(tahun, bulan, batas_ee, ee_bbox, output_base_
                 parts_da.append(da.load())
 
         if not parts_da:
-            print(f"[{tahun}-{bulan:02d}] ⚠️ Gagal mengumpulkan data IMERG.")
+            print(f"[{tahun}-{bulan:02d}] [ERROR] Gagal mengumpulkan data part IMERG.")
             return None
 
         # Gabungkan Part 1 dan Part 2 sepanjang dimensi waktu (time)
@@ -198,94 +280,142 @@ def unduh_imerg_halfhourly_bulanan(tahun, bulan, batas_ee, ee_bbox, output_base_
             merged_da = xr.concat(parts_da, dim="time")
             ds_full = merged_da.to_dataset(name="precipitation")
 
+        # Tier 4: Atomic NetCDF Staging & Verification
         ds_full.attrs["source"] = "NASA/GPM_L3/IMERG_V07"
         ds_full.attrs["temporal_resolution"] = "Half-Hourly (30-Minute)"
         ds_full.attrs["units"] = "mm/hr"
         ds_full.attrs["long_name"] = "Half-hourly Precipitation (GPM IMERG v07 Final Run)"
-        ds_full.to_netcdf(nc_path)
+        ds_full.to_netcdf(nc_path_tmp)
         ds_full.close()
 
         for f in temp_files:
             if os.path.exists(f):
                 os.remove(f)
 
-        print(f"[{tahun}-{bulan:02d}] Sukses! Tersimpan NetCDF 30-menit: {nc_path}\n")
-        return nc_path
+        tmp_valid, tmp_msg, tmp_steps = check_file_integrity(nc_path_tmp, tahun, bulan, 'imerg')
+        if tmp_valid or (tmp_steps == total_gee_count):
+            if os.path.exists(nc_path):
+                os.remove(nc_path)
+            os.replace(nc_path_tmp, nc_path)
+            print(f"[{tahun}-{bulan:02d}] [SUKSES] Tersimpan secara atomic: {nc_path} ({tmp_steps} steps 30-menit)\n")
+            return nc_path
+        else:
+            print(f"[{tahun}-{bulan:02d}] [ERROR] Validasi atomic gagal ({tmp_msg}). File sementara dibuang.")
+            if os.path.exists(nc_path_tmp):
+                os.remove(nc_path_tmp)
+            return None
 
     except Exception as e:
         print(f"[{tahun}-{bulan:02d}] Error: {e}")
         for f in temp_files:
             if os.path.exists(f):
                 os.remove(f)
+        if os.path.exists(nc_path_tmp):
+            os.remove(nc_path_tmp)
         return None
 
-def unduh_imerg_monthly_tahunan(tahun, batas_ee, ee_bbox, output_base_dir):
+def unduh_imerg_monthly_tahunan(tahun, batas_ee, ee_bbox, output_base_dir, force=False):
     """
     Mode alternatif: Mengunduh 12 bulan akumulasi IMERG Monthly V07 dalam 1 file per tahun.
+    Dilengkapi 4-tier Pre-Flight Guardrails & Atomic Writing.
     """
     folder_tahun = os.path.join(output_base_dir, str(tahun))
     os.makedirs(folder_tahun, exist_ok=True)
     nc_path = os.path.join(folder_tahun, f"imerg_monthly_{tahun}.nc")
+    nc_path_tmp = f"{nc_path}.tmp"
     tif_temp = os.path.join(folder_tahun, f"temp_imerg_monthly_{tahun}.tif")
 
-    if os.path.exists(nc_path):
-        print(f"[{tahun}] File bulanan sudah ada: {nc_path} (Dilewati)")
+    # Tier 1: Local Integrity Check
+    is_valid, msg, actual_steps = check_file_integrity(nc_path, tahun, expected_type='imerg_monthly')
+    if not force and is_valid:
+        print(f"[{tahun}] [OK] File bulanan sudah lengkap ({actual_steps} bulan): {nc_path} (Dilewati)")
         return nc_path
 
     tgl_awal = f"{tahun}-01-01"
     tgl_akhir = f"{tahun+1}-01-01"
 
-    col = (ee.ImageCollection("NASA/GPM_L3/IMERG_MONTHLY_V07")
-           .filterBounds(ee_bbox)
-           .filterDate(tgl_awal, tgl_akhir))
+    print(f"[{tahun}] Mengambil koleksi IMERG Monthly V07 dari GEE...")
+    try:
+        col = (ee.ImageCollection("NASA/GPM_L3/IMERG_MONTHLY_V07")
+               .filterBounds(ee_bbox)
+               .filterDate(tgl_awal, tgl_akhir))
 
-    n_img = col.size().getInfo()
-    if n_img == 0:
-        print(f"[{tahun}] Data IMERG Monthly tidak tersedia di GEE.")
+        n_img = col.size().getInfo()
+        if n_img == 0:
+            print(f"[{tahun}] [INFO GEE] Data IMERG Monthly tidak tersedia di GEE.")
+            return None
+
+        if not force and actual_steps > 0 and n_img <= actual_steps:
+            print(f"[{tahun}] [INFO GEE] File lokal sudah up-to-date ({actual_steps}/{n_img} bulan). Dilewati.")
+            return nc_path
+
+        # Tier 3: Disk Space Check
+        check_disk_space(folder_tahun)
+
+        times_ms = col.aggregate_array('system:time_start').getInfo()
+        time_index = pd.to_datetime(times_ms, unit='ms')
+
+        def convert_to_monthly_accum(img):
+            date = ee.Date(img.get('system:time_start'))
+            days = date.advance(1, 'month').difference(date, 'day')
+            rate_mm_day = img.select('precipitation')
+            monthly_mm = rate_mm_day.multiply(days).rename('precipitation')
+            return monthly_mm.copyProperties(img, ['system:time_start'])
+
+        monthly_col = col.map(convert_to_monthly_accum)
+        stacked = monthly_col.toBands().clip(ee_bbox)
+
+        print(f"[{tahun}] Mengekspor {n_img} bulan ke GeoTIFF temporer...")
+        geemap.ee_export_image(
+            stacked,
+            filename=tif_temp,
+            region=ee_bbox,
+            scale=11132,
+            file_per_band=False
+        )
+
+        # Tier 4: Atomic NetCDF Staging & Verification
+        with rxr.open_rasterio(tif_temp, masked=True) as da:
+            da = da.rename({'band': 'time'})
+            da['time'] = time_index[:len(da.time)]
+            da.name = "precipitation"
+            da.attrs["units"] = "mm/month"
+            da.attrs["source"] = "NASA/GPM_L3/IMERG_MONTHLY_V07"
+            da.to_netcdf(nc_path_tmp)
+
+        if os.path.exists(tif_temp):
+            os.remove(tif_temp)
+
+        tmp_valid, tmp_msg, tmp_steps = check_file_integrity(nc_path_tmp, tahun, expected_type='imerg_monthly')
+        if tmp_valid or (tmp_steps == n_img):
+            if os.path.exists(nc_path):
+                os.remove(nc_path)
+            os.replace(nc_path_tmp, nc_path)
+            print(f"[{tahun}] [SUKSES] Tersimpan secara atomic: {nc_path} ({tmp_steps} bulan)\n")
+            return nc_path
+        else:
+            print(f"[{tahun}] [ERROR] Validasi atomic gagal ({tmp_msg}). File sementara dibuang.")
+            if os.path.exists(nc_path_tmp):
+                os.remove(nc_path_tmp)
+            return None
+
+    except Exception as e:
+        print(f"[{tahun}] Error: {e}")
+        if os.path.exists(tif_temp):
+            os.remove(tif_temp)
+        if os.path.exists(nc_path_tmp):
+            os.remove(nc_path_tmp)
         return None
 
-    times_ms = col.aggregate_array('system:time_start').getInfo()
-    time_index = pd.to_datetime(times_ms, unit='ms')
-
-    def convert_to_monthly_accum(img):
-        date = ee.Date(img.get('system:time_start'))
-        days = date.advance(1, 'month').difference(date, 'day')
-        rate_mm_day = img.select('precipitation')
-        monthly_mm = rate_mm_day.multiply(days).rename('precipitation')
-        return monthly_mm.copyProperties(img, ['system:time_start'])
-
-    monthly_col = col.map(convert_to_monthly_accum)
-    stacked = monthly_col.toBands().clip(ee_bbox)
-
-    geemap.ee_export_image(
-        stacked,
-        filename=tif_temp,
-        region=ee_bbox,
-        scale=11132,
-        file_per_band=False
-    )
-
-    with rxr.open_rasterio(tif_temp, masked=True) as da:
-        da = da.rename({'band': 'time'})
-        da['time'] = time_index[:len(da.time)]
-        da.name = "precipitation"
-        da.attrs["units"] = "mm/month"
-        da.attrs["source"] = "NASA/GPM_L3/IMERG_MONTHLY_V07"
-        da.to_netcdf(nc_path)
-
-    if os.path.exists(tif_temp):
-        os.remove(tif_temp)
-    print(f"[{tahun}] Sukses! Tersimpan: {nc_path}\n")
-    return nc_path
-
 def main():
-    parser = argparse.ArgumentParser(description="GEE NASA GPM IMERG Downloader CLI")
+    parser = argparse.ArgumentParser(description="GEE NASA GPM IMERG Downloader CLI with Pre-Flight Guardrails")
     parser.add_argument("--start-year", type=int, default=2024, help="Tahun awal pengunduhan (default: 2024)")
     parser.add_argument("--end-year", type=int, default=2026, help="Tahun akhir pengunduhan (default: 2026)")
     parser.add_argument("--start-month", type=int, default=1, help="Bulan awal (default: 1)")
     parser.add_argument("--end-month", type=int, default=12, help="Bulan akhir (default: 12)")
     parser.add_argument("--mode", choices=['half-hourly', 'monthly'], default='half-hourly',
                         help="Mode temporal: 'half-hourly' (resolusi waktu asli 30-menit) atau 'monthly' (akumulasi bulanan)")
+    parser.add_argument("--force", action="store_true", help="Paksa unduh ulang meskipun file lokal sudah lengkap")
     parser.add_argument("--output-dir", type=str, default=None, help="Folder basis output")
     parser.add_argument("--geojson", type=str, default="33.05_kecamatan.geojson", help="Path batas GeoJSON Kebumen")
     parser.add_argument("--service-account", type=str, default=None, help="Path file Service Account JSON GEE")
@@ -298,6 +428,7 @@ def main():
     print(f"GEE NASA GPM IMERG v07 DOWNLOADER CLI (MODE: {args.mode.upper()})")
     print(f"Periode: {args.start_year} s.d. {args.end_year}")
     print(f"Output : {output_dir}")
+    print(f"Force  : {args.force}")
     print("=" * 75)
 
     init_earth_engine(sa_path=args.service_account)
@@ -306,13 +437,13 @@ def main():
 
     if args.mode == 'monthly':
         for tahun in range(args.start_year, args.end_year + 1):
-            unduh_imerg_monthly_tahunan(tahun, batas_ee, ee_bbox, output_dir)
+            unduh_imerg_monthly_tahunan(tahun, batas_ee, ee_bbox, output_dir, force=args.force)
     else:
         for tahun in range(args.start_year, args.end_year + 1):
             m_start = args.start_month if tahun == args.start_year else 1
             m_end = args.end_month if tahun == args.end_year else 12
             for bulan in range(m_start, m_end + 1):
-                unduh_imerg_halfhourly_bulanan(tahun, bulan, batas_ee, ee_bbox, output_dir)
+                unduh_imerg_halfhourly_bulanan(tahun, bulan, batas_ee, ee_bbox, output_dir, force=args.force)
 
     print("=" * 75)
     print("SELESAI PIPELINE UNDUH NASA GPM IMERG")

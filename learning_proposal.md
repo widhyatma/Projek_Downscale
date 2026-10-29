@@ -1,44 +1,32 @@
-# Learning Proposal: Standarisasi Script CLI GEE Standalone & Penegakan Resolusi Temporal Terkecil Asli
+# Learning Proposal: Penegasan Manajemen Kode Scratch & Workspace Hygiene (Rule 10)
 
 ## 1. Identifikasi Masalah & Rationale
-Pengunduhan data satelit dan reanalisis cuaca sering kali dilakukan di lingkungan Jupyter Notebook (`.ipynb`). Meskipun interaktif, penggunaan notebook memiliki limitasi untuk eksekusi terjadwal (*cron jobs*), otomatisasi *background pipeline*, dan pembaruan data bertahap (*incremental update*). Selain itu:
-1. **Pemisahan Script Standalone CLI (.py):** Setiap notebook downloader (`GEE_CHIRPS`, `GEE_GSMAP`, `GEE_ERA5_Land`, `GEE_IMERG`) wajib memiliki padanan script Python murni (`.py`) yang mendukung argumen baris perintah (`argparse` untuk tahun, bulan, path output, dan kredensial).
-2. **Penegakan Resolusi Waktu Terkecil Asli (*Native Finest Temporal Resolution*):**
-   - **CHIRPS:** Resolusi waktu asli terkecil adalah **Harian (Daily)** (`UCSB-CHC/CHIRPS/V3/DAILY_SAT` & `DAILY_RNL`).
-   - **GSMaP:** Resolusi waktu asli terkecil adalah **Per Jam (Hourly)** (`JAXA/GPM_L3/GSMaP/v8/operational`, band `hourlyPrecipRateGC`, 672--744 jam/bulan).
-   - **ERA5-Land:** Resolusi waktu asli terkecil adalah **Per Jam (Hourly)** (`ECMWF/ERA5_LAND/HOURLY`, 6 variabel atmosferik, 672--744 jam/bulan).
-   - **NASA GPM IMERG:** Resolusi waktu asli terkecil adalah **Setengah Jam (Half-Hourly / 30-menit)** (`NASA/GPM_L3/IMERG_V07`, 1.344--1.488 time-steps/bulan).
-3. **Guardrail Band Export GEE untuk Data Setengah Jam (Rule 5):**
-   - Karena citra 30-menit dalam 1 bulan menghasilkan 1.488 scene (>1024 band limit GEE), proses ekspor wajib dibagi menjadi dua interval 15-harian ($\le 768$ band), lalu digabungkan kembali (*concatenate*) secara lokal ke dalam satu file NetCDF bulanan utuh.
+Pengguna memberikan instruksi eksplisit:
+> `kalau mau buat kode scratch masuk ke d:\Github\Projek_Downscale\scratch`
+
+Sebelumnya, Rule 10 sudah tercantum pada [`.agents/AGENTS.md`](file:///d:/Github/Projek_Downscale/.agents/AGENTS.md), namun perlu dipertegas sebagai **Zero-Tolerance Behavioral Guardrail** agar agen tidak pernah membuat skrip uji coba, inspeksi data, atau skrip ad-hoc di direktori root atau direktori dokumen proyek.
 
 ---
 
 ## 2. Klasifikasi Pembelajaran
-- **Tipe:** Rule Update & New Rule Addition
-- **Target:** Menambahkan `Rule 18. Native Finest Temporal Resolution & Standalone CLI GEE Pipelines` pada [AGENTS.md](file:///d:/Github/Projek_Downscale/.agents/AGENTS.md).
+- **Tipe:** Update Existing Rule
+- **Target File:** [`.agents/AGENTS.md`](file:///d:/Github/Projek_Downscale/.agents/AGENTS.md)
+- **Target Bagian:** `## 10. Workspace Scratch Code Management`
 
 ---
 
-## 3. Rincian Usulan Penambahan Rule (Proposed Addition)
+## 3. Rincian Usulan Perubahan (Diff / Proposed Update)
 
 ```markdown
-## 18. Native Finest Temporal Resolution & Standalone CLI GEE Pipelines
-- **Dual Format Architecture (.ipynb & .py):**
-  - Every GEE downloader notebook (`GEE_<DATASET>.ipynb`) must maintain a synchronized, standalone production CLI counterpart (`GEE_<DATASET>.py`).
-  - Standalone scripts must support headless command-line arguments: `--start-year`, `--end-year`, `--start-month`, `--end-month`, `--output-dir`, and `--service-account`.
-- **Enforcement of Native Finest Temporal Resolution:**
-  - Downloader pipelines must strictly ingest and archive data at the smallest native sampling interval:
-    1. **CHIRPS:** Daily resolution (`time: 28..31` steps per monthly NetCDF).
-    2. **GSMaP:** 1-hour resolution (`time: 672..744` steps per monthly NetCDF).
-    3. **ERA5-Land:** 1-hour resolution (6 stacked atmospheric variables, `time: 672..744` steps).
-    4. **NASA GPM IMERG:** Half-hourly / 30-minute resolution (`time: 1344..1488` steps per monthly NetCDF).
-- **Sub-Monthly Chunking Guardrail for Half-Hourly Feeds:**
-  - For half-hourly collections (e.g. IMERG with 1,488 scenes/month exceeding GEE's 1024 band ceiling), export in two sequential 15-day sub-stacks (Day 1-15: 720 bands; Day 16-end: 624-768 bands), then assemble seamlessly into the unified monthly NetCDF file using `xarray.concat`.
-- **Incremental Cache Validation:**
-  - Scripts must verify existing files on disk and skip redundant downloads, only fetching missing periods or newly released real-time dates.
+## 10. Workspace Scratch Code Management
+- **Wajib menyimpan seluruh skrip sementara/scratch di folder `scratch/` (Zero-Tolerance Guardrail)**:
+  - Path folder absolut: `d:\Github\Projek_Downscale\scratch/`
+  - Dilarang keras membuat skrip verifikasi, tes sementara, inspeksi data (`check_*.py`, `test_*.py`, `inspect_*.py`), atau file intermediate langsung di root direktori repositori maupun di dalam `documents/`.
+  - Setiap eksekusi skrip scratch harus memanggil file dari direktori `scratch/<nama_script>.py`.
+  - **Siklus Hidup Scratch (Lifecycle Hygiene):** Setelah eksekusi skrip scratch selesai dan hasilnya diperoleh, agen wajib membersihkan file tersebut dari `scratch/` agar workspace tetap bersih dan terpelihara.
 ```
 
 ---
 
 ## 4. Konfirmasi Pengguna
-Apakah Anda menyetujui penambahan Rule 18 pada [AGENTS.md](file:///d:/Github/Projek_Downscale/.agents/AGENTS.md) ini?
+Apakah Anda menyetujui penguatan **Rule 10** pada [`.agents/AGENTS.md`](file:///d:/Github/Projek_Downscale/.agents/AGENTS.md) ini?

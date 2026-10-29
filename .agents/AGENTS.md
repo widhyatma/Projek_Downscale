@@ -70,12 +70,12 @@
   - Single-panel dual-axis correlation: Left Y Suhu (`darkorange` ●) vs Right Y Curah Hujan (`dodgerblue` bars).
   - Saved to `periode_tertentu_plots/<tahun>/Periode_<target_waktu>.png`.
 
-## 10. Workspace Scratch Code Management
+## 10. Workspace Scratch Code Management (Zero-Tolerance Guardrail)
 - **Wajib menyimpan seluruh skrip sementara/scratch di folder `scratch/`**:
-  - Path folder: `d:\Github\Projek_Downscale\scratch/`
-  - Dilarang membuat skrip verifikasi, tes sementara, atau kode inspeksi langsung di root direktori repositori.
+  - Path folder absolut: `d:\Github\Projek_Downscale\scratch/`
+  - Dilarang keras membuat skrip verifikasi, tes sementara, inspeksi data (`check_*.py`, `test_*.py`, `inspect_*.py`), atau file intermediate langsung di root direktori repositori maupun di dalam `documents/`.
   - Setiap eksekusi skrip scratch harus memanggil file dari direktori `scratch/<nama_script>.py`.
-  - Bersihkan atau kelola file dalam `scratch/` secara teratur agar repositori tetap rapi.
+  - **Siklus Hidup Scratch (Lifecycle Hygiene):** Setelah eksekusi skrip scratch selesai dan hasilnya diperoleh, file sementara di dalam `scratch/` wajib langsung dibersihkan agar workspace tetap bersih dan terpelihara.
 
 ## 11. Topographic Precipitation Downscaling Architecture
 - **Multi-Model Suite Standards:**

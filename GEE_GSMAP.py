@@ -13,14 +13,21 @@ import os
 import sys
 import glob
 import json
+import shutil
 import argparse
 import calendar
 from datetime import datetime, timedelta
+
+try:
+    sys.stdout.reconfigure(encoding='utf-8')
+except Exception:
+    pass
 
 import ee
 import geopandas as gpd
 import geemap
 import rioxarray as rxr
+import xarray as xr
 import pandas as pd
 from shapely.validation import make_valid
 from shapely.ops import transform, unary_union
@@ -120,20 +127,67 @@ def prepare_geometry(geojson_path, buffer_deg=0.01):
     )
     return fc, ee_bbox, bounds
 
-def unduh_gsmap_bulanan(tahun, bulan, batas_ee, ee_bbox, output_base_dir):
+def check_file_integrity(nc_path, year, month, expected_type='gsmap'):
+    """
+    Tier 1: Validasi Integritas File NetCDF.
+    Memeriksa eksistensi, ukuran > 0, dan kecukupan time steps vs jumlah jam dalam bulan (days * 24).
+    """
+    if not os.path.exists(nc_path):
+        return False, "File belum ada", 0
+    if os.path.getsize(nc_path) == 0:
+        return False, "File 0 byte (kosong/korup)", 0
+
+    _, days_in_month = calendar.monthrange(year, month)
+    expected_steps = days_in_month * 24
+
+    try:
+        with xr.open_dataset(nc_path) as ds:
+            if 'time' not in ds.dims and 'time' not in ds.coords:
+                return False, "Dimensi 'time' tidak ditemukan", 0
+            actual_steps = ds.sizes.get('time', len(ds['time']))
+            if 'precipitation' not in ds.data_vars:
+                return False, "Variabel 'precipitation' tidak ditemukan", actual_steps
+            if actual_steps < expected_steps:
+                return False, f"Time steps terpotong ({actual_steps}/{expected_steps} jam)", actual_steps
+            return True, f"Lengkap ({actual_steps}/{expected_steps} jam)", actual_steps
+    except Exception as e:
+        return False, f"File rusak / korup ({e})", 0
+
+def check_disk_space(target_dir, min_free_gb=1.5):
+    """
+    Tier 3: Disk Space Guardrail.
+    Memeriksa sisa kapasitas penyimpanan sebelum ekspor citra.
+    """
+    try:
+        _, _, free = shutil.disk_usage(target_dir)
+        free_gb = free / (1024 ** 3)
+        if free_gb < min_free_gb:
+            print(f"  [DISK GUARD] Peringatan: Sisa ruang disk tinggal {free_gb:.2f} GB (< {min_free_gb} GB) di {target_dir}")
+            return False, free_gb
+        return True, free_gb
+    except Exception:
+        return True, 999.0
+
+def unduh_gsmap_bulanan(tahun, bulan, batas_ee, ee_bbox, output_base_dir, force=False):
     """
     Mengunduh presipitasi GSMaP per jam (hourly) selama 1 bulan penuh
-    menggunakan multi-band stacking (672-744 band) dan menyimpannya ke NetCDF.
+    menggunakan multi-band stacking (672-744 band) dengan 4-tier Pre-Flight Guardrails & Atomic Writing.
     """
     folder_tahun = os.path.join(output_base_dir, str(tahun))
     os.makedirs(folder_tahun, exist_ok=True)
 
     nc_path = os.path.join(folder_tahun, f"gsmap_{tahun}_{bulan:02d}.nc")
+    nc_path_tmp = f"{nc_path}.tmp"
     tif_path = os.path.join(folder_tahun, f"temp_gsmap_{tahun}_{bulan:02d}.tif")
 
-    if os.path.exists(nc_path):
-        print(f"[{tahun}-{bulan:02d}] File sudah ada: {nc_path} (Dilewati)")
+    # Tier 1: Local Integrity Validation
+    is_valid, msg, actual_steps = check_file_integrity(nc_path, tahun, bulan, 'gsmap')
+    if not force and is_valid:
+        print(f"[{tahun}-{bulan:02d}] [OK] File sudah lengkap ({actual_steps} jam): {nc_path} (Dilewati)")
         return nc_path
+
+    if actual_steps > 0 and not is_valid:
+        print(f"[{tahun}-{bulan:02d}] [PERIKSA GEE] File lokal terdeteksi tidak lengkap: {msg}. Memeriksa ketersediaan citra di GEE...")
 
     tgl_mulai = f"{tahun}-{bulan:02d}-01"
     if bulan == 12:
@@ -148,17 +202,25 @@ def unduh_gsmap_bulanan(tahun, bulan, batas_ee, ee_bbox, output_base_dir):
                .filter(ee.Filter.date(tgl_mulai, tgl_akhir))
                .select('hourlyPrecipRateGC'))
 
+        # Tier 2: GEE Pre-Flight Metadata Check
         count = col.size().getInfo()
         if count == 0:
-            print(f"[{tahun}-{bulan:02d}] Tidak ada data di GEE untuk periode ini.")
+            print(f"[{tahun}-{bulan:02d}] [INFO GEE] Tidak ada data di GEE untuk periode ini.")
             return None
+
+        if not force and actual_steps > 0 and count <= actual_steps:
+            print(f"[{tahun}-{bulan:02d}] [INFO GEE] File lokal sudah up-to-date dengan data GEE saat ini ({actual_steps}/{count} jam). Dilewati.")
+            return nc_path
+
+        # Tier 3: Disk Space Check
+        check_disk_space(folder_tahun)
 
         timestamps_ms = col.aggregate_array('system:time_start').getInfo()
         time_index = pd.to_datetime(timestamps_ms, unit='ms')
 
         stacked = col.toBands().clip(ee_bbox)
 
-        print(f"[{tahun}-{bulan:02d}] Mengunduh {count} jam sekaligus ke GeoTIFF...")
+        print(f"[{tahun}-{bulan:02d}] Mengunduh {count} jam sekaligus ke GeoTIFF temporer...")
         geemap.ee_export_image(
             stacked,
             filename=tif_path,
@@ -167,6 +229,7 @@ def unduh_gsmap_bulanan(tahun, bulan, batas_ee, ee_bbox, output_base_dir):
             file_per_band=False
         )
 
+        # Tier 4: Atomic NetCDF Staging & Verification
         with rxr.open_rasterio(tif_path, masked=True) as da:
             da = da.rename({'band': 'time'})
             da['time'] = time_index[:len(da.time)]
@@ -174,25 +237,39 @@ def unduh_gsmap_bulanan(tahun, bulan, batas_ee, ee_bbox, output_base_dir):
             da.attrs["long_name"] = "GSMaP v8 Operational Hourly Precipitation Rate (Gauge-Calibrated)"
             da.attrs["units"] = "mm/hr"
             da.attrs["temporal_resolution"] = "Hourly"
-            da.to_netcdf(nc_path)
+            da.to_netcdf(nc_path_tmp)
 
         if os.path.exists(tif_path):
             os.remove(tif_path)
-        print(f"[{tahun}-{bulan:02d}] Sukses! Tersimpan: {nc_path}\n")
-        return nc_path
+
+        tmp_valid, tmp_msg, tmp_steps = check_file_integrity(nc_path_tmp, tahun, bulan, 'gsmap')
+        if tmp_valid or (tmp_steps == count):
+            if os.path.exists(nc_path):
+                os.remove(nc_path)
+            os.replace(nc_path_tmp, nc_path)
+            print(f"[{tahun}-{bulan:02d}] [SUKSES] Tersimpan secara atomic: {nc_path} ({tmp_steps} jam)\n")
+            return nc_path
+        else:
+            print(f"[{tahun}-{bulan:02d}] [ERROR] Validasi atomic gagal ({tmp_msg}). File sementara dibuang.")
+            if os.path.exists(nc_path_tmp):
+                os.remove(nc_path_tmp)
+            return None
 
     except Exception as e:
         print(f"[{tahun}-{bulan:02d}] Error: {e}")
         if os.path.exists(tif_path):
             os.remove(tif_path)
+        if os.path.exists(nc_path_tmp):
+            os.remove(nc_path_tmp)
         return None
 
 def main():
-    parser = argparse.ArgumentParser(description="GEE GSMaP Hourly Downloader CLI")
+    parser = argparse.ArgumentParser(description="GEE GSMaP Hourly Downloader CLI with Pre-Flight Guardrails")
     parser.add_argument("--start-year", type=int, default=2000, help="Tahun awal pengunduhan (default: 2000)")
     parser.add_argument("--end-year", type=int, default=2026, help="Tahun akhir pengunduhan (default: 2026)")
     parser.add_argument("--start-month", type=int, default=1, help="Bulan awal (default: 1)")
     parser.add_argument("--end-month", type=int, default=12, help="Bulan akhir (default: 12)")
+    parser.add_argument("--force", action="store_true", help="Paksa unduh ulang meskipun file lokal sudah lengkap")
     parser.add_argument("--output-dir", type=str, default=os.path.join(os.getcwd(), "data", "gsmap"), help="Folder basis output GSMaP")
     parser.add_argument("--geojson", type=str, default="33.05_kecamatan.geojson", help="Path batas GeoJSON Kebumen")
     parser.add_argument("--service-account", type=str, default=None, help="Path file Service Account JSON GEE")
@@ -202,6 +279,7 @@ def main():
     print("GEE GSMaP HOURLY (PER JAM) NATIVE RESOLUTION DOWNLOADER")
     print(f"Periode: {args.start_year} s.d. {args.end_year}")
     print(f"Output : {args.output_dir}")
+    print(f"Force  : {args.force}")
     print("=" * 75)
 
     init_earth_engine(sa_path=args.service_account)
@@ -213,7 +291,7 @@ def main():
         m_end = args.end_month if tahun == args.end_year else 12
 
         for bulan in range(m_start, m_end + 1):
-            unduh_gsmap_bulanan(tahun, bulan, batas_ee, ee_bbox, args.output_dir)
+            unduh_gsmap_bulanan(tahun, bulan, batas_ee, ee_bbox, args.output_dir, force=args.force)
 
     print("=" * 75)
     print("SELESAI PIPELINE UNDUH GSMaP HOURLY")
