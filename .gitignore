@@ -4,6 +4,8 @@
 /CHIRPS_2026
 /data
 staklimjerukagung-b852a12a367e.json
+kaggle.json
+.kaggle_token
 
 # Plot & Visual Outputs
 /analisis_cuaca_spasial/
@@ -23,3 +25,7 @@ __pycache__/
 *.png
 *.jpg
 *.jpeg
+
+# Logs
+/logs/
+*.log

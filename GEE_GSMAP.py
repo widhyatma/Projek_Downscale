@@ -263,6 +263,109 @@ def unduh_gsmap_bulanan(tahun, bulan, batas_ee, ee_bbox, output_base_dir, force=
             os.remove(nc_path_tmp)
         return None
 
+
+def init_kaggle_auth():
+    """Menginisialisasi kredensial Kaggle untuk upload versi baru dataset."""
+    if 'KAGGLE_KERNEL_RUN_TYPE' in os.environ:
+        try:
+            from kaggle_secrets import UserSecretsClient
+            secrets = UserSecretsClient()
+            k_user = None
+            k_key = None
+            for u_label in ["KAGGLE_USERNAME", "kaggle_username", "USERNAME"]:
+                try:
+                    k_user = secrets.get_secret(u_label)
+                    if k_user: break
+                except Exception:
+                    pass
+            for k_label in ["KAGGLE_KEY", "kaggle_key", "KAGGLE_API_KEY", "KAGGLE_TOKEN"]:
+                try:
+                    k_key = secrets.get_secret(k_label)
+                    if k_key: break
+                except Exception:
+                    pass
+            
+            if not k_user:
+                k_user = "jerismeteo"
+            
+            if k_key:
+                os.environ["KAGGLE_USERNAME"] = k_user
+                os.environ["KAGGLE_KEY"] = k_key
+                import kagglehub
+                kagglehub.auth.set_kaggle_credentials(k_user, k_key)
+                print(f"[AUTH] Kredensial Kaggle aktif via Secrets untuk user: {k_user}")
+                return True
+        except Exception as e:
+            print(f"[AUTH] Kaggle Secrets tidak tersedia: {e}")
+
+    candidates = [
+        os.path.join(os.getcwd(), "kaggle.json"),
+        os.path.join(os.path.dirname(os.getcwd()), "kaggle.json"),
+        os.path.expanduser("~/.kaggle/kaggle.json")
+    ]
+    for p in candidates:
+        if os.path.exists(p):
+            try:
+                with open(p, "r", encoding="utf-8") as f:
+                    c = json.load(f)
+                os.environ["KAGGLE_USERNAME"] = c["username"]
+                os.environ["KAGGLE_KEY"] = c["key"]
+                import kagglehub
+                kagglehub.auth.set_kaggle_credentials(c["username"], c["key"])
+                print(f"[AUTH] Kredensial Kaggle aktif via file: {p}")
+                return True
+            except Exception:
+                pass
+
+    if os.environ.get("KAGGLE_USERNAME") and os.environ.get("KAGGLE_KEY"):
+        return True
+
+    print("[AUTH] Peringatan: Kredensial Kaggle (KAGGLE_KEY) belum terkonfigurasi.")
+    return False
+
+def upload_ke_kaggle(dataset_handle, upload_root, subfolder_data, nama_dataset):
+    """
+    Mengunggah dataset NetCDF terbaru ke Kaggle Dataset menggunakan kagglehub.
+    Menghitung jumlah file .nc valid dan mengabaikan file temporer/cache.
+    """
+    import kagglehub
+    if not init_kaggle_auth():
+        print(f"⚠️ [UPLOAD] Dilewati: Kredensial Kaggle tidak ditemukan. Tambahkan Secret 'KAGGLE_KEY' di Kaggle Secrets.")
+        return False
+        
+    target_nc_dir = os.path.join(upload_root, subfolder_data)
+    list_files = glob.glob(os.path.join(target_nc_dir, "**", "*.nc"), recursive=True)
+    if not list_files:
+        print(f"⚠️ [UPLOAD] Tidak ditemukan file NetCDF di: {target_nc_dir}. Upload dibatalkan.")
+        return False
+
+    now_str = datetime.now().strftime("%Y-%m-%d %H:%M WIB")
+    version_notes = f"Pembaruan Otomatis Data GEE ({nama_dataset}): {len(list_files)} file NetCDF per {now_str}"
+
+    print(f"\n{'='*75}")
+    print(f"🚀 MENGUNGGAH VERSI BARU KE KAGGLE DATASET")
+    print(f"🏷️  Handle Dataset : {dataset_handle}")
+    print(f"📁 Folder Basis   : {upload_root}")
+    print(f"📊 Total File     : {len(list_files)} file NetCDF ({subfolder_data})")
+    print(f"📝 Catatan Versi  : {version_notes}")
+    print(f"{'='*75}")
+
+    try:
+        kagglehub.dataset_upload(
+            handle=dataset_handle,
+            local_dataset_dir=upload_root,
+            version_notes=version_notes,
+            ignore_patterns=[
+                "*.tmp", "*.tif", "*.temp", "*.geojson", "*.json",
+                "*.ipynb", "__pycache__/", ".ipynb_checkpoints/"
+            ]
+        )
+        print(f"✅ [SUKSES] Dataset {dataset_handle} berhasil diperbarui di Kaggle!")
+        return True
+    except Exception as e:
+        print(f"❌ [GAGAL] Terjadi kesalahan saat mengunggah dataset: {e}")
+        return False
+
 def main():
     parser = argparse.ArgumentParser(description="GEE GSMaP Hourly Downloader CLI with Pre-Flight Guardrails")
     parser.add_argument("--start-year", type=int, default=2000, help="Tahun awal pengunduhan (default: 2000)")
@@ -273,6 +376,7 @@ def main():
     parser.add_argument("--output-dir", type=str, default=os.path.join(os.getcwd(), "data", "gsmap"), help="Folder basis output GSMaP")
     parser.add_argument("--geojson", type=str, default="33.05_kecamatan.geojson", help="Path batas GeoJSON Kebumen")
     parser.add_argument("--service-account", type=str, default=None, help="Path file Service Account JSON GEE")
+    parser.add_argument("--upload-kaggle", action="store_true", help="Unggah otomatis versi baru ke Kaggle Dataset via kagglehub")
     args = parser.parse_args()
 
     print("=" * 75)
@@ -296,6 +400,15 @@ def main():
     print("=" * 75)
     print("SELESAI PIPELINE UNDUH GSMaP HOURLY")
     print("=" * 75)
+
+
+    if args.upload_kaggle or 'KAGGLE_KERNEL_RUN_TYPE' in os.environ:
+        upload_ke_kaggle(
+            dataset_handle="jerismeteo/gee-gsmap-kebumen",
+            upload_root=os.getcwd(),
+            subfolder_data='data/gsmap',
+            nama_dataset="JAXA GSMaP v8 Kebumen"
+        )
 
 if __name__ == "__main__":
     main()
