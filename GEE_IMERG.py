@@ -181,6 +181,32 @@ def check_disk_space(target_dir, min_free_gb=1.5):
     except Exception:
         return True, 999.0
 
+def cari_file_input_imerg(tahun, bulan):
+    """Mengecek apakah file NetCDF IMERG (lengkap maupun parsial) tersedia di Input Dataset Kaggle."""
+    if 'KAGGLE_KERNEL_RUN_TYPE' in os.environ:
+        input_base = "/kaggle/input/datasets/jerismeteo/gee-imerg-kebumen"
+        possible_paths = [
+            f"{input_base}/data/imerg/{tahun}/imerg_{tahun}_{bulan:02d}.nc",
+            f"{input_base}/{tahun}/imerg_{tahun}_{bulan:02d}.nc",
+            f"{input_base}/{tahun}/{tahun}_{bulan:02d}/imerg_{tahun}_{bulan:02d}.nc",
+            f"{input_base}/imerg_{tahun}_{bulan:02d}.nc",
+            f"/kaggle/input/gee-imerg-kebumen/data/imerg/{tahun}/imerg_{tahun}_{bulan:02d}.nc",
+            f"/kaggle/input/gee-imerg-kebumen/{tahun}/imerg_{tahun}_{bulan:02d}.nc"
+        ]
+        best_path = None
+        max_steps = 0
+        for p in possible_paths:
+            if os.path.exists(p):
+                valid, msg, steps = check_file_integrity(p, tahun, bulan, 'imerg')
+                if valid:
+                    return p, True, steps
+                elif steps > max_steps:
+                    max_steps = steps
+                    best_path = p
+        if best_path:
+            return best_path, False, max_steps
+    return None, False, 0
+
 def unduh_imerg_halfhourly_bulanan(tahun, bulan, batas_ee, ee_bbox, output_base_dir, force=False):
     """
     Mengunduh presipitasi NASA GPM IMERG v07 setengah jam (30-menit / half-hourly)
@@ -200,6 +226,19 @@ def unduh_imerg_halfhourly_bulanan(tahun, bulan, batas_ee, ee_bbox, output_base_
     if not force and is_valid:
         print(f"[{tahun}-{bulan:02d}] [OK] File sudah lengkap ({actual_steps} steps 30-menit): {nc_path} (Dilewati)")
         return nc_path
+
+    # Tier 1.5: Kaggle Input Cache Check (Smart Partial & Full Cache)
+    if not force:
+        input_file, is_cache_valid, cache_steps = cari_file_input_imerg(tahun, bulan)
+        if input_file and os.path.exists(input_file):
+            if is_cache_valid:
+                print(f"[{tahun}-{bulan:02d}] [KAGGLE CACHE 100%] File lengkap ditemukan di {input_file}. Menyalin...")
+                shutil.copy2(input_file, nc_path)
+                return nc_path
+            elif cache_steps > actual_steps:
+                print(f"[{tahun}-{bulan:02d}] [KAGGLE CACHE PARTIAL] Mengadopsi cache parsial ({cache_steps} steps 30-menit) dari {input_file}...")
+                shutil.copy2(input_file, nc_path)
+                actual_steps = cache_steps
 
     if actual_steps > 0 and not is_valid:
         print(f"[{tahun}-{bulan:02d}] [PERIKSA GEE] File lokal terdeteksi tidak lengkap: {msg}. Memeriksa data di GEE...")
