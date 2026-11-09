@@ -25,6 +25,7 @@ __pycache__/
 *.png
 *.jpg
 *.jpeg
+!prediksi_musim/plots_16_9/*.png
 
 # Logs
 /logs/
