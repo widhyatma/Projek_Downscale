@@ -182,3 +182,31 @@
 - **Incremental Cache Validation:**
   - Scripts must verify existing files on disk and skip redundant downloads, only fetching missing periods or newly released real-time dates.
 
+## 19. Sequential Deep Learning (LSTM/GRU) for Dasarian Climate Modeling
+- **3D Temporal Sequence Tensor Construction:**
+  - Pre-monsoon climate sequences must be structured as 3D tensors: `(n_samples, time_steps = 27, n_features)`.
+  - Temporal domain spans Dasarian 1 (Jan I) to Dasarian 27 (Sep III) preceding the monsoon onset window (Okt I–Nov III).
+  - Feature dimensions at each dasarian step must incorporate running dasarian precipitation, anomaly against dasarian climatology, ratio to normal, monthly interpolated ENSO (ONI) and IOD (DMI) indices, and baseline local normal AMH.
+  - Normalization parameters must be calculated strictly per training fold without test-year exposure to eliminate temporal data leakage (Rule 12).
+- **Multi-Head Task Architecture:**
+  - Recurrent neural networks (LSTM, Bi-LSTM, GRU) must map sequential tensors into a shared latent temporal manifold, branching into multi-head targets:
+    1. *AMH Category Head:* 3-class classification (Maju, Sama, Mundur) via Softmax.
+    2. *Exact AMH Dasarian Head:* Continuous linear regression for exact dasarian timing.
+    3. *Rainfall Character Head:* 3-class classification (Atas Normal, Normal, Bawah Normal).
+- **Leave-One-Year-Out (LOYO) Validation Mandate:**
+  - All deep learning and sequential models must undergo multi-decade Leave-One-Year-Out cross-validation across all 26 historical years (676 out-of-fold predictions) before operational deployment.
+
+## 20. Topographic Downscaling of Seasonal Predictions to 250m Continuous Raster Grids
+- **High-Resolution Topographic Covariate Mesh (250m):**
+  - Continuous 250m regular spatial grids must be derived from high-resolution DEMs (e.g. `DEM_Topografi_Kebumen_30m.tif`), containing:
+    1. Topographic elevation ($Z$, mdpl).
+    2. Terrain slope gradient (degrees).
+    3. Orthogonal aspect decomposition: $\sin(\text{aspect})$ and $\cos(\text{aspect})$ (Rule 12).
+    4. Metric Euclidean distance to coastline ($D_{\text{coast}}$, km).
+    5. Topographic Position Index (TPI 250m) distinguishing ridges, valleys, and alluvial plains.
+- **Enforcement of Regional Mass Conservation (Rule 15):**
+  - High-resolution downscaled precipitation fields must be calibrated against coarse satellite/reanalysis estimates to guarantee exact volumetric water balance:
+    $$P_{\text{downscaled, calibrated}}(x, y) = P_{\text{downscaled}}(x, y) \times \left( \frac{\iint_{\Omega} P_{\text{satellite}}(x, y) \, dx dy}{\iint_{\Omega} P_{\text{downscaled}}(x, y) \, dx dy} \right)$$
+- **Standard Cartographic & Raster Deliverables:**
+  - Downscaled outputs must be exported as georeferenced GeoTIFFs (EPSG:4326/WGS84) with LZW compression and visualized on 16:9 aspect ratio thematic maps (300 DPI) with administrative boundaries and contour overlays.
+

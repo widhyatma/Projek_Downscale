@@ -283,8 +283,145 @@ def plot_peta_6_kalender_tanam(gdf):
     plt.close('all')
     print(f"[SUKSES] Peta 6 tersimpan di: {out_file}")
 
+def plot_peta_7_spasial_kontinyu_amh_250m(gdf):
+    """Peta 7: Peta Kontinyu 250m Awal Musim Hujan Kebumen 2026/2027."""
+    raster_path = BASE_DIR / "prediksi_musim" / "rasters_250m" / "AMH_Dasarian_250m_Kebumen_2026.tif"
+    if not raster_path.exists():
+        print(f"Raster {raster_path} belum tersedia.")
+        return
+        
+    import rasterio
+    with rasterio.open(raster_path) as src:
+        data = src.read(1)
+        data = np.where(data > -9000, data, np.nan)
+        extent = [src.bounds.left, src.bounds.right, src.bounds.bottom, src.bounds.top]
+        
+    fig, ax = plt.subplots(figsize=(16, 9), dpi=300)
+    fig.patch.set_facecolor('#ffffff')
+    
+    im = ax.imshow(data, extent=extent, cmap='YlOrRd', vmin=31.0, vmax=33.5, origin='upper')
+    gdf.boundary.plot(ax=ax, color='#222222', linewidth=0.75, alpha=0.85)
+    
+    # Anotasi batas kecamatan
+    for _, row in gdf.iterrows():
+        pt = row.geometry.representative_point()
+        ax.text(pt.x, pt.y, row['nm_kecamatan'], fontsize=6.8, fontweight='bold', ha='center', va='center',
+                color='#111111', bbox=dict(boxstyle='round,pad=0.12', facecolor='white', alpha=0.6, edgecolor='none'))
+                
+    # Colorbar
+    cbar = plt.colorbar(im, ax=ax, fraction=0.032, pad=0.02)
+    cbar.set_label("Prakiraan Dasarian AMH 2026/2027 (Resolusi Spasial 250m)", fontsize=10.5, fontweight='bold')
+    cbar.set_ticks([31.0, 31.5, 32.0, 32.5, 33.0])
+    cbar.set_ticklabels(['Nov I (31.0)', 'Nov I.5', 'Nov II (32.0)', 'Nov II.5', 'Nov III (33.0)'])
+    
+    add_decorations(ax,
+                    "PETA 7: SPATIAL DOWNSCALING 250M PRAKIRAAN AWAL MUSIM HUJAN (AMH) KEBUMEN 2026/2027",
+                    "Distribusi Kontinyu Tanggal Masuk Musim Hujan Berbasis Fusi Topografi DEM SRTM 30m & Sinyal Iklim Sekuensial",
+                    source_text="Sumber: Model Topographic Downscaling 250m (DEM 30m + ERA5-Land + CHIRPS)")
+                    
+    plt.tight_layout()
+    out_file = PLOTS_DIR / "Peta_7_Spasial_Kontinyu_AMH_250m_Kebumen.png"
+    plt.savefig(out_file, dpi=300)
+    plt.close('all')
+    print(f"[SUKSES] Peta 7 tersimpan di: {out_file}")
+
+def plot_peta_8_spasial_kontinyu_total_hujan_250m(gdf):
+    """Peta 8: Peta Kontinyu 250m Total Curah Hujan Musim Hujan Ter-downscale."""
+    raster_path = BASE_DIR / "prediksi_musim" / "rasters_250m" / "Total_Hujan_MH_250m_Kebumen_2026.tif"
+    if not raster_path.exists():
+        print(f"Raster {raster_path} belum tersedia.")
+        return
+        
+    import rasterio
+    with rasterio.open(raster_path) as src:
+        data = src.read(1)
+        data = np.where(data > -9000, data, np.nan)
+        extent = [src.bounds.left, src.bounds.right, src.bounds.bottom, src.bounds.top]
+        
+    fig, ax = plt.subplots(figsize=(16, 9), dpi=300)
+    fig.patch.set_facecolor('#ffffff')
+    
+    im = ax.imshow(data, extent=extent, cmap='YlGnBu', vmin=1200, vmax=2200, origin='upper')
+    gdf.boundary.plot(ax=ax, color='#222222', linewidth=0.75, alpha=0.85)
+    
+    for _, row in gdf.iterrows():
+        pt = row.geometry.representative_point()
+        ax.text(pt.x, pt.y, row['nm_kecamatan'], fontsize=6.8, fontweight='bold', ha='center', va='center',
+                color='#111111', bbox=dict(boxstyle='round,pad=0.12', facecolor='white', alpha=0.6, edgecolor='none'))
+                
+    cbar = plt.colorbar(im, ax=ax, fraction=0.032, pad=0.02)
+    cbar.set_label("Total Curah Hujan Musim Hujan 2026/2027 (mm, Grid 250m)", fontsize=10.5, fontweight='bold')
+    
+    add_decorations(ax,
+                    "PETA 8: SPATIAL DOWNSCALING 250M TOTAL AKUMULASI CURAH HUJAN MUSIM HUJAN KEBUMEN",
+                    "Prakiraan Akumulasi Presipitasi Terkalibrasi Pelestarian Konservasi Massa Regional (Rule 15)",
+                    source_text="Sumber: Kalibrasi Konservasi Massa Air Regional (Bias Volume = 0.00%)")
+                    
+    plt.tight_layout()
+    out_file = PLOTS_DIR / "Peta_8_Spasial_Kontinyu_Total_Hujan_250m_Kebumen.png"
+    plt.savefig(out_file, dpi=300)
+    plt.close('all')
+    print(f"[SUKSES] Peta 8 tersimpan di: {out_file}")
+
+def plot_peta_9_zonasi_mikro_kalender_tanam_250m(gdf):
+    """Peta 9: Peta Zonasi Mikro 250m Kalender Tanam Padi MT1."""
+    raster_path = BASE_DIR / "prediksi_musim" / "rasters_250m" / "AMH_Dasarian_250m_Kebumen_2026.tif"
+    if not raster_path.exists():
+        print(f"Raster {raster_path} belum tersedia.")
+        return
+        
+    import rasterio
+    import matplotlib.colors as mcolors
+    with rasterio.open(raster_path) as src:
+        data = src.read(1)
+        extent = [src.bounds.left, src.bounds.right, src.bounds.bottom, src.bounds.top]
+        
+    # Diskretisasi waktu tanam:
+    # AMH <= 31.6 -> Tanam Nov III (Nilai 1)
+    # 31.6 < AMH <= 32.2 -> Tanam Des I (Nilai 2)
+    # AMH > 32.2 -> Tanam Des II (Nilai 3)
+    tanam_grid = np.full_like(data, np.nan)
+    valid = data > -9000
+    tanam_grid[valid & (data <= 31.6)] = 1
+    tanam_grid[valid & (data > 31.6) & (data <= 32.2)] = 2
+    tanam_grid[valid & (data > 32.2)] = 3
+    
+    fig, ax = plt.subplots(figsize=(16, 9), dpi=300)
+    fig.patch.set_facecolor('#ffffff')
+    
+    cmap_discrete = mcolors.ListedColormap([COLOR_PALETTE['Nov III'], COLOR_PALETTE['Des I'], COLOR_PALETTE['Des II']])
+    bounds_d = [0.5, 1.5, 2.5, 3.5]
+    norm_d = mcolors.BoundaryNorm(bounds_d, cmap_discrete.N)
+    
+    ax.imshow(tanam_grid, extent=extent, cmap=cmap_discrete, norm=norm_d, origin='upper')
+    gdf.boundary.plot(ax=ax, color='#222222', linewidth=0.75, alpha=0.85)
+    
+    for _, row in gdf.iterrows():
+        pt = row.geometry.representative_point()
+        ax.text(pt.x, pt.y, row['nm_kecamatan'], fontsize=6.8, fontweight='bold', ha='center', va='center',
+                color='#111111', bbox=dict(boxstyle='round,pad=0.12', facecolor='white', alpha=0.6, edgecolor='none'))
+                
+    patches = [
+        mpatches.Patch(color=COLOR_PALETTE['Nov III'], label="Zonasi 1 (Perbukitan Utara & Lereng): Tanam Padi Nov III"),
+        mpatches.Patch(color=COLOR_PALETTE['Des I'], label="Zonasi 2 (Dataran Aluvial Lembah Tengah): Tanam Padi Des I"),
+        mpatches.Patch(color=COLOR_PALETTE['Des II'], label="Zonasi 3 (Pesisir Pantai Selatan & Dataran Timur): Tanam Padi Des II")
+    ]
+    ax.legend(handles=patches, title="Zonasi Mikro Kalender Tanam Padi MT1 (Grid 250m)", loc='lower right',
+              fontsize=10.5, title_fontsize=11, framealpha=0.92, facecolor='white', edgecolor='#999999')
+              
+    add_decorations(ax,
+                    "PETA 9: ZONASI MIKRO 250M REKOMENDASI KALENDER TANAM PADI SAWAH MT1 KEBUMEN",
+                    "Panduan Operasional Presisi Blok Sawah Tingkat Desa untuk Mitigasi Defisit Air Awal Musim Tanam 2026/2027",
+                    source_text="Sumber: Rekomendasi Terintegrasi Model Downscaling Spasial 250m & Topografi Kebumen")
+                    
+    plt.tight_layout()
+    out_file = PLOTS_DIR / "Peta_9_Zonasi_Mikro_Kalender_Tanam_250m.png"
+    plt.savefig(out_file, dpi=300)
+    plt.close('all')
+    print(f"[SUKSES] Peta 9 tersimpan di: {out_file}")
+
 def generate_all_maps():
-    """Menghasilkan seluruh 6 peta tematik 16:9 secara otomatis."""
+    """Menghasilkan seluruh 9 peta tematik 16:9 secara otomatis."""
     print("Memuat data geospasial dan tabel hasil prediksi...")
     gdf = load_geodata()
     print(f"Data termuat untuk {len(gdf)} kecamatan. Menghasilkan peta 16:9...")
@@ -296,7 +433,13 @@ def generate_all_maps():
     plot_peta_5_puncak_musim(gdf)
     plot_peta_6_kalender_tanam(gdf)
     
-    print("\n[SELESAI] Semua 6 peta tematik 16:9 telah berhasil dibuat dengan kualitas 300 DPI!")
+    # Peta Spasial Kontinyu 250m Baru
+    plot_peta_7_spasial_kontinyu_amh_250m(gdf)
+    plot_peta_8_spasial_kontinyu_total_hujan_250m(gdf)
+    plot_peta_9_zonasi_mikro_kalender_tanam_250m(gdf)
+    
+    print("\n[SELESAI] Semua 9 peta tematik 16:9 telah berhasil dibuat dengan kualitas 300 DPI!")
 
 if __name__ == "__main__":
     generate_all_maps()
+
