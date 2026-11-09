@@ -420,8 +420,94 @@ def plot_peta_9_zonasi_mikro_kalender_tanam_250m(gdf):
     plt.close('all')
     print(f"[SUKSES] Peta 9 tersimpan di: {out_file}")
 
+def plot_peta_10_komparasi_klimatologi_multi_sensor():
+    """Peta 10: 4-Panel Komparasi Normal Klimatologi AMH Multi-Sensor (2000-2025)."""
+    comp_path = DATA_DIR / "normal_klimatologi_komparasi_multi_sensor.csv"
+    if not comp_path.exists():
+        print(f"Data {comp_path} belum tersedia.")
+        return
+        
+    gdf = gpd.read_file(GEOJSON_PATH)
+    gdf['geometry'] = force_2d(gdf['geometry'])
+    df_comp = pd.read_csv(comp_path)
+    gdf_comp = gdf.merge(df_comp, left_on='nm_kecamatan', right_on='kecamatan')
+    
+    fig, axes = plt.subplots(2, 2, figsize=(16, 9), dpi=300)
+    fig.patch.set_facecolor('#ffffff')
+    
+    panels = [
+        {
+            'ax': axes[0, 0],
+            'col': 'normal_label_chirps',
+            'title': '(a) CHIRPS v3.0 Daily SAT (TIR CCD Calibrated, 0.05°)',
+            'desc': 'Normal Dominan: Okt I (10 Kec), Okt II (9 Kec), Okt III (7 Kec)'
+        },
+        {
+            'ax': axes[0, 1],
+            'col': 'normal_label_gsmap',
+            'title': '(b) JAXA GSMaP v8 Hourly (Passive Microwave DPR Radar, 0.10°)',
+            'desc': 'Normal Dominan: Okt I (4 Kec), Okt II (22 Kec)'
+        },
+        {
+            'ax': axes[1, 0],
+            'col': 'normal_label_era5',
+            'title': '(c) ECMWF ERA5-Land Hourly (Atmospheric Reanalysis, 0.10°)',
+            'desc': 'Normal Dominan: Okt I (7 Kec), Okt II (15 Kec), Nov I (2 Kec)'
+        },
+        {
+            'ax': axes[1, 1],
+            'col': 'normal_label_fused',
+            'title': '(d) Fused Multi-Sensor Consensus (Ensemble 4 Sensor)',
+            'desc': 'Konsensus: Okt II (22 Kec), Okt III (4 Kec) | Rata-rata σ = 4.9 hari'
+        }
+    ]
+    
+    used_labels = set()
+    for p in panels:
+        ax = p['ax']
+        col = p['col']
+        for _, row in gdf_comp.iterrows():
+            lbl = row[col]
+            used_labels.add(lbl)
+            c = COLOR_PALETTE.get(lbl, '#cccccc')
+            gpd.GeoSeries([row.geometry]).plot(ax=ax, color=c, edgecolor='#333333', linewidth=0.6)
+            
+            # Anotasi nama kecamatan & label dasarian
+            pt = row.geometry.representative_point()
+            if col == 'normal_label_fused':
+                txt = f"{row['nm_kecamatan']}\n{lbl}\n(±{row['dispersi_hari_sigma']}h)"
+                fsize = 5.2
+            else:
+                txt = f"{row['nm_kecamatan']}\n{lbl}"
+                fsize = 5.5
+            ax.text(pt.x, pt.y, txt, fontsize=fsize, fontweight='bold', ha='center', va='center',
+                    color='#111111', bbox=dict(boxstyle='round,pad=0.1', facecolor='white', alpha=0.55, edgecolor='none'))
+                    
+        ax.set_title(f"{p['title']}\n{p['desc']}", fontsize=10.5, fontweight='bold', pad=8, color='#1a1a1a')
+        ax.tick_params(labelsize=7.5, colors='#555555')
+        ax.grid(True, linestyle='--', alpha=0.35, color='#999999')
+        ax.set_xlabel("Bujur Timur (°E)", fontsize=8, labelpad=2, color='#444444')
+        ax.set_ylabel("Lintang Selatan (°S)", fontsize=8, labelpad=2, color='#444444')
+        
+    # Legend bersama
+    order_labels = ['Okt I', 'Okt II', 'Okt III', 'Nov I']
+    patches = [mpatches.Patch(color=COLOR_PALETTE[l], label=f"Dasarian {l}") for l in order_labels if l in used_labels]
+    fig.legend(handles=patches, title="Dasarian Awal Musim Hujan (AMH)", loc='lower center',
+               bbox_to_anchor=(0.5, 0.005), ncol=len(patches), fontsize=10.5, title_fontsize=11,
+               framealpha=0.95, facecolor='white', edgecolor='#999999')
+               
+    fig.suptitle("PETA 10: EVALUASI KOMPARATIF & KONSENSUS NORMAL KLIMATOLOGI AMH MULTI-SENSOR KEBUMEN (2000-2025)\n"
+                 "Harmonisasi Satelit IR (CHIRPS), Radar Gelombang Mikro (GSMaP/IMERG), dan Reanalisis Atmosfer (ERA5-Land)",
+                 fontsize=13.5, fontweight='bold', color='#111111', y=0.99)
+                 
+    plt.tight_layout(rect=[0, 0.04, 1, 0.96])
+    out_file = PLOTS_DIR / "Peta_10_Komparasi_Normal_AMH_Multi_Sensor.png"
+    plt.savefig(out_file, dpi=300)
+    plt.close('all')
+    print(f"[SUKSES] Peta 10 tersimpan di: {out_file}")
+
 def generate_all_maps():
-    """Menghasilkan seluruh 9 peta tematik 16:9 secara otomatis."""
+    """Menghasilkan seluruh 10 peta tematik 16:9 secara otomatis."""
     print("Memuat data geospasial dan tabel hasil prediksi...")
     gdf = load_geodata()
     print(f"Data termuat untuk {len(gdf)} kecamatan. Menghasilkan peta 16:9...")
@@ -433,12 +519,15 @@ def generate_all_maps():
     plot_peta_5_puncak_musim(gdf)
     plot_peta_6_kalender_tanam(gdf)
     
-    # Peta Spasial Kontinyu 250m Baru
+    # Peta Spasial Kontinyu 250m
     plot_peta_7_spasial_kontinyu_amh_250m(gdf)
     plot_peta_8_spasial_kontinyu_total_hujan_250m(gdf)
     plot_peta_9_zonasi_mikro_kalender_tanam_250m(gdf)
     
-    print("\n[SELESAI] Semua 9 peta tematik 16:9 telah berhasil dibuat dengan kualitas 300 DPI!")
+    # Peta Komparasi Multi-Sensor Climatology
+    plot_peta_10_komparasi_klimatologi_multi_sensor()
+    
+    print("\n[SELESAI] Semua 10 peta tematik 16:9 telah berhasil dibuat dengan kualitas 300 DPI!")
 
 if __name__ == "__main__":
     generate_all_maps()

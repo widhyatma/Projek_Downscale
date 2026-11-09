@@ -29,8 +29,10 @@ def parse_args():
     parser.add_argument("--dmi-agu", type=float, default=0.35, help="Nilai Indeks Dipole Mode Index (DMI) Agustus (default: 0.35).")
     parser.add_argument("--dmi-sep", type=float, default=0.42, help="Nilai Indeks DMI September (default: 0.42).")
     parser.add_argument("--run-loyo", action="store_true", help="Jalankan validasi Leave-One-Year-Out (LOYO) pada data historis 2000-2025.")
+    parser.add_argument("--compare-climatology", action="store_true", help="Jalankan evaluasi komparatif klimatologi multi-sensor (CHIRPS, GSMaP, ERA5, IMERG).")
+    parser.add_argument("--build-atlas-250m", action="store_true", help="Bangun 36 raster GeoTIFF Atlas Normal Dasarian 250m sepanjang tahun.")
     parser.add_argument("--downscale-250m", action="store_true", help="Jalankan spatial downscaling topografi resolusi 250m (GeoTIFF).")
-    parser.add_argument("--export-plots", action="store_true", help="Otomatis hasilkan 9 peta tematik resolusi tinggi 16:9 (300 DPI).")
+    parser.add_argument("--export-plots", action="store_true", help="Otomatis hasilkan 10 peta tematik resolusi tinggi 16:9 (300 DPI).")
     parser.add_argument("--output-dir", type=str, default=str(BASE_DIR / "prediksi_musim" / "data"), help="Direktori output CSV hasil.")
     return parser.parse_args()
 
@@ -136,13 +138,23 @@ def run_prediction_pipeline(args):
     print("="*80)
     print(df_out[['kecamatan', 'normal_amh_label', 'prakiraan_amh_label', 'perbandingan_terhadap_normal', 'prakiraan_sifat_hujan', 'rekomendasi_tanam_padi_mt1']].to_string(index=False))
     
+    if args.compare_climatology:
+        print("\n[STEP KHUSUS] Menjalankan Evaluasi Komparatif & Fusi Klimatologi Multi-Sensor...")
+        from prediksi_musim.multi_sensor_climatology import build_multi_sensor_comparison
+        build_multi_sensor_comparison()
+
+    if args.build_atlas_250m:
+        print("\n[STEP KHUSUS] Menghasilkan 36 GeoTIFF Atlas Normal Dasarian 250m Sepanjang Tahun...")
+        from prediksi_musim.atlas_klimatologi_250m import generate_atlas_36_dasarians
+        generate_atlas_36_dasarians()
+
     if args.downscale_250m:
         print("\n[STEP 3/4] Menjalankan Topographic Spatial Downscaling 250m...")
         from prediksi_musim.topographic_downscaling import run_spatial_downscaling_2026
         run_spatial_downscaling_2026()
 
     if args.export_plots:
-        print("\n[STEP 4/4] Menghasilkan 9 Peta Tematik Standar Publikasi 16:9 (termasuk Raster 250m)...")
+        print("\n[STEP 4/4] Menghasilkan 10 Peta Tematik Standar Publikasi 16:9 (termasuk Raster 250m & Komparasi Sensor)...")
         from prediksi_musim.visualisasi_peta import generate_all_maps
         generate_all_maps()
     else:
