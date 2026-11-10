@@ -30,6 +30,16 @@ INV_KATEGORI_MAP = {0: 'Maju', 1: 'Sama', 2: 'Mundur'}
 SIFAT_MAP = {'Bawah Normal': 0, 'Normal': 1, 'Atas Normal': 2}
 INV_SIFAT_MAP = {0: 'Bawah Normal', 1: 'Normal', 2: 'Atas Normal'}
 
+def get_dasarian_label(d_idx):
+    d_round = int(round(d_idx))
+    m = ((d_round - 1) // 3) + 1
+    d_m = ((d_round - 1) % 3) + 1
+    m_names = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"]
+    roman = ["I", "II", "III"]
+    if 1 <= m <= 12:
+        return f"{m_names[m-1]} {roman[d_m-1]}"
+    return f"Dasarian {d_round}"
+
 def build_sequential_dataset():
     """
     Membangun tensor 3-dimensi (samples, 27 dasarians, n_features)
@@ -335,6 +345,140 @@ def run_loyo_benchmark():
     
     return df_compare
 
+def create_lstm_rainy_operational_model(input_shape):
+    """Membangun arsitektur LSTM Multi-Head 4-Output untuk Prediksi Operasional Musim Hujan."""
+    inp = layers.Input(shape=input_shape)
+    x = layers.LSTM(48, return_sequences=True)(inp)
+    x = layers.Dropout(0.2)(x)
+    x = layers.LSTM(24)(x)
+    shared = layers.Dense(24, activation='relu')(x)
+    
+    out_kat = layers.Dense(3, activation='softmax', name='kategori')(shared)
+    out_das = layers.Dense(1, activation='linear', name='dasarian')(shared)
+    out_sifat = layers.Dense(3, activation='softmax', name='sifat')(shared)
+    out_puncak = layers.Dense(1, activation='linear', name='puncak')(shared)
+    
+    model = models.Model(inputs=inp, outputs=[out_kat, out_das, out_sifat, out_puncak])
+    model.compile(
+        optimizer=tf.keras.optimizers.Adam(learning_rate=0.003),
+        loss={
+            'kategori': 'sparse_categorical_crossentropy',
+            'dasarian': 'huber',
+            'sifat': 'sparse_categorical_crossentropy',
+            'puncak': 'huber'
+        },
+        loss_weights={'kategori': 1.0, 'dasarian': 0.1, 'sifat': 1.0, 'puncak': 0.1}
+    )
+    return model
+
+def predict_future_rainy_season_2026_lstm(oni_jas=2.16, oni_jja=1.80, dmi_agu=0.35, dmi_sep=0.42):
+    """
+    Menginferensi Prakiraan Musim Hujan 2026/2027 untuk 26 Kecamatan di Kabupaten Kebumen
+    menggunakan model Deep Learning Sekuensial LSTM Multi-Head yang dilatih pada data 2000-2025.
+    Menyimpan hasil ke: prediksi_musim/data/prakiraan_musim_2026_2027_kebumen.csv
+    """
+    print("\n" + "="*85)
+    print("INFERENSI PREDIKSI MUSIM HUJAN KEBUMEN 2026/2027 (MODEL LSTM MULTI-HEAD)")
+    print(f"Kondisi Global: ONI JAS={oni_jas:+.2f}, ONI JJA={oni_jja:+.2f}, DMI Sep={dmi_sep:+.2f}")
+    print("="*85)
+    
+    X_seq, df_meta = build_sequential_dataset()
+    n_samples, time_steps, n_feats = X_seq.shape
+    
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X_seq.reshape(-1, n_feats)).reshape(-1, time_steps, n_feats)
+    
+    y_k = df_meta['kategori_amh'].map(KATEGORI_MAP).values
+    y_d = df_meta['amh_dasarian'].values
+    y_s = df_meta['sifat_hujan'].map(SIFAT_MAP).values
+    y_p = df_meta['puncak_dasarian'].values
+    
+    print("Melatih model LSTM Multi-Head penuh pada data historis 2000-2025 (35 epochs)...")
+    model_lstm = create_lstm_rainy_operational_model((time_steps, n_feats))
+    model_lstm.fit(
+        X_scaled,
+        {'kategori': y_k, 'dasarian': y_d, 'sifat': y_s, 'puncak': y_p},
+        epochs=35, batch_size=32, verbose=0
+    )
+    
+    df_norm = pd.read_csv(DATA_DIR / "normal_klimatologi_amh_kebumen.csv")
+    df_das = pd.read_csv(DATA_DIR / "dasarian_curah_hujan_kebumen_2000_2026.csv")
+    norm_das = df_das[df_das['tahun'] <= 2025].groupby(['kecamatan', 'dasarian'])['curah_hujan'].mean().rename('normal_hujan_dasarian').reset_index()
+    
+    results = []
+    
+    for _, norm_row in df_norm.iterrows():
+        kec = norm_row['kecamatan']
+        sub_2026 = df_das[(df_das['tahun'] == 2026) & (df_das['kecamatan'] == kec)].sort_values('dasarian')
+        
+        features_seq = []
+        for d in range(1, 28): # Dasarian 1..27 (Jan I s/d Sep III)
+            sub_d = sub_2026[sub_2026['dasarian'] == d]
+            norm_val = norm_das[(norm_das['kecamatan'] == kec) & (norm_das['dasarian'] == d)]['normal_hujan_dasarian'].values[0]
+            
+            if not sub_d.empty:
+                cur_val = sub_d['curah_hujan'].values[0]
+            else:
+                cur_val = norm_val * 0.70 # Proyeksi musim kemarau lebih kering di bawah Super El Niño
+                
+            m = ((d - 1) // 3) + 1
+            oni_val = oni_jas if m >= 7 else (oni_jja if m >= 5 else 0.0)
+            dmi_val = dmi_sep if m >= 8 else (dmi_agu if m >= 6 else 0.0)
+            
+            features_seq.append([
+                cur_val,
+                cur_val - norm_val,
+                (cur_val + 1.0) / (norm_val + 1.0),
+                oni_val,
+                dmi_val,
+                norm_row['normal_amh_dasarian'],
+                norm_row['normal_total_hujan_mh_mm']
+            ])
+            
+        X_input = np.array([features_seq], dtype=np.float32)
+        X_input_scaled = scaler.transform(X_input.reshape(-1, n_feats)).reshape(1, time_steps, n_feats)
+        
+        pred_k, pred_d, pred_s, pred_p = model_lstm.predict(X_input_scaled, verbose=0)
+        
+        kat_prob = pred_k[0]
+        kat_pred = INV_KATEGORI_MAP[int(np.argmax(kat_prob))]
+        das_pred = float(pred_d[0][0])
+        sifat_pred = INV_SIFAT_MAP[int(np.argmax(pred_s[0]))]
+        puncak_pred = float(pred_p[0][0])
+        
+        # Rekomendasi Kalender Tanam Padi Rendengan (MT1)
+        olah_tanah_das = int(round(das_pred)) + 1
+        tanam_das = olah_tanah_das + 1
+        
+        results.append({
+            'kecamatan': kec,
+            'normal_amh_dasarian': norm_row['normal_amh_dasarian'],
+            'normal_amh_label': norm_row['normal_amh_label'],
+            'prakiraan_amh_dasarian': round(das_pred, 1),
+            'prakiraan_amh_label': get_dasarian_label(das_pred),
+            'perbandingan_terhadap_normal': kat_pred,
+            'probabilitas_maju_pct': round(kat_prob[0] * 100, 1),
+            'probabilitas_sama_pct': round(kat_prob[1] * 100, 1),
+            'probabilitas_mundur_pct': round(kat_prob[2] * 100, 1),
+            'prakiraan_sifat_hujan': sifat_pred,
+            'prakiraan_puncak_dasarian': round(puncak_pred, 1),
+            'prakiraan_puncak_label': get_dasarian_label(puncak_pred),
+            'rekomendasi_olah_tanah': get_dasarian_label(olah_tanah_das),
+            'rekomendasi_tanam_padi_mt1': get_dasarian_label(tanam_das)
+        })
+        
+    df_out = pd.DataFrame(results)
+    out_file = DATA_DIR / "prakiraan_musim_2026_2027_kebumen.csv"
+    df_out.to_csv(out_file, index=False)
+    print(f"\n[SUKSES] Prakiraan Musim Hujan 2026/2027 berbasis LSTM tersimpan di: {out_file}")
+    
+    print("\n" + "="*85)
+    print("RINGKASAN PRAKIRAAN AWAL MUSIM HUJAN KEBUMEN 2026/2027 (MODEL LSTM MULTI-HEAD)")
+    print("="*85)
+    print(df_out[['kecamatan', 'normal_amh_label', 'prakiraan_amh_label', 'perbandingan_terhadap_normal', 'prakiraan_sifat_hujan', 'rekomendasi_tanam_padi_mt1']].to_string(index=False))
+    print("="*85)
+    return df_out
+
 if __name__ == "__main__":
-    run_loyo_benchmark()
+    predict_future_rainy_season_2026_lstm()
 

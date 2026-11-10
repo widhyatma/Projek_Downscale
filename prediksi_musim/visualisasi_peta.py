@@ -234,14 +234,15 @@ def plot_peta_5_puncak_musim(gdf):
     fig, ax = plt.subplots(figsize=(16, 9), dpi=300)
     fig.patch.set_facecolor('#ffffff')
     
-    order = ['Des I', 'Des II']
-    cat_colors = {cat: COLOR_PALETTE.get(cat, '#cccccc') for cat in order}
-    gdf['color'] = gdf['prakiraan_puncak_label'].map(cat_colors)
+    order = ['Nov I', 'Nov II', 'Nov III', 'Des I', 'Des II', 'Des III', 'Jan I', 'Jan II', 'Jan III']
+    cat_colors = {cat: COLOR_PALETTE.get(cat, '#f46d43') for cat in order}
+    gdf['color'] = gdf['prakiraan_puncak_label'].map(cat_colors).fillna('#f46d43')
     
     gdf.plot(color=gdf['color'], edgecolor='#222222', linewidth=0.8, ax=ax)
     annotate_districts(ax, gdf, 'prakiraan_puncak_label')
     
-    patches = [mpatches.Patch(color=cat_colors[cat], label=f"Dasarian {cat}") for cat in order if cat in cat_colors]
+    present_order = [cat for cat in order if cat in gdf['prakiraan_puncak_label'].values]
+    patches = [mpatches.Patch(color=cat_colors[cat], label=f"Dasarian {cat}") for cat in present_order]
     ax.legend(handles=patches, title="Prakiraan Puncak Musim Hujan", loc='lower right',
               fontsize=10.5, title_fontsize=11, framealpha=0.92, facecolor='white', edgecolor='#999999')
     
