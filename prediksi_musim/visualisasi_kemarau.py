@@ -137,14 +137,15 @@ def plot_peta_2_prakiraan_amk(gdf):
     fig, ax = plt.subplots(figsize=(16, 9), dpi=300)
     fig.patch.set_facecolor('#ffffff')
     
-    order = ['Apr II', 'Apr III', 'Mei I', 'Mei II', 'Mei III']
-    cat_colors = {cat: COLOR_PALETTE_KEMARAU.get(cat, '#cccccc') for cat in order}
-    gdf['color'] = gdf['prakiraan_amk_label'].map(cat_colors)
+    order = ['Apr I', 'Apr II', 'Apr III', 'Mei I', 'Mei II', 'Mei III', 'Jun I', 'Jun II', 'Jun III']
+    cat_colors = {cat: COLOR_PALETTE_KEMARAU.get(cat, '#fdae6b') for cat in order}
+    gdf['color'] = gdf['prakiraan_amk_label'].map(cat_colors).fillna('#fdae6b')
     
     gdf.plot(color=gdf['color'], edgecolor='#222222', linewidth=0.8, ax=ax)
     annotate_districts(ax, gdf, 'prakiraan_amk_label')
     
-    patches = [mpatches.Patch(color=cat_colors[cat], label=f"Dasarian {cat}") for cat in order if cat in cat_colors]
+    present_order = [cat for cat in order if cat in gdf['prakiraan_amk_label'].values]
+    patches = [mpatches.Patch(color=cat_colors[cat], label=f"Dasarian {cat}") for cat in present_order]
     ax.legend(handles=patches, title="Prakiraan AMK Musim 2026", loc='lower right',
               fontsize=10.5, title_fontsize=11, framealpha=0.92, facecolor='white', edgecolor='#999999')
               
@@ -257,18 +258,27 @@ def plot_peta_6_pola_tanam_palawija(gdf):
     fig, ax = plt.subplots(figsize=(16, 9), dpi=300)
     fig.patch.set_facecolor('#ffffff')
     
-    order = ['Apr III', 'Mei I', 'Mei II', 'Mei III']
-    cat_colors = {cat: COLOR_PALETTE_KEMARAU.get(cat, '#cccccc') for cat in order}
+    order = ['Apr I', 'Apr II', 'Apr III', 'Mei I', 'Mei II', 'Mei III', 'Jun I', 'Jun II']
+    cat_colors = {cat: COLOR_PALETTE_KEMARAU.get(cat, '#fdae6b') for cat in order}
     gdf['color'] = gdf['rekomendasi_tanam_palawija_mt3'].map(cat_colors).fillna('#fdae6b')
     
     gdf.plot(color=gdf['color'], edgecolor='#222222', linewidth=0.8, ax=ax)
     annotate_districts(ax, gdf, 'rekomendasi_tanam_palawija_mt3')
     
+    present_order = [cat for cat in order if cat in gdf['rekomendasi_tanam_palawija_mt3'].values]
+    stage_desc = {
+        'Apr I': 'Tanam Palawija Apr I',
+        'Apr II': 'Tanam Palawija Apr II',
+        'Apr III': 'Tanam Palawija Apr III (Pesisir Selatan Cepat)',
+        'Mei I': 'Tanam Palawija Mei I (Pesisir Barat & Transisi)',
+        'Mei II': 'Tanam Palawija Mei II (Dataran Aluvial Tengah)',
+        'Mei III': 'Tanam Palawija Mei III (Perbukitan Utara)',
+        'Jun I': 'Tanam Palawija Jun I (Pesisir & Dataran Lambat)',
+        'Jun II': 'Tanam Palawija Jun II'
+    }
     patches = [
-        mpatches.Patch(color=COLOR_PALETTE_KEMARAU['Apr III'], label="Tahap 1: Tanam Palawija Apr III (Pesisir Selatan)"),
-        mpatches.Patch(color=COLOR_PALETTE_KEMARAU['Mei I'], label="Tahap 2: Tanam Palawija Mei I (Pesisir Barat & Transisi)"),
-        mpatches.Patch(color=COLOR_PALETTE_KEMARAU['Mei II'], label="Tahap 3: Tanam Palawija Mei II (Dataran Aluvial Tengah)"),
-        mpatches.Patch(color=COLOR_PALETTE_KEMARAU['Mei III'], label="Tahap 4: Tanam Palawija Mei III (Perbukitan Utara)")
+        mpatches.Patch(color=cat_colors[cat], label=stage_desc.get(cat, f"Tanam Palawija {cat}"))
+        for cat in present_order
     ]
     ax.legend(handles=patches, title="Zonasi Waktu Tanam Palawija MT3", loc='lower right',
               fontsize=10.5, title_fontsize=11, framealpha=0.92, facecolor='white', edgecolor='#999999')
