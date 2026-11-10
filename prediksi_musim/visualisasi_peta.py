@@ -150,7 +150,7 @@ def plot_peta_2_prakiraan_amh(gdf):
     
     add_decorations(ax, 
                     "PETA 2: PRAKIRAAN AWAL MUSIM HUJAN (AMH) KABUPATEN KEBUMEN 2026/2027", 
-                    "Prediksi Spasial Resolusi Tinggi Berbasis Machine Learning (XGBoost + Random Forest) di Bawah Kondisi ENSO Positif")
+                    "Prediksi Spasial Resolusi Tinggi Berbasis Sequential Deep Learning (LSTM Multi-Head) di Bawah Kondisi ENSO")
     
     plt.tight_layout()
     out_file = PLOTS_DIR / "Peta_2_Prakiraan_AMH_2026_2027.png"
