@@ -18,10 +18,12 @@ from shapely import force_2d
 
 BASE_DIR = Path(r"d:\Github\Projek_Downscale")
 DATA_DIR = BASE_DIR / "prediksi_musim" / "data"
-PLOTS_DIR = BASE_DIR / "prediksi_musim" / "plots_16_9"
+PLOTS_DIR = BASE_DIR / "prediksi_musim" / "prediksi_musim_hujan"
+PLOTS_DIR_LEGACY = BASE_DIR / "prediksi_musim" / "plots_16_9"
 GEOJSON_PATH = BASE_DIR / "33.05_kecamatan.geojson"
 
 PLOTS_DIR.mkdir(parents=True, exist_ok=True)
+PLOTS_DIR_LEGACY.mkdir(parents=True, exist_ok=True)
 
 # Palet Warna Standar BMKG / WMO
 COLOR_PALETTE = {

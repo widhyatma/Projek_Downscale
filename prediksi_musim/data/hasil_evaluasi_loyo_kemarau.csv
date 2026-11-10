@@ -1,0 +1,677 @@
+tahun,kecamatan,kategori_amk,amk_dasarian,sifat_hujan_mk,pmk_dasarian,normal_amk_dasarian,normal_total_hujan_mk_mm,pred_kat_lstm,pred_amk_das_lstm,pred_sifat_lstm,pred_pmk_das_lstm
+2000,Adimulyo,Mundur,15.0,Normal,19,14.0,704.4,Mundur,15.06,Atas Normal,23.13
+2000,Alian,Mundur,17.0,Normal,19,14.0,698.6,Mundur,14.56,Atas Normal,20.78
+2000,Ambal,Mundur,15.0,Bawah Normal,19,12.0,501.0,Mundur,15.5,Atas Normal,24.07
+2000,Ayah,Mundur,15.0,Bawah Normal,19,13.5,743.3,Mundur,15.15,Atas Normal,24.04
+2000,Bonorowo,Mundur,15.0,Bawah Normal,19,12.0,440.9,Mundur,15.43,Atas Normal,24.29
+2000,Buayan,Mundur,15.0,Normal,19,14.0,700.2,Mundur,14.82,Atas Normal,23.83
+2000,Buluspesantren,Mundur,15.0,Normal,19,13.5,557.4,Mundur,15.58,Atas Normal,24.03
+2000,Gombong,Mundur,15.0,Normal,19,14.0,722.6,Mundur,15.02,Atas Normal,23.33
+2000,Karanganyar,Mundur,15.0,Normal,19,14.0,720.8,Mundur,14.68,Atas Normal,21.52
+2000,Karanggayam,Mundur,17.0,Normal,19,15.0,823.2,Mundur,15.18,Atas Normal,22.73
+2000,Karangsambung,Mundur,17.0,Normal,19,15.0,823.0,Mundur,15.13,Atas Normal,22.14
+2000,Kebumen,Mundur,15.0,Normal,19,14.0,638.0,Mundur,15.16,Atas Normal,23.35
+2000,Klirong,Mundur,15.0,Normal,19,14.0,613.9,Mundur,15.26,Atas Normal,23.58
+2000,Kutowinangun,Mundur,15.0,Normal,19,14.0,554.1,Mundur,15.22,Atas Normal,23.67
+2000,Kuwarasan,Mundur,15.0,Normal,19,14.0,697.8,Mundur,15.04,Atas Normal,23.59
+2000,Mirit,Mundur,15.0,Bawah Normal,19,12.0,440.7,Mundur,15.45,Atas Normal,24.44
+2000,Padureso,Mundur,17.0,Normal,19,14.0,613.7,Mundur,14.94,Atas Normal,22.41
+2000,Pejagoan,Mundur,17.0,Normal,19,14.0,728.8,Mundur,14.54,Atas Normal,20.53
+2000,Petanahan,Mundur,15.0,Normal,19,14.0,660.0,Mundur,15.17,Atas Normal,23.31
+2000,Poncowarno,Mundur,15.0,Normal,19,14.0,616.1,Mundur,15.06,Atas Normal,23.01
+2000,Prembun,Mundur,15.0,Normal,19,14.0,511.4,Mundur,15.19,Atas Normal,23.69
+2000,Puring,Mundur,15.0,Normal,19,14.0,677.7,Mundur,15.12,Atas Normal,23.56
+2000,Rowokele,Mundur,15.0,Normal,19,14.0,771.3,Mundur,14.99,Atas Normal,23.66
+2000,Sadang,Mundur,17.0,Normal,19,16.0,859.1,Mundur,15.4,Atas Normal,23.05
+2000,Sempor,Mundur,17.0,Normal,19,14.5,755.8,Mundur,15.04,Atas Normal,23.58
+2000,Sruweng,Mundur,15.0,Normal,19,14.0,709.5,Mundur,14.63,Atas Normal,20.98
+2001,Adimulyo,Mundur,17.0,Atas Normal,19,14.0,704.4,Mundur,18.56,Atas Normal,23.68
+2001,Alian,Mundur,17.0,Atas Normal,19,14.0,698.6,Mundur,18.7,Atas Normal,23.55
+2001,Ambal,Mundur,17.0,Atas Normal,26,12.0,501.0,Mundur,18.25,Atas Normal,22.15
+2001,Ayah,Mundur,18.0,Atas Normal,26,13.5,743.3,Mundur,18.48,Atas Normal,23.26
+2001,Bonorowo,Sama,12.0,Atas Normal,26,12.0,440.9,Mundur,18.32,Atas Normal,22.03
+2001,Buayan,Mundur,17.0,Atas Normal,26,14.0,700.2,Mundur,18.61,Atas Normal,23.64
+2001,Buluspesantren,Mundur,17.0,Atas Normal,26,13.5,557.4,Mundur,18.71,Atas Normal,23.44
+2001,Gombong,Mundur,17.0,Atas Normal,19,14.0,722.6,Mundur,18.6,Atas Normal,23.69
+2001,Karanganyar,Mundur,17.0,Atas Normal,19,14.0,720.8,Mundur,18.61,Atas Normal,23.71
+2001,Karanggayam,Mundur,17.0,Atas Normal,19,15.0,823.2,Mundur,18.5,Atas Normal,23.31
+2001,Karangsambung,Mundur,17.0,Atas Normal,19,15.0,823.0,Mundur,18.32,Atas Normal,22.9
+2001,Kebumen,Mundur,17.0,Atas Normal,26,14.0,638.0,Mundur,18.69,Atas Normal,23.61
+2001,Klirong,Mundur,17.0,Atas Normal,26,14.0,613.9,Mundur,18.68,Atas Normal,23.63
+2001,Kutowinangun,Mundur,17.0,Atas Normal,26,14.0,554.1,Mundur,18.73,Atas Normal,23.4
+2001,Kuwarasan,Mundur,17.0,Atas Normal,19,14.0,697.8,Mundur,18.58,Atas Normal,23.67
+2001,Mirit,Sama,12.0,Atas Normal,26,12.0,440.7,Mundur,18.3,Atas Normal,22.03
+2001,Padureso,Mundur,17.0,Atas Normal,26,14.0,613.7,Mundur,18.78,Atas Normal,23.38
+2001,Pejagoan,Mundur,17.0,Atas Normal,19,14.0,728.8,Mundur,18.64,Atas Normal,23.63
+2001,Petanahan,Mundur,17.0,Atas Normal,26,14.0,660.0,Mundur,18.63,Atas Normal,23.66
+2001,Poncowarno,Mundur,17.0,Atas Normal,26,14.0,616.1,Mundur,18.78,Atas Normal,23.49
+2001,Prembun,Mundur,17.0,Atas Normal,26,14.0,511.4,Mundur,18.72,Atas Normal,23.12
+2001,Puring,Mundur,17.0,Atas Normal,26,14.0,677.7,Mundur,18.65,Atas Normal,23.61
+2001,Rowokele,Mundur,18.0,Atas Normal,19,14.0,771.3,Mundur,18.59,Atas Normal,23.66
+2001,Sadang,Mundur,17.0,Atas Normal,19,16.0,859.1,Mundur,17.94,Atas Normal,21.94
+2001,Sempor,Mundur,18.0,Atas Normal,19,14.5,755.8,Mundur,18.68,Atas Normal,23.66
+2001,Sruweng,Mundur,17.0,Atas Normal,19,14.0,709.5,Mundur,18.62,Atas Normal,23.68
+2002,Adimulyo,Maju,13.0,Bawah Normal,19,14.0,704.4,Sama,14.83,Bawah Normal,21.66
+2002,Alian,Maju,13.0,Bawah Normal,26,14.0,698.6,Sama,14.73,Bawah Normal,20.63
+2002,Ambal,Sama,12.0,Bawah Normal,26,12.0,501.0,Maju,11.15,Bawah Normal,21.83
+2002,Ayah,Sama,13.0,Bawah Normal,26,13.5,743.3,Sama,14.71,Bawah Normal,22.12
+2002,Bonorowo,Sama,12.0,Bawah Normal,26,12.0,440.9,Maju,11.27,Bawah Normal,24.19
+2002,Buayan,Maju,12.0,Bawah Normal,19,14.0,700.2,Sama,15.15,Bawah Normal,22.34
+2002,Buluspesantren,Maju,12.0,Bawah Normal,26,13.5,557.4,Sama,14.32,Bawah Normal,22.41
+2002,Gombong,Maju,12.0,Bawah Normal,19,14.0,722.6,Sama,15.04,Bawah Normal,21.45
+2002,Karanganyar,Maju,13.0,Bawah Normal,19,14.0,720.8,Sama,14.98,Bawah Normal,21.08
+2002,Karanggayam,Maju,13.0,Bawah Normal,19,15.0,823.2,Mundur,15.22,Bawah Normal,18.9
+2002,Karangsambung,Maju,13.0,Bawah Normal,19,15.0,823.0,Mundur,15.15,Bawah Normal,18.21
+2002,Kebumen,Maju,13.0,Bawah Normal,19,14.0,638.0,Sama,14.65,Bawah Normal,22.13
+2002,Klirong,Maju,13.0,Bawah Normal,19,14.0,613.9,Sama,14.73,Bawah Normal,23.04
+2002,Kutowinangun,Maju,12.0,Bawah Normal,26,14.0,554.1,Sama,14.33,Bawah Normal,23.11
+2002,Kuwarasan,Maju,12.0,Bawah Normal,19,14.0,697.8,Sama,15.05,Bawah Normal,22.14
+2002,Mirit,Maju,11.0,Bawah Normal,26,12.0,440.7,Maju,11.21,Bawah Normal,24.34
+2002,Padureso,Maju,13.0,Bawah Normal,26,14.0,613.7,Sama,14.57,Bawah Normal,20.83
+2002,Pejagoan,Maju,13.0,Bawah Normal,19,14.0,728.8,Sama,14.86,Bawah Normal,20.7
+2002,Petanahan,Maju,13.0,Bawah Normal,19,14.0,660.0,Sama,14.74,Bawah Normal,22.38
+2002,Poncowarno,Maju,13.0,Bawah Normal,26,14.0,616.1,Sama,14.61,Bawah Normal,21.35
+2002,Prembun,Maju,12.0,Bawah Normal,26,14.0,511.4,Maju,13.48,Bawah Normal,24.83
+2002,Puring,Maju,13.0,Bawah Normal,19,14.0,677.7,Sama,14.95,Bawah Normal,22.59
+2002,Rowokele,Maju,12.0,Bawah Normal,19,14.0,771.3,Sama,15.08,Bawah Normal,21.44
+2002,Sadang,Maju,13.0,Bawah Normal,17,16.0,859.1,Mundur,14.92,Bawah Normal,17.66
+2002,Sempor,Maju,12.0,Bawah Normal,19,14.5,755.8,Sama,15.39,Bawah Normal,20.57
+2002,Sruweng,Maju,13.0,Bawah Normal,19,14.0,709.5,Sama,14.85,Bawah Normal,21.14
+2003,Adimulyo,Maju,10.0,Bawah Normal,16,14.0,704.4,Sama,14.3,Atas Normal,23.95
+2003,Alian,Maju,10.0,Bawah Normal,16,14.0,698.6,Sama,15.01,Atas Normal,25.43
+2003,Ambal,Maju,10.0,Bawah Normal,16,12.0,501.0,Maju,10.78,Normal,24.45
+2003,Ayah,Maju,10.0,Bawah Normal,19,13.5,743.3,Maju,13.65,Atas Normal,23.79
+2003,Bonorowo,Maju,10.0,Bawah Normal,16,12.0,440.9,Maju,11.01,Normal,25.02
+2003,Buayan,Maju,10.0,Bawah Normal,17,14.0,700.2,Maju,14.34,Atas Normal,23.98
+2003,Buluspesantren,Maju,10.0,Bawah Normal,16,13.5,557.4,Maju,12.11,Atas Normal,23.76
+2003,Gombong,Maju,10.0,Bawah Normal,16,14.0,722.6,Sama,14.49,Atas Normal,24.19
+2003,Karanganyar,Maju,10.0,Bawah Normal,16,14.0,720.8,Sama,15.24,Atas Normal,26.07
+2003,Karanggayam,Maju,10.0,Bawah Normal,16,15.0,823.2,Maju,16.0,Atas Normal,25.84
+2003,Karangsambung,Maju,10.0,Bawah Normal,16,15.0,823.0,Maju,16.96,Atas Normal,27.37
+2003,Kebumen,Maju,10.0,Bawah Normal,16,14.0,638.0,Maju,15.0,Atas Normal,24.81
+2003,Klirong,Maju,10.0,Bawah Normal,16,14.0,613.9,Maju,15.0,Atas Normal,24.9
+2003,Kutowinangun,Maju,10.0,Bawah Normal,16,14.0,554.1,Maju,13.47,Atas Normal,24.62
+2003,Kuwarasan,Maju,10.0,Bawah Normal,16,14.0,697.8,Sama,14.45,Atas Normal,23.84
+2003,Mirit,Maju,10.0,Bawah Normal,16,12.0,440.7,Maju,10.92,Normal,24.93
+2003,Padureso,Maju,10.0,Bawah Normal,16,14.0,613.7,Maju,14.56,Atas Normal,24.91
+2003,Pejagoan,Maju,10.0,Bawah Normal,16,14.0,728.8,Sama,15.0,Atas Normal,25.65
+2003,Petanahan,Maju,10.0,Bawah Normal,16,14.0,660.0,Sama,14.63,Atas Normal,24.14
+2003,Poncowarno,Maju,10.0,Bawah Normal,16,14.0,616.1,Maju,14.82,Atas Normal,24.92
+2003,Prembun,Maju,10.0,Bawah Normal,16,14.0,511.4,Maju,12.77,Atas Normal,24.7
+2003,Puring,Maju,10.0,Bawah Normal,16,14.0,677.7,Sama,14.41,Atas Normal,23.85
+2003,Rowokele,Maju,10.0,Bawah Normal,16,14.0,771.3,Sama,14.14,Atas Normal,23.26
+2003,Sadang,Maju,10.0,Bawah Normal,17,16.0,859.1,Maju,15.27,Atas Normal,28.35
+2003,Sempor,Maju,10.0,Bawah Normal,16,14.5,755.8,Maju,14.9,Atas Normal,24.35
+2003,Sruweng,Maju,10.0,Bawah Normal,16,14.0,709.5,Sama,14.94,Atas Normal,25.56
+2004,Adimulyo,Maju,10.0,Bawah Normal,19,14.0,704.4,Mundur,16.07,Bawah Normal,18.36
+2004,Alian,Maju,13.0,Bawah Normal,26,14.0,698.6,Mundur,16.85,Bawah Normal,18.02
+2004,Ambal,Maju,10.0,Normal,26,12.0,501.0,Maju,10.97,Atas Normal,22.43
+2004,Ayah,Maju,11.0,Normal,26,13.5,743.3,Maju,12.43,Bawah Normal,21.2
+2004,Bonorowo,Maju,10.0,Bawah Normal,26,12.0,440.9,Maju,10.81,Atas Normal,22.14
+2004,Buayan,Maju,11.0,Bawah Normal,26,14.0,700.2,Maju,15.34,Bawah Normal,19.85
+2004,Buluspesantren,Maju,10.0,Bawah Normal,26,13.5,557.4,Maju,15.33,Atas Normal,22.98
+2004,Gombong,Maju,13.0,Bawah Normal,26,14.0,722.6,Mundur,15.77,Bawah Normal,17.82
+2004,Karanganyar,Maju,13.0,Bawah Normal,26,14.0,720.8,Mundur,16.18,Bawah Normal,17.75
+2004,Karanggayam,Maju,13.0,Bawah Normal,26,15.0,823.2,Mundur,15.92,Bawah Normal,18.16
+2004,Karangsambung,Maju,13.0,Bawah Normal,26,15.0,823.0,Mundur,15.96,Bawah Normal,17.96
+2004,Kebumen,Maju,10.0,Bawah Normal,26,14.0,638.0,Mundur,17.1,Bawah Normal,21.16
+2004,Klirong,Maju,10.0,Bawah Normal,26,14.0,613.9,Maju,16.55,Atas Normal,21.6
+2004,Kutowinangun,Maju,10.0,Bawah Normal,26,14.0,554.1,Mundur,16.8,Atas Normal,22.86
+2004,Kuwarasan,Maju,10.0,Bawah Normal,26,14.0,697.8,Maju,15.59,Bawah Normal,18.74
+2004,Mirit,Maju,10.0,Normal,26,12.0,440.7,Maju,10.8,Atas Normal,22.13
+2004,Padureso,Maju,10.0,Bawah Normal,26,14.0,613.7,Mundur,17.03,Bawah Normal,20.88
+2004,Pejagoan,Maju,13.0,Bawah Normal,26,14.0,728.8,Mundur,16.53,Bawah Normal,17.69
+2004,Petanahan,Maju,10.0,Normal,19,14.0,660.0,Mundur,16.01,Bawah Normal,19.89
+2004,Poncowarno,Maju,10.0,Bawah Normal,26,14.0,616.1,Mundur,17.33,Atas Normal,21.74
+2004,Prembun,Maju,10.0,Bawah Normal,26,14.0,511.4,Maju,16.22,Atas Normal,22.11
+2004,Puring,Maju,10.0,Normal,19,14.0,677.7,Maju,15.47,Bawah Normal,19.72
+2004,Rowokele,Maju,11.0,Bawah Normal,26,14.0,771.3,Maju,15.21,Bawah Normal,17.78
+2004,Sadang,Maju,13.0,Bawah Normal,26,16.0,859.1,Maju,16.05,Normal,19.54
+2004,Sempor,Maju,13.0,Bawah Normal,26,14.5,755.8,Mundur,15.89,Bawah Normal,18.1
+2004,Sruweng,Maju,13.0,Bawah Normal,26,14.0,709.5,Mundur,16.45,Bawah Normal,17.76
+2005,Adimulyo,Maju,12.0,Normal,16,14.0,704.4,Sama,13.09,Bawah Normal,17.68
+2005,Alian,Sama,14.0,Normal,16,14.0,698.6,Sama,12.94,Bawah Normal,18.14
+2005,Ambal,Maju,11.0,Atas Normal,16,12.0,501.0,Maju,11.33,Bawah Normal,16.94
+2005,Ayah,Maju,12.0,Normal,16,13.5,743.3,Sama,12.99,Bawah Normal,17.72
+2005,Bonorowo,Maju,11.0,Normal,16,12.0,440.9,Maju,10.95,Bawah Normal,16.64
+2005,Buayan,Maju,12.0,Normal,16,14.0,700.2,Sama,12.99,Bawah Normal,17.71
+2005,Buluspesantren,Maju,12.0,Normal,16,13.5,557.4,Maju,12.17,Bawah Normal,17.58
+2005,Gombong,Sama,14.0,Normal,16,14.0,722.6,Sama,13.12,Bawah Normal,17.74
+2005,Karanganyar,Sama,14.0,Normal,16,14.0,720.8,Sama,13.07,Bawah Normal,17.92
+2005,Karanggayam,Maju,14.0,Normal,16,15.0,823.2,Maju,13.75,Bawah Normal,18.28
+2005,Karangsambung,Maju,14.0,Normal,16,15.0,823.0,Maju,13.72,Bawah Normal,18.34
+2005,Kebumen,Maju,12.0,Normal,16,14.0,638.0,Sama,12.75,Bawah Normal,17.89
+2005,Klirong,Maju,12.0,Normal,16,14.0,613.9,Sama,12.68,Bawah Normal,17.82
+2005,Kutowinangun,Maju,12.0,Atas Normal,16,14.0,554.1,Maju,12.23,Bawah Normal,17.65
+2005,Kuwarasan,Maju,12.0,Normal,16,14.0,697.8,Sama,13.02,Bawah Normal,17.74
+2005,Mirit,Maju,11.0,Normal,16,12.0,440.7,Maju,10.95,Bawah Normal,16.65
+2005,Padureso,Maju,12.0,Normal,16,14.0,613.7,Maju,12.48,Bawah Normal,17.92
+2005,Pejagoan,Sama,14.0,Normal,16,14.0,728.8,Sama,13.08,Bawah Normal,17.97
+2005,Petanahan,Maju,12.0,Normal,16,14.0,660.0,Sama,12.89,Bawah Normal,17.8
+2005,Poncowarno,Maju,12.0,Normal,16,14.0,616.1,Maju,12.52,Bawah Normal,17.91
+2005,Prembun,Maju,12.0,Normal,16,14.0,511.4,Maju,12.03,Bawah Normal,17.46
+2005,Puring,Maju,12.0,Normal,16,14.0,677.7,Sama,12.91,Bawah Normal,17.78
+2005,Rowokele,Maju,12.0,Normal,16,14.0,771.3,Sama,13.23,Bawah Normal,17.53
+2005,Sadang,Maju,14.0,Normal,21,16.0,859.1,Maju,13.59,Bawah Normal,17.98
+2005,Sempor,Sama,14.0,Normal,21,14.5,755.8,Sama,13.28,Bawah Normal,17.81
+2005,Sruweng,Maju,12.0,Normal,16,14.0,709.5,Sama,13.04,Bawah Normal,17.91
+2006,Adimulyo,Maju,12.0,Bawah Normal,17,14.0,704.4,Maju,14.24,Atas Normal,19.75
+2006,Alian,Sama,14.0,Bawah Normal,17,14.0,698.6,Mundur,14.64,Bawah Normal,16.97
+2006,Ambal,Maju,11.0,Bawah Normal,17,12.0,501.0,Mundur,14.82,Bawah Normal,17.24
+2006,Ayah,Maju,11.0,Bawah Normal,17,13.5,743.3,Maju,13.21,Atas Normal,19.56
+2006,Bonorowo,Maju,11.0,Bawah Normal,17,12.0,440.9,Mundur,15.82,Bawah Normal,20.68
+2006,Buayan,Maju,11.0,Bawah Normal,17,14.0,700.2,Maju,13.23,Atas Normal,20.79
+2006,Buluspesantren,Maju,11.0,Bawah Normal,17,13.5,557.4,Mundur,14.42,Bawah Normal,16.88
+2006,Gombong,Maju,12.0,Bawah Normal,17,14.0,722.6,Mundur,13.85,Atas Normal,20.04
+2006,Karanganyar,Maju,12.0,Bawah Normal,17,14.0,720.8,Mundur,14.52,Bawah Normal,18.28
+2006,Karanggayam,Mundur,17.0,Bawah Normal,17,15.0,823.2,Mundur,16.43,Bawah Normal,22.17
+2006,Karangsambung,Mundur,17.0,Bawah Normal,17,15.0,823.0,Mundur,15.73,Bawah Normal,20.96
+2006,Kebumen,Maju,12.0,Bawah Normal,17,14.0,638.0,Mundur,14.82,Bawah Normal,17.0
+2006,Klirong,Maju,11.0,Bawah Normal,17,14.0,613.9,Mundur,14.52,Bawah Normal,17.4
+2006,Kutowinangun,Maju,11.0,Bawah Normal,17,14.0,554.1,Mundur,14.44,Bawah Normal,17.03
+2006,Kuwarasan,Maju,11.0,Bawah Normal,17,14.0,697.8,Maju,13.5,Atas Normal,20.94
+2006,Mirit,Maju,11.0,Bawah Normal,17,12.0,440.7,Mundur,14.94,Bawah Normal,17.45
+2006,Padureso,Maju,12.0,Bawah Normal,17,14.0,613.7,Mundur,16.16,Bawah Normal,21.87
+2006,Pejagoan,Sama,14.0,Bawah Normal,17,14.0,728.8,Mundur,14.62,Bawah Normal,17.79
+2006,Petanahan,Maju,11.0,Bawah Normal,17,14.0,660.0,Mundur,14.36,Atas Normal,18.9
+2006,Poncowarno,Maju,12.0,Bawah Normal,17,14.0,616.1,Mundur,14.7,Bawah Normal,16.87
+2006,Prembun,Maju,11.0,Bawah Normal,17,14.0,511.4,Mundur,14.85,Bawah Normal,18.17
+2006,Puring,Maju,11.0,Bawah Normal,17,14.0,677.7,Maju,13.39,Atas Normal,20.65
+2006,Rowokele,Maju,11.0,Bawah Normal,17,14.0,771.3,Maju,13.15,Atas Normal,20.22
+2006,Sadang,Mundur,17.0,Bawah Normal,17,16.0,859.1,Mundur,15.15,Bawah Normal,19.27
+2006,Sempor,Mundur,16.0,Bawah Normal,17,14.5,755.8,Mundur,16.71,Bawah Normal,22.72
+2006,Sruweng,Maju,12.0,Bawah Normal,17,14.0,709.5,Mundur,15.06,Bawah Normal,17.65
+2007,Adimulyo,Mundur,16.0,Bawah Normal,17,14.0,704.4,Maju,13.24,Bawah Normal,25.61
+2007,Alian,Mundur,16.0,Bawah Normal,17,14.0,698.6,Maju,13.24,Bawah Normal,25.61
+2007,Ambal,Mundur,16.0,Bawah Normal,17,12.0,501.0,Maju,11.9,Bawah Normal,24.28
+2007,Ayah,Mundur,16.0,Bawah Normal,17,13.5,743.3,Maju,13.13,Bawah Normal,25.5
+2007,Bonorowo,Mundur,13.0,Bawah Normal,17,12.0,440.9,Maju,11.73,Bawah Normal,24.1
+2007,Buayan,Mundur,16.0,Bawah Normal,17,14.0,700.2,Maju,13.24,Bawah Normal,25.61
+2007,Buluspesantren,Mundur,16.0,Bawah Normal,17,13.5,557.4,Maju,13.26,Bawah Normal,25.61
+2007,Gombong,Mundur,17.0,Bawah Normal,17,14.0,722.6,Maju,13.23,Bawah Normal,25.61
+2007,Karanganyar,Mundur,17.0,Bawah Normal,17,14.0,720.8,Maju,13.23,Bawah Normal,25.61
+2007,Karanggayam,Mundur,17.0,Bawah Normal,17,15.0,823.2,Maju,13.24,Bawah Normal,25.61
+2007,Karangsambung,Mundur,17.0,Bawah Normal,17,15.0,823.0,Maju,13.24,Bawah Normal,25.6
+2007,Kebumen,Mundur,16.0,Bawah Normal,17,14.0,638.0,Maju,13.28,Bawah Normal,25.64
+2007,Klirong,Mundur,16.0,Bawah Normal,17,14.0,613.9,Maju,13.3,Bawah Normal,25.64
+2007,Kutowinangun,Mundur,16.0,Bawah Normal,17,14.0,554.1,Maju,13.28,Bawah Normal,25.48
+2007,Kuwarasan,Mundur,16.0,Bawah Normal,17,14.0,697.8,Maju,13.24,Bawah Normal,25.61
+2007,Mirit,Mundur,13.0,Bawah Normal,17,12.0,440.7,Maju,11.72,Bawah Normal,24.09
+2007,Padureso,Mundur,17.0,Bawah Normal,17,14.0,613.7,Maju,13.3,Bawah Normal,25.65
+2007,Pejagoan,Mundur,17.0,Bawah Normal,17,14.0,728.8,Maju,13.22,Bawah Normal,25.6
+2007,Petanahan,Mundur,16.0,Bawah Normal,17,14.0,660.0,Maju,13.27,Bawah Normal,25.64
+2007,Poncowarno,Mundur,16.0,Bawah Normal,17,14.0,616.1,Maju,13.29,Bawah Normal,25.64
+2007,Prembun,Mundur,16.0,Bawah Normal,17,14.0,511.4,Maju,13.08,Bawah Normal,24.59
+2007,Puring,Mundur,16.0,Bawah Normal,17,14.0,677.7,Maju,13.26,Bawah Normal,25.62
+2007,Rowokele,Mundur,17.0,Bawah Normal,17,14.0,771.3,Maju,13.2,Bawah Normal,25.57
+2007,Sadang,Mundur,17.0,Bawah Normal,17,16.0,859.1,Maju,13.22,Bawah Normal,25.57
+2007,Sempor,Mundur,17.0,Bawah Normal,17,14.5,755.8,Maju,13.26,Bawah Normal,25.63
+2007,Sruweng,Mundur,16.0,Bawah Normal,17,14.0,709.5,Maju,13.23,Bawah Normal,25.61
+2008,Adimulyo,Maju,13.0,Bawah Normal,17,14.0,704.4,Mundur,12.63,Atas Normal,18.78
+2008,Alian,Maju,13.0,Bawah Normal,17,14.0,698.6,Mundur,15.2,Atas Normal,23.05
+2008,Ambal,Maju,10.0,Bawah Normal,16,12.0,501.0,Mundur,12.18,Atas Normal,21.5
+2008,Ayah,Maju,12.0,Bawah Normal,17,13.5,743.3,Mundur,12.75,Bawah Normal,17.82
+2008,Bonorowo,Maju,10.0,Bawah Normal,16,12.0,440.9,Mundur,12.15,Atas Normal,22.13
+2008,Buayan,Maju,12.0,Bawah Normal,17,14.0,700.2,Mundur,13.27,Bawah Normal,17.25
+2008,Buluspesantren,Maju,10.0,Bawah Normal,16,13.5,557.4,Maju,11.94,Atas Normal,20.18
+2008,Gombong,Maju,13.0,Bawah Normal,17,14.0,722.6,Mundur,13.65,Bawah Normal,18.73
+2008,Karanganyar,Maju,13.0,Bawah Normal,19,14.0,720.8,Mundur,14.69,Atas Normal,21.14
+2008,Karanggayam,Maju,14.0,Bawah Normal,16,15.0,823.2,Mundur,17.14,Atas Normal,21.78
+2008,Karangsambung,Maju,14.0,Bawah Normal,17,15.0,823.0,Mundur,17.33,Atas Normal,22.34
+2008,Kebumen,Maju,12.0,Bawah Normal,16,14.0,638.0,Mundur,13.05,Atas Normal,21.54
+2008,Klirong,Maju,12.0,Bawah Normal,17,14.0,613.9,Mundur,12.28,Atas Normal,19.63
+2008,Kutowinangun,Maju,12.0,Bawah Normal,16,14.0,554.1,Maju,12.3,Atas Normal,20.97
+2008,Kuwarasan,Maju,13.0,Bawah Normal,17,14.0,697.8,Mundur,12.94,Bawah Normal,17.38
+2008,Mirit,Maju,10.0,Bawah Normal,16,12.0,440.7,Mundur,12.37,Atas Normal,22.08
+2008,Padureso,Maju,12.0,Bawah Normal,17,14.0,613.7,Mundur,14.73,Atas Normal,23.99
+2008,Pejagoan,Maju,13.0,Bawah Normal,17,14.0,728.8,Mundur,15.34,Atas Normal,22.45
+2008,Petanahan,Maju,12.0,Bawah Normal,17,14.0,660.0,Mundur,12.24,Atas Normal,19.05
+2008,Poncowarno,Maju,12.0,Bawah Normal,16,14.0,616.1,Mundur,13.74,Atas Normal,23.1
+2008,Prembun,Maju,12.0,Bawah Normal,16,14.0,511.4,Mundur,12.5,Atas Normal,21.9
+2008,Puring,Maju,12.0,Bawah Normal,17,14.0,677.7,Mundur,12.05,Bawah Normal,17.4
+2008,Rowokele,Sama,14.0,Bawah Normal,19,14.0,771.3,Mundur,14.26,Bawah Normal,18.5
+2008,Sadang,Maju,14.0,Bawah Normal,17,16.0,859.1,Mundur,17.04,Atas Normal,20.87
+2008,Sempor,Sama,14.0,Bawah Normal,19,14.5,755.8,Mundur,15.6,Atas Normal,20.32
+2008,Sruweng,Maju,13.0,Bawah Normal,17,14.0,709.5,Mundur,14.58,Atas Normal,21.98
+2009,Adimulyo,Mundur,17.0,Normal,17,14.0,704.4,Sama,14.64,Bawah Normal,18.75
+2009,Alian,Mundur,17.0,Normal,19,14.0,698.6,Sama,14.79,Bawah Normal,19.18
+2009,Ambal,Mundur,17.0,Normal,26,12.0,501.0,Mundur,14.56,Bawah Normal,15.8
+2009,Ayah,Mundur,17.0,Normal,19,13.5,743.3,Sama,13.28,Bawah Normal,17.13
+2009,Bonorowo,Mundur,17.0,Normal,26,12.0,440.9,Mundur,14.47,Bawah Normal,15.67
+2009,Buayan,Mundur,17.0,Normal,17,14.0,700.2,Sama,13.79,Bawah Normal,18.05
+2009,Buluspesantren,Mundur,17.0,Normal,26,13.5,557.4,Mundur,15.24,Bawah Normal,17.75
+2009,Gombong,Mundur,17.0,Normal,19,14.0,722.6,Maju,12.95,Bawah Normal,18.05
+2009,Karanganyar,Mundur,17.0,Normal,19,14.0,720.8,Maju,13.2,Bawah Normal,18.25
+2009,Karanggayam,Mundur,17.0,Normal,17,15.0,823.2,Maju,13.27,Bawah Normal,17.11
+2009,Karangsambung,Mundur,17.0,Normal,17,15.0,823.0,Maju,13.41,Bawah Normal,17.34
+2009,Kebumen,Mundur,17.0,Normal,19,14.0,638.0,Sama,15.57,Bawah Normal,19.53
+2009,Klirong,Mundur,17.0,Normal,19,14.0,613.9,Sama,15.16,Bawah Normal,17.71
+2009,Kutowinangun,Mundur,17.0,Bawah Normal,26,14.0,554.1,Sama,15.45,Bawah Normal,19.29
+2009,Kuwarasan,Mundur,17.0,Normal,17,14.0,697.8,Maju,13.81,Bawah Normal,18.73
+2009,Mirit,Mundur,17.0,Normal,26,12.0,440.7,Mundur,14.53,Bawah Normal,15.68
+2009,Padureso,Mundur,17.0,Bawah Normal,26,14.0,613.7,Sama,15.53,Bawah Normal,19.57
+2009,Pejagoan,Mundur,17.0,Normal,19,14.0,728.8,Sama,13.96,Bawah Normal,18.65
+2009,Petanahan,Mundur,17.0,Normal,19,14.0,660.0,Sama,14.99,Bawah Normal,16.93
+2009,Poncowarno,Mundur,17.0,Bawah Normal,26,14.0,616.1,Sama,15.53,Bawah Normal,19.57
+2009,Prembun,Mundur,17.0,Bawah Normal,26,14.0,511.4,Sama,15.54,Bawah Normal,19.41
+2009,Puring,Mundur,17.0,Normal,17,14.0,677.7,Sama,14.49,Bawah Normal,16.91
+2009,Rowokele,Mundur,17.0,Normal,19,14.0,771.3,Maju,12.54,Bawah Normal,17.32
+2009,Sadang,Mundur,17.0,Normal,17,16.0,859.1,Maju,13.53,Bawah Normal,17.17
+2009,Sempor,Mundur,17.0,Normal,19,14.5,755.8,Maju,12.81,Bawah Normal,17.09
+2009,Sruweng,Mundur,17.0,Normal,19,14.0,709.5,Sama,14.14,Bawah Normal,18.86
+2010,Adimulyo,Sama,14.0,Atas Normal,18,14.0,704.4,Maju,12.85,Bawah Normal,23.2
+2010,Alian,Sama,14.0,Atas Normal,23,14.0,698.6,Maju,13.04,Bawah Normal,21.23
+2010,Ambal,Maju,10.0,Atas Normal,18,12.0,501.0,Mundur,15.04,Bawah Normal,25.35
+2010,Ayah,Sama,14.0,Atas Normal,18,13.5,743.3,Maju,14.66,Bawah Normal,24.72
+2010,Bonorowo,Mundur,18.0,Atas Normal,23,12.0,440.9,Mundur,15.32,Bawah Normal,25.4
+2010,Buayan,Sama,14.0,Atas Normal,18,14.0,700.2,Maju,13.03,Bawah Normal,23.92
+2010,Buluspesantren,Mundur,22.0,Atas Normal,18,13.5,557.4,Maju,13.16,Bawah Normal,24.6
+2010,Gombong,Sama,14.0,Atas Normal,18,14.0,722.6,Maju,13.07,Bawah Normal,21.33
+2010,Karanganyar,Sama,14.0,Atas Normal,18,14.0,720.8,Maju,13.07,Bawah Normal,19.88
+2010,Karanggayam,Maju,14.0,Atas Normal,18,15.0,823.2,Maju,12.82,Bawah Normal,18.33
+2010,Karangsambung,Maju,14.0,Atas Normal,23,15.0,823.0,Maju,12.95,Bawah Normal,18.59
+2010,Kebumen,Sama,14.0,Atas Normal,18,14.0,638.0,Maju,12.73,Bawah Normal,23.55
+2010,Klirong,Sama,14.0,Atas Normal,18,14.0,613.9,Maju,12.52,Bawah Normal,24.54
+2010,Kutowinangun,Mundur,21.0,Atas Normal,18,14.0,554.1,Maju,12.43,Bawah Normal,24.81
+2010,Kuwarasan,Sama,14.0,Atas Normal,18,14.0,697.8,Maju,12.91,Bawah Normal,23.54
+2010,Mirit,Maju,10.0,Atas Normal,18,12.0,440.7,Mundur,15.33,Bawah Normal,25.39
+2010,Padureso,Mundur,21.0,Atas Normal,23,14.0,613.7,Maju,12.99,Bawah Normal,22.68
+2010,Pejagoan,Sama,14.0,Atas Normal,23,14.0,728.8,Maju,13.07,Bawah Normal,19.96
+2010,Petanahan,Sama,14.0,Atas Normal,18,14.0,660.0,Maju,12.66,Bawah Normal,24.39
+2010,Poncowarno,Sama,14.0,Atas Normal,23,14.0,616.1,Maju,12.78,Bawah Normal,23.38
+2010,Prembun,Mundur,18.0,Atas Normal,23,14.0,511.4,Maju,12.4,Bawah Normal,24.68
+2010,Puring,Sama,14.0,Atas Normal,18,14.0,677.7,Maju,12.83,Bawah Normal,24.57
+2010,Rowokele,Sama,14.0,Atas Normal,18,14.0,771.3,Maju,13.19,Bawah Normal,21.3
+2010,Sadang,Maju,14.0,Atas Normal,23,16.0,859.1,Maju,14.94,Bawah Normal,21.59
+2010,Sempor,Sama,14.0,Atas Normal,18,14.5,755.8,Maju,12.95,Bawah Normal,19.31
+2010,Sruweng,Sama,14.0,Atas Normal,23,14.0,709.5,Maju,13.01,Bawah Normal,20.37
+2011,Adimulyo,Mundur,15.0,Bawah Normal,17,14.0,704.4,Mundur,14.94,Normal,23.6
+2011,Alian,Mundur,15.0,Bawah Normal,17,14.0,698.6,Mundur,14.96,Normal,23.68
+2011,Ambal,Mundur,15.0,Bawah Normal,17,12.0,501.0,Sama,13.63,Bawah Normal,25.14
+2011,Ayah,Mundur,15.0,Bawah Normal,17,13.5,743.3,Mundur,13.9,Normal,23.8
+2011,Bonorowo,Mundur,15.0,Bawah Normal,17,12.0,440.9,Sama,13.87,Bawah Normal,25.77
+2011,Buayan,Mundur,15.0,Bawah Normal,17,14.0,700.2,Mundur,14.97,Normal,23.9
+2011,Buluspesantren,Mundur,15.0,Bawah Normal,17,13.5,557.4,Sama,14.76,Normal,24.97
+2011,Gombong,Mundur,15.0,Bawah Normal,17,14.0,722.6,Mundur,14.86,Normal,23.54
+2011,Karanganyar,Mundur,15.0,Bawah Normal,17,14.0,720.8,Mundur,14.79,Normal,23.5
+2011,Karanggayam,Sama,15.0,Bawah Normal,17,15.0,823.2,Mundur,14.19,Normal,20.39
+2011,Karangsambung,Sama,15.0,Bawah Normal,17,15.0,823.0,Mundur,14.27,Normal,20.56
+2011,Kebumen,Mundur,15.0,Bawah Normal,17,14.0,638.0,Mundur,15.38,Normal,23.85
+2011,Klirong,Mundur,15.0,Bawah Normal,17,14.0,613.9,Mundur,15.49,Normal,24.11
+2011,Kutowinangun,Mundur,15.0,Bawah Normal,17,14.0,554.1,Mundur,16.21,Normal,24.61
+2011,Kuwarasan,Mundur,15.0,Bawah Normal,17,14.0,697.8,Mundur,14.98,Normal,23.82
+2011,Mirit,Mundur,15.0,Bawah Normal,17,12.0,440.7,Sama,13.88,Bawah Normal,25.82
+2011,Padureso,Mundur,15.0,Bawah Normal,17,14.0,613.7,Mundur,15.5,Normal,24.25
+2011,Pejagoan,Mundur,15.0,Bawah Normal,17,14.0,728.8,Mundur,14.82,Normal,23.36
+2011,Petanahan,Mundur,15.0,Bawah Normal,17,14.0,660.0,Mundur,15.18,Normal,23.94
+2011,Poncowarno,Mundur,15.0,Bawah Normal,17,14.0,616.1,Mundur,15.38,Normal,24.18
+2011,Prembun,Mundur,15.0,Bawah Normal,17,14.0,511.4,Mundur,16.73,Normal,25.2
+2011,Puring,Mundur,15.0,Bawah Normal,17,14.0,677.7,Mundur,15.05,Normal,24.03
+2011,Rowokele,Mundur,15.0,Bawah Normal,17,14.0,771.3,Mundur,14.92,Normal,22.77
+2011,Sadang,Sama,16.0,Bawah Normal,17,16.0,859.1,Maju,13.1,Bawah Normal,18.44
+2011,Sempor,Sama,15.0,Bawah Normal,17,14.5,755.8,Mundur,14.9,Normal,21.67
+2011,Sruweng,Mundur,15.0,Bawah Normal,17,14.0,709.5,Mundur,14.85,Normal,23.52
+2012,Adimulyo,Mundur,15.0,Bawah Normal,17,14.0,704.4,Mundur,18.11,Atas Normal,25.59
+2012,Alian,Mundur,15.0,Bawah Normal,17,14.0,698.6,Mundur,18.61,Atas Normal,24.94
+2012,Ambal,Mundur,15.0,Bawah Normal,17,12.0,501.0,Sama,13.75,Atas Normal,21.99
+2012,Ayah,Mundur,15.0,Bawah Normal,17,13.5,743.3,Mundur,18.02,Atas Normal,24.16
+2012,Bonorowo,Mundur,15.0,Bawah Normal,17,12.0,440.9,Sama,13.57,Atas Normal,22.35
+2012,Buayan,Mundur,15.0,Bawah Normal,17,14.0,700.2,Mundur,17.74,Atas Normal,25.49
+2012,Buluspesantren,Mundur,15.0,Bawah Normal,17,13.5,557.4,Sama,15.81,Atas Normal,24.72
+2012,Gombong,Mundur,15.0,Bawah Normal,19,14.0,722.6,Mundur,18.58,Atas Normal,25.24
+2012,Karanganyar,Mundur,15.0,Bawah Normal,19,14.0,720.8,Mundur,18.68,Atas Normal,25.11
+2012,Karanggayam,Sama,15.0,Bawah Normal,19,15.0,823.2,Mundur,18.42,Atas Normal,23.38
+2012,Karangsambung,Sama,15.0,Bawah Normal,19,15.0,823.0,Mundur,18.34,Atas Normal,23.08
+2012,Kebumen,Mundur,15.0,Bawah Normal,17,14.0,638.0,Mundur,18.25,Atas Normal,26.09
+2012,Klirong,Mundur,15.0,Bawah Normal,17,14.0,613.9,Mundur,16.68,Atas Normal,25.54
+2012,Kutowinangun,Mundur,15.0,Bawah Normal,17,14.0,554.1,Mundur,17.29,Atas Normal,26.26
+2012,Kuwarasan,Mundur,15.0,Bawah Normal,17,14.0,697.8,Mundur,18.04,Atas Normal,25.65
+2012,Mirit,Mundur,15.0,Bawah Normal,17,12.0,440.7,Sama,13.31,Atas Normal,21.97
+2012,Padureso,Mundur,15.0,Bawah Normal,17,14.0,613.7,Mundur,18.45,Atas Normal,25.7
+2012,Pejagoan,Mundur,15.0,Bawah Normal,19,14.0,728.8,Mundur,18.59,Atas Normal,24.72
+2012,Petanahan,Mundur,15.0,Bawah Normal,17,14.0,660.0,Mundur,17.14,Atas Normal,25.49
+2012,Poncowarno,Mundur,15.0,Bawah Normal,17,14.0,616.1,Mundur,18.43,Atas Normal,26.05
+2012,Prembun,Mundur,15.0,Bawah Normal,17,14.0,511.4,Mundur,16.9,Atas Normal,26.29
+2012,Puring,Mundur,15.0,Bawah Normal,17,14.0,677.7,Mundur,17.13,Atas Normal,25.47
+2012,Rowokele,Mundur,15.0,Bawah Normal,19,14.0,771.3,Mundur,18.54,Atas Normal,25.12
+2012,Sadang,Maju,15.0,Bawah Normal,19,16.0,859.1,Mundur,18.1,Normal,23.17
+2012,Sempor,Sama,15.0,Bawah Normal,19,14.5,755.8,Mundur,18.33,Atas Normal,23.8
+2012,Sruweng,Mundur,15.0,Bawah Normal,19,14.0,709.5,Mundur,18.6,Atas Normal,25.38
+2013,Adimulyo,Mundur,21.0,Atas Normal,26,14.0,704.4,Maju,12.85,Bawah Normal,21.45
+2013,Alian,Mundur,21.0,Atas Normal,26,14.0,698.6,Maju,13.39,Bawah Normal,20.47
+2013,Ambal,Sama,12.0,Atas Normal,26,12.0,501.0,Mundur,15.3,Bawah Normal,17.2
+2013,Ayah,Mundur,21.0,Atas Normal,26,13.5,743.3,Mundur,14.85,Bawah Normal,17.16
+2013,Bonorowo,Sama,12.0,Atas Normal,26,12.0,440.9,Mundur,15.48,Bawah Normal,17.84
+2013,Buayan,Mundur,21.0,Atas Normal,26,14.0,700.2,Maju,12.63,Bawah Normal,21.93
+2013,Buluspesantren,Mundur,21.0,Atas Normal,26,13.5,557.4,Mundur,16.12,Bawah Normal,19.64
+2013,Gombong,Mundur,21.0,Atas Normal,26,14.0,722.6,Maju,11.69,Bawah Normal,17.74
+2013,Karanganyar,Mundur,21.0,Atas Normal,26,14.0,720.8,Maju,12.22,Bawah Normal,18.06
+2013,Karanggayam,Mundur,21.0,Atas Normal,26,15.0,823.2,Sama,14.76,Bawah Normal,17.71
+2013,Karangsambung,Mundur,21.0,Atas Normal,26,15.0,823.0,Sama,14.97,Bawah Normal,17.73
+2013,Kebumen,Mundur,21.0,Atas Normal,26,14.0,638.0,Maju,12.93,Bawah Normal,24.02
+2013,Klirong,Mundur,21.0,Atas Normal,26,14.0,613.9,Maju,13.36,Bawah Normal,22.99
+2013,Kutowinangun,Mundur,21.0,Atas Normal,26,14.0,554.1,Maju,13.12,Bawah Normal,24.03
+2013,Kuwarasan,Mundur,21.0,Atas Normal,26,14.0,697.8,Maju,12.58,Bawah Normal,22.21
+2013,Mirit,Sama,12.0,Atas Normal,26,12.0,440.7,Mundur,15.5,Bawah Normal,17.81
+2013,Padureso,Mundur,21.0,Atas Normal,26,14.0,613.7,Maju,13.14,Bawah Normal,23.7
+2013,Pejagoan,Mundur,21.0,Atas Normal,26,14.0,728.8,Maju,13.22,Bawah Normal,17.67
+2013,Petanahan,Mundur,21.0,Atas Normal,26,14.0,660.0,Maju,13.22,Bawah Normal,22.73
+2013,Poncowarno,Mundur,21.0,Atas Normal,26,14.0,616.1,Maju,13.07,Bawah Normal,24.07
+2013,Prembun,Mundur,21.0,Atas Normal,26,14.0,511.4,Maju,13.15,Bawah Normal,23.9
+2013,Puring,Mundur,21.0,Atas Normal,26,14.0,677.7,Maju,12.95,Bawah Normal,22.29
+2013,Rowokele,Mundur,21.0,Atas Normal,26,14.0,771.3,Maju,12.22,Bawah Normal,16.18
+2013,Sadang,Mundur,21.0,Atas Normal,26,16.0,859.1,Sama,14.65,Bawah Normal,18.48
+2013,Sempor,Mundur,21.0,Atas Normal,26,14.5,755.8,Maju,12.38,Bawah Normal,17.36
+2013,Sruweng,Mundur,21.0,Atas Normal,26,14.0,709.5,Maju,12.8,Bawah Normal,20.05
+2014,Adimulyo,Mundur,22.0,Normal,26,14.0,704.4,Mundur,15.25,Bawah Normal,18.41
+2014,Alian,Mundur,15.0,Normal,26,14.0,698.6,Mundur,15.26,Bawah Normal,18.39
+2014,Ambal,Sama,12.0,Normal,26,12.0,501.0,Maju,12.73,Bawah Normal,18.9
+2014,Ayah,Sama,13.0,Normal,26,13.5,743.3,Mundur,15.44,Bawah Normal,18.99
+2014,Bonorowo,Sama,12.0,Normal,26,12.0,440.9,Maju,12.86,Bawah Normal,18.99
+2014,Buayan,Mundur,15.0,Normal,26,14.0,700.2,Mundur,15.33,Bawah Normal,18.58
+2014,Buluspesantren,Mundur,15.0,Normal,26,13.5,557.4,Maju,13.07,Bawah Normal,19.22
+2014,Gombong,Mundur,22.0,Normal,26,14.0,722.6,Mundur,15.54,Bawah Normal,18.78
+2014,Karanganyar,Mundur,19.0,Normal,26,14.0,720.8,Mundur,15.46,Bawah Normal,18.64
+2014,Karanggayam,Mundur,22.0,Normal,26,15.0,823.2,Mundur,15.14,Bawah Normal,18.18
+2014,Karangsambung,Mundur,22.0,Normal,26,15.0,823.0,Mundur,15.12,Bawah Normal,18.17
+2014,Kebumen,Mundur,15.0,Normal,26,14.0,638.0,Mundur,14.94,Bawah Normal,18.12
+2014,Klirong,Mundur,15.0,Normal,26,14.0,613.9,Maju,14.02,Bawah Normal,18.24
+2014,Kutowinangun,Mundur,15.0,Normal,26,14.0,554.1,Maju,12.8,Bawah Normal,19.1
+2014,Kuwarasan,Mundur,22.0,Normal,26,14.0,697.8,Mundur,15.32,Bawah Normal,18.49
+2014,Mirit,Sama,12.0,Normal,26,12.0,440.7,Maju,12.75,Bawah Normal,18.89
+2014,Padureso,Mundur,15.0,Normal,26,14.0,613.7,Mundur,15.07,Bawah Normal,18.26
+2014,Pejagoan,Mundur,22.0,Normal,26,14.0,728.8,Mundur,15.39,Bawah Normal,18.61
+2014,Petanahan,Mundur,15.0,Normal,26,14.0,660.0,Mundur,14.68,Bawah Normal,17.99
+2014,Poncowarno,Mundur,15.0,Normal,26,14.0,616.1,Mundur,14.8,Bawah Normal,18.13
+2014,Prembun,Mundur,15.0,Normal,26,14.0,511.4,Maju,12.41,Bawah Normal,18.91
+2014,Puring,Mundur,15.0,Normal,26,14.0,677.7,Mundur,15.14,Bawah Normal,18.49
+2014,Rowokele,Mundur,19.0,Normal,26,14.0,771.3,Mundur,15.22,Bawah Normal,18.27
+2014,Sadang,Mundur,22.0,Normal,26,16.0,859.1,Mundur,14.87,Bawah Normal,17.93
+2014,Sempor,Mundur,19.0,Normal,26,14.5,755.8,Mundur,15.34,Bawah Normal,18.43
+2014,Sruweng,Mundur,22.0,Normal,26,14.0,709.5,Mundur,15.36,Bawah Normal,18.55
+2015,Adimulyo,Sama,14.0,Bawah Normal,17,14.0,704.4,Sama,13.16,Normal,19.44
+2015,Alian,Sama,14.0,Bawah Normal,17,14.0,698.6,Sama,13.27,Normal,19.69
+2015,Ambal,Maju,10.0,Bawah Normal,17,12.0,501.0,Maju,14.63,Normal,24.4
+2015,Ayah,Sama,14.0,Bawah Normal,17,13.5,743.3,Maju,12.93,Normal,19.64
+2015,Bonorowo,Maju,10.0,Bawah Normal,17,12.0,440.9,Maju,14.84,Normal,25.1
+2015,Buayan,Sama,14.0,Bawah Normal,17,14.0,700.2,Sama,13.1,Normal,19.4
+2015,Buluspesantren,Maju,10.0,Bawah Normal,17,13.5,557.4,Maju,13.84,Normal,22.05
+2015,Gombong,Sama,14.0,Bawah Normal,17,14.0,722.6,Sama,13.13,Normal,19.32
+2015,Karanganyar,Sama,14.0,Bawah Normal,17,14.0,720.8,Sama,13.22,Normal,19.52
+2015,Karanggayam,Mundur,17.0,Bawah Normal,17,15.0,823.2,Sama,12.9,Normal,18.94
+2015,Karangsambung,Mundur,17.0,Bawah Normal,17,15.0,823.0,Maju,12.95,Normal,19.07
+2015,Kebumen,Sama,14.0,Bawah Normal,17,14.0,638.0,Sama,13.36,Normal,19.87
+2015,Klirong,Sama,14.0,Bawah Normal,17,14.0,613.9,Sama,13.4,Normal,20.12
+2015,Kutowinangun,Sama,14.0,Bawah Normal,17,14.0,554.1,Sama,13.83,Normal,21.04
+2015,Kuwarasan,Sama,14.0,Bawah Normal,17,14.0,697.8,Sama,13.13,Normal,19.35
+2015,Mirit,Maju,10.0,Bawah Normal,17,12.0,440.7,Maju,14.83,Normal,25.12
+2015,Padureso,Sama,14.0,Bawah Normal,17,14.0,613.7,Sama,13.45,Normal,20.07
+2015,Pejagoan,Sama,14.0,Bawah Normal,17,14.0,728.8,Sama,13.19,Normal,19.52
+2015,Petanahan,Sama,14.0,Bawah Normal,17,14.0,660.0,Sama,13.25,Normal,19.76
+2015,Poncowarno,Sama,14.0,Bawah Normal,17,14.0,616.1,Sama,13.47,Normal,20.12
+2015,Prembun,Sama,14.0,Bawah Normal,17,14.0,511.4,Sama,14.3,Normal,22.25
+2015,Puring,Sama,14.0,Bawah Normal,17,14.0,677.7,Sama,13.19,Normal,19.68
+2015,Rowokele,Sama,14.0,Bawah Normal,17,14.0,771.3,Sama,12.93,Normal,18.98
+2015,Sadang,Mundur,17.0,Bawah Normal,17,16.0,859.1,Maju,12.73,Normal,18.97
+2015,Sempor,Sama,14.0,Bawah Normal,17,14.5,755.8,Sama,13.07,Normal,19.1
+2015,Sruweng,Sama,14.0,Bawah Normal,17,14.0,709.5,Sama,13.24,Normal,19.58
+2016,Adimulyo,Sama,14.0,Atas Normal,25,14.0,704.4,Sama,14.23,Bawah Normal,17.31
+2016,Alian,Sama,14.0,Atas Normal,21,14.0,698.6,Sama,14.37,Bawah Normal,17.47
+2016,Ambal,Mundur,21.0,Atas Normal,25,12.0,501.0,Maju,11.26,Bawah Normal,18.03
+2016,Ayah,Sama,14.0,Atas Normal,25,13.5,743.3,Sama,13.87,Bawah Normal,16.76
+2016,Bonorowo,Mundur,21.0,Atas Normal,25,12.0,440.9,Maju,11.21,Bawah Normal,18.5
+2016,Buayan,Sama,14.0,Atas Normal,25,14.0,700.2,Sama,14.12,Bawah Normal,17.14
+2016,Buluspesantren,Sama,14.0,Atas Normal,25,13.5,557.4,Sama,14.21,Bawah Normal,17.11
+2016,Gombong,Sama,14.0,Atas Normal,21,14.0,722.6,Sama,14.15,Bawah Normal,17.13
+2016,Karanganyar,Sama,14.0,Atas Normal,25,14.0,720.8,Sama,14.18,Bawah Normal,17.24
+2016,Karanggayam,Maju,14.0,Atas Normal,21,15.0,823.2,Maju,13.11,Bawah Normal,18.53
+2016,Karangsambung,Maju,14.0,Atas Normal,21,15.0,823.0,Maju,13.61,Bawah Normal,18.53
+2016,Kebumen,Sama,14.0,Atas Normal,25,14.0,638.0,Sama,14.42,Bawah Normal,17.48
+2016,Klirong,Sama,14.0,Atas Normal,25,14.0,613.9,Sama,14.39,Bawah Normal,17.41
+2016,Kutowinangun,Mundur,21.0,Atas Normal,25,14.0,554.1,Sama,14.24,Bawah Normal,17.13
+2016,Kuwarasan,Sama,14.0,Atas Normal,25,14.0,697.8,Sama,14.17,Bawah Normal,17.2
+2016,Mirit,Mundur,21.0,Atas Normal,25,12.0,440.7,Maju,11.09,Bawah Normal,18.54
+2016,Padureso,Sama,14.0,Atas Normal,25,14.0,613.7,Sama,14.46,Bawah Normal,17.53
+2016,Pejagoan,Sama,14.0,Atas Normal,25,14.0,728.8,Sama,14.29,Bawah Normal,17.37
+2016,Petanahan,Sama,14.0,Atas Normal,25,14.0,660.0,Sama,14.36,Bawah Normal,17.43
+2016,Poncowarno,Sama,14.0,Atas Normal,25,14.0,616.1,Sama,14.44,Bawah Normal,17.5
+2016,Prembun,Mundur,21.0,Atas Normal,25,14.0,511.4,Sama,14.07,Bawah Normal,16.9
+2016,Puring,Sama,14.0,Atas Normal,25,14.0,677.7,Sama,14.23,Bawah Normal,17.33
+2016,Rowokele,Sama,14.0,Atas Normal,21,14.0,771.3,Sama,13.94,Bawah Normal,16.83
+2016,Sadang,Maju,14.0,Atas Normal,21,16.0,859.1,Maju,13.01,Bawah Normal,20.4
+2016,Sempor,Sama,14.0,Atas Normal,21,14.5,755.8,Maju,14.06,Bawah Normal,17.3
+2016,Sruweng,Sama,14.0,Atas Normal,25,14.0,709.5,Sama,14.29,Bawah Normal,17.38
+2017,Adimulyo,Sama,14.0,Bawah Normal,19,14.0,704.4,Maju,13.0,Bawah Normal,24.67
+2017,Alian,Sama,14.0,Bawah Normal,26,14.0,698.6,Maju,12.79,Bawah Normal,23.94
+2017,Ambal,Maju,11.0,Bawah Normal,26,12.0,501.0,Mundur,14.07,Bawah Normal,24.6
+2017,Ayah,Sama,13.0,Bawah Normal,26,13.5,743.3,Maju,14.01,Bawah Normal,26.34
+2017,Bonorowo,Maju,11.0,Bawah Normal,26,12.0,440.9,Mundur,13.95,Bawah Normal,24.65
+2017,Buayan,Maju,13.0,Bawah Normal,26,14.0,700.2,Maju,13.52,Bawah Normal,25.62
+2017,Buluspesantren,Maju,11.0,Bawah Normal,26,13.5,557.4,Sama,14.28,Bawah Normal,27.48
+2017,Gombong,Sama,14.0,Bawah Normal,26,14.0,722.6,Maju,12.86,Atas Normal,24.47
+2017,Karanganyar,Sama,14.0,Bawah Normal,19,14.0,720.8,Maju,12.67,Atas Normal,23.98
+2017,Karanggayam,Maju,14.0,Normal,19,15.0,823.2,Maju,12.26,Bawah Normal,22.26
+2017,Karangsambung,Maju,14.0,Normal,19,15.0,823.0,Maju,12.43,Bawah Normal,21.07
+2017,Kebumen,Maju,13.0,Bawah Normal,26,14.0,638.0,Maju,13.23,Bawah Normal,25.07
+2017,Klirong,Maju,13.0,Bawah Normal,26,14.0,613.9,Maju,13.35,Bawah Normal,25.18
+2017,Kutowinangun,Maju,13.0,Bawah Normal,26,14.0,554.1,Maju,13.7,Bawah Normal,25.95
+2017,Kuwarasan,Maju,13.0,Bawah Normal,26,14.0,697.8,Maju,13.26,Bawah Normal,25.19
+2017,Mirit,Maju,11.0,Bawah Normal,26,12.0,440.7,Mundur,13.97,Bawah Normal,24.92
+2017,Padureso,Maju,13.0,Bawah Normal,26,14.0,613.7,Maju,13.23,Bawah Normal,24.81
+2017,Pejagoan,Sama,14.0,Bawah Normal,19,14.0,728.8,Maju,12.66,Atas Normal,23.73
+2017,Petanahan,Maju,13.0,Bawah Normal,19,14.0,660.0,Maju,13.31,Bawah Normal,25.14
+2017,Poncowarno,Maju,13.0,Bawah Normal,26,14.0,616.1,Maju,13.42,Bawah Normal,25.18
+2017,Prembun,Maju,11.0,Bawah Normal,26,14.0,511.4,Sama,13.59,Bawah Normal,25.8
+2017,Puring,Maju,13.0,Bawah Normal,26,14.0,677.7,Maju,13.66,Bawah Normal,25.71
+2017,Rowokele,Sama,14.0,Normal,26,14.0,771.3,Maju,12.69,Atas Normal,24.08
+2017,Sadang,Mundur,17.0,Normal,19,16.0,859.1,Maju,12.64,Bawah Normal,21.03
+2017,Sempor,Sama,14.0,Normal,26,14.5,755.8,Maju,12.41,Atas Normal,23.54
+2017,Sruweng,Sama,14.0,Bawah Normal,19,14.0,709.5,Maju,12.77,Atas Normal,24.15
+2018,Adimulyo,Maju,13.0,Bawah Normal,16,14.0,704.4,Mundur,18.59,Atas Normal,24.8
+2018,Alian,Maju,13.0,Bawah Normal,16,14.0,698.6,Mundur,18.21,Atas Normal,24.92
+2018,Ambal,Sama,12.0,Bawah Normal,16,12.0,501.0,Sama,14.29,Atas Normal,26.05
+2018,Ayah,Sama,13.0,Bawah Normal,16,13.5,743.3,Mundur,17.4,Atas Normal,19.41
+2018,Bonorowo,Sama,12.0,Bawah Normal,16,12.0,440.9,Sama,13.31,Atas Normal,26.17
+2018,Buayan,Maju,13.0,Bawah Normal,16,14.0,700.2,Mundur,18.15,Atas Normal,22.49
+2018,Buluspesantren,Sama,13.0,Bawah Normal,16,13.5,557.4,Mundur,17.66,Atas Normal,26.08
+2018,Gombong,Maju,13.0,Bawah Normal,16,14.0,722.6,Mundur,18.43,Atas Normal,21.03
+2018,Karanganyar,Maju,13.0,Bawah Normal,16,14.0,720.8,Mundur,18.38,Atas Normal,21.04
+2018,Karanggayam,Mundur,16.0,Bawah Normal,16,15.0,823.2,Mundur,17.48,Atas Normal,18.67
+2018,Karangsambung,Mundur,16.0,Bawah Normal,16,15.0,823.0,Mundur,17.67,Atas Normal,19.16
+2018,Kebumen,Maju,13.0,Bawah Normal,16,14.0,638.0,Mundur,18.37,Atas Normal,26.36
+2018,Klirong,Maju,13.0,Bawah Normal,16,14.0,613.9,Mundur,18.34,Atas Normal,26.4
+2018,Kutowinangun,Maju,12.0,Bawah Normal,16,14.0,554.1,Mundur,17.7,Atas Normal,26.21
+2018,Kuwarasan,Maju,13.0,Bawah Normal,16,14.0,697.8,Mundur,18.43,Atas Normal,24.2
+2018,Mirit,Maju,11.0,Bawah Normal,16,12.0,440.7,Sama,13.23,Atas Normal,26.14
+2018,Padureso,Maju,13.0,Bawah Normal,16,14.0,613.7,Mundur,17.4,Atas Normal,25.97
+2018,Pejagoan,Maju,13.0,Bawah Normal,16,14.0,728.8,Mundur,18.32,Atas Normal,21.26
+2018,Petanahan,Maju,13.0,Bawah Normal,16,14.0,660.0,Mundur,18.57,Atas Normal,26.42
+2018,Poncowarno,Maju,13.0,Bawah Normal,16,14.0,616.1,Mundur,17.85,Atas Normal,26.14
+2018,Prembun,Maju,12.0,Bawah Normal,16,14.0,511.4,Mundur,16.8,Atas Normal,26.06
+2018,Puring,Maju,13.0,Bawah Normal,16,14.0,677.7,Mundur,18.41,Atas Normal,25.74
+2018,Rowokele,Maju,13.0,Bawah Normal,16,14.0,771.3,Mundur,17.92,Atas Normal,19.44
+2018,Sadang,Sama,16.0,Bawah Normal,16,16.0,859.1,Mundur,17.21,Atas Normal,18.93
+2018,Sempor,Mundur,16.0,Bawah Normal,16,14.5,755.8,Mundur,17.83,Atas Normal,19.19
+2018,Sruweng,Maju,13.0,Bawah Normal,16,14.0,709.5,Mundur,18.53,Atas Normal,23.78
+2019,Adimulyo,Maju,13.0,Bawah Normal,17,14.0,704.4,Sama,14.98,Bawah Normal,25.8
+2019,Alian,Maju,13.0,Bawah Normal,17,14.0,698.6,Sama,14.5,Bawah Normal,25.79
+2019,Ambal,Sama,12.0,Bawah Normal,17,12.0,501.0,Maju,12.27,Bawah Normal,24.5
+2019,Ayah,Sama,13.0,Bawah Normal,17,13.5,743.3,Sama,15.82,Normal,25.94
+2019,Bonorowo,Sama,12.0,Bawah Normal,17,12.0,440.9,Maju,12.07,Bawah Normal,24.37
+2019,Buayan,Maju,13.0,Bawah Normal,17,14.0,700.2,Sama,14.62,Bawah Normal,25.61
+2019,Buluspesantren,Maju,12.0,Bawah Normal,17,13.5,557.4,Maju,12.66,Bawah Normal,25.34
+2019,Gombong,Maju,13.0,Bawah Normal,17,14.0,722.6,Sama,15.13,Bawah Normal,25.9
+2019,Karanganyar,Maju,13.0,Bawah Normal,17,14.0,720.8,Sama,15.48,Normal,26.03
+2019,Karanggayam,Maju,14.0,Bawah Normal,17,15.0,823.2,Maju,12.61,Bawah Normal,25.2
+2019,Karangsambung,Maju,14.0,Bawah Normal,17,15.0,823.0,Maju,12.45,Bawah Normal,25.11
+2019,Kebumen,Maju,13.0,Bawah Normal,17,14.0,638.0,Sama,14.31,Bawah Normal,25.69
+2019,Klirong,Maju,13.0,Bawah Normal,17,14.0,613.9,Sama,13.54,Bawah Normal,25.55
+2019,Kutowinangun,Maju,13.0,Bawah Normal,17,14.0,554.1,Maju,12.72,Bawah Normal,25.35
+2019,Kuwarasan,Maju,13.0,Bawah Normal,17,14.0,697.8,Sama,14.7,Bawah Normal,25.66
+2019,Mirit,Sama,12.0,Bawah Normal,17,12.0,440.7,Maju,12.06,Bawah Normal,24.4
+2019,Padureso,Maju,13.0,Bawah Normal,17,14.0,613.7,Sama,13.31,Bawah Normal,25.7
+2019,Pejagoan,Maju,13.0,Bawah Normal,17,14.0,728.8,Sama,14.83,Bawah Normal,25.86
+2019,Petanahan,Maju,13.0,Bawah Normal,17,14.0,660.0,Sama,14.24,Bawah Normal,25.57
+2019,Poncowarno,Maju,13.0,Bawah Normal,17,14.0,616.1,Sama,13.78,Bawah Normal,25.66
+2019,Prembun,Maju,13.0,Bawah Normal,17,14.0,511.4,Maju,12.41,Bawah Normal,25.2
+2019,Puring,Maju,13.0,Bawah Normal,17,14.0,677.7,Sama,14.08,Bawah Normal,25.54
+2019,Rowokele,Maju,13.0,Bawah Normal,17,14.0,771.3,Sama,14.99,Bawah Normal,25.82
+2019,Sadang,Maju,15.0,Bawah Normal,17,16.0,859.1,Maju,12.39,Bawah Normal,24.74
+2019,Sempor,Maju,13.0,Bawah Normal,17,14.5,755.8,Sama,13.28,Bawah Normal,25.59
+2019,Sruweng,Maju,13.0,Bawah Normal,17,14.0,709.5,Sama,15.08,Bawah Normal,25.91
+2020,Adimulyo,Mundur,16.0,Normal,26,14.0,704.4,Maju,9.84,Bawah Normal,16.21
+2020,Alian,Mundur,16.0,Normal,26,14.0,698.6,Maju,10.08,Bawah Normal,16.42
+2020,Ambal,Maju,11.0,Normal,26,12.0,501.0,Maju,10.45,Bawah Normal,19.55
+2020,Ayah,Mundur,17.0,Normal,26,13.5,743.3,Maju,10.17,Bawah Normal,16.38
+2020,Bonorowo,Maju,11.0,Normal,26,12.0,440.9,Maju,10.85,Atas Normal,21.22
+2020,Buayan,Mundur,16.0,Normal,26,14.0,700.2,Maju,9.83,Bawah Normal,16.0
+2020,Buluspesantren,Mundur,16.0,Normal,26,13.5,557.4,Maju,9.71,Bawah Normal,16.27
+2020,Gombong,Mundur,16.0,Normal,26,14.0,722.6,Maju,10.17,Bawah Normal,16.66
+2020,Karanganyar,Mundur,16.0,Normal,26,14.0,720.8,Maju,10.33,Bawah Normal,16.82
+2020,Karanggayam,Mundur,16.0,Normal,22,15.0,823.2,Mundur,16.22,Atas Normal,24.76
+2020,Karangsambung,Mundur,16.0,Normal,26,15.0,823.0,Mundur,16.23,Atas Normal,24.83
+2020,Kebumen,Mundur,16.0,Normal,26,14.0,638.0,Maju,9.83,Bawah Normal,16.29
+2020,Klirong,Mundur,16.0,Normal,26,14.0,613.9,Maju,9.74,Bawah Normal,16.11
+2020,Kutowinangun,Mundur,16.0,Normal,26,14.0,554.1,Maju,9.75,Bawah Normal,16.6
+2020,Kuwarasan,Mundur,16.0,Normal,26,14.0,697.8,Maju,9.8,Bawah Normal,16.09
+2020,Mirit,Maju,11.0,Normal,26,12.0,440.7,Maju,10.76,Atas Normal,20.96
+2020,Padureso,Mundur,16.0,Normal,26,14.0,613.7,Maju,10.05,Bawah Normal,16.43
+2020,Pejagoan,Mundur,16.0,Normal,26,14.0,728.8,Maju,10.17,Bawah Normal,16.6
+2020,Petanahan,Mundur,16.0,Normal,26,14.0,660.0,Maju,9.75,Bawah Normal,16.04
+2020,Poncowarno,Mundur,16.0,Normal,26,14.0,616.1,Maju,9.91,Bawah Normal,16.35
+2020,Prembun,Mundur,16.0,Normal,26,14.0,511.4,Maju,9.75,Bawah Normal,17.06
+2020,Puring,Mundur,16.0,Normal,26,14.0,677.7,Maju,9.67,Bawah Normal,15.83
+2020,Rowokele,Mundur,17.0,Normal,26,14.0,771.3,Maju,10.3,Bawah Normal,16.75
+2020,Sadang,Sama,16.0,Normal,24,16.0,859.1,Maju,14.59,Atas Normal,23.56
+2020,Sempor,Mundur,17.0,Normal,26,14.5,755.8,Maju,11.49,Bawah Normal,18.37
+2020,Sruweng,Mundur,16.0,Normal,26,14.0,709.5,Maju,10.03,Bawah Normal,16.45
+2021,Adimulyo,Maju,12.0,Atas Normal,25,14.0,704.4,Mundur,14.28,Normal,17.35
+2021,Alian,Maju,12.0,Atas Normal,25,14.0,698.6,Mundur,14.41,Normal,17.86
+2021,Ambal,Sama,12.0,Atas Normal,25,12.0,501.0,Mundur,14.77,Bawah Normal,19.04
+2021,Ayah,Maju,12.0,Atas Normal,25,13.5,743.3,Mundur,14.49,Bawah Normal,15.76
+2021,Bonorowo,Sama,12.0,Atas Normal,25,12.0,440.9,Mundur,14.35,Bawah Normal,20.65
+2021,Buayan,Maju,12.0,Atas Normal,25,14.0,700.2,Mundur,14.6,Bawah Normal,16.61
+2021,Buluspesantren,Maju,12.0,Atas Normal,25,13.5,557.4,Mundur,14.71,Bawah Normal,19.32
+2021,Gombong,Maju,12.0,Atas Normal,20,14.0,722.6,Mundur,14.45,Normal,17.36
+2021,Karanganyar,Maju,12.0,Atas Normal,20,14.0,720.8,Mundur,14.42,Normal,17.86
+2021,Karanggayam,Maju,12.0,Atas Normal,20,15.0,823.2,Mundur,14.9,Normal,19.14
+2021,Karangsambung,Maju,12.0,Atas Normal,20,15.0,823.0,Mundur,14.83,Normal,19.15
+2021,Kebumen,Maju,12.0,Atas Normal,25,14.0,638.0,Mundur,14.44,Normal,17.76
+2021,Klirong,Maju,12.0,Atas Normal,25,14.0,613.9,Mundur,14.41,Normal,17.85
+2021,Kutowinangun,Maju,12.0,Atas Normal,25,14.0,554.1,Mundur,14.76,Bawah Normal,18.52
+2021,Kuwarasan,Maju,12.0,Atas Normal,25,14.0,697.8,Mundur,14.47,Bawah Normal,17.01
+2021,Mirit,Sama,12.0,Atas Normal,25,12.0,440.7,Mundur,14.22,Normal,20.94
+2021,Padureso,Maju,12.0,Atas Normal,25,14.0,613.7,Mundur,14.67,Normal,17.97
+2021,Pejagoan,Maju,12.0,Atas Normal,20,14.0,728.8,Mundur,14.34,Normal,18.06
+2021,Petanahan,Maju,12.0,Atas Normal,25,14.0,660.0,Mundur,14.29,Normal,17.49
+2021,Poncowarno,Maju,12.0,Atas Normal,25,14.0,616.1,Mundur,14.6,Normal,17.92
+2021,Prembun,Maju,12.0,Atas Normal,25,14.0,511.4,Mundur,15.02,Bawah Normal,19.1
+2021,Puring,Maju,12.0,Atas Normal,25,14.0,677.7,Mundur,14.26,Normal,17.27
+2021,Rowokele,Maju,12.0,Atas Normal,21,14.0,771.3,Mundur,14.49,Bawah Normal,16.55
+2021,Sadang,Maju,12.0,Atas Normal,20,16.0,859.1,Mundur,15.07,Normal,19.23
+2021,Sempor,Maju,12.0,Atas Normal,20,14.5,755.8,Mundur,14.07,Normal,19.35
+2021,Sruweng,Maju,12.0,Atas Normal,20,14.0,709.5,Mundur,14.37,Normal,17.75
+2022,Adimulyo,Mundur,18.0,Atas Normal,24,14.0,704.4,Maju,13.73,Bawah Normal,16.07
+2022,Alian,Mundur,18.0,Atas Normal,22,14.0,698.6,Mundur,16.09,Bawah Normal,17.21
+2022,Ambal,Mundur,18.0,Atas Normal,24,12.0,501.0,Sama,13.85,Bawah Normal,16.57
+2022,Ayah,Mundur,19.0,Atas Normal,24,13.5,743.3,Mundur,13.92,Bawah Normal,14.61
+2022,Bonorowo,Mundur,18.0,Atas Normal,24,12.0,440.9,Sama,13.96,Bawah Normal,16.67
+2022,Buayan,Mundur,19.0,Atas Normal,24,14.0,700.2,Maju,13.58,Bawah Normal,15.58
+2022,Buluspesantren,Mundur,18.0,Atas Normal,22,13.5,557.4,Maju,12.89,Bawah Normal,16.05
+2022,Gombong,Mundur,19.0,Atas Normal,24,14.0,722.6,Mundur,14.0,Bawah Normal,15.88
+2022,Karanganyar,Mundur,19.0,Atas Normal,24,14.0,720.8,Mundur,14.79,Bawah Normal,16.36
+2022,Karanggayam,Mundur,19.0,Atas Normal,24,15.0,823.2,Mundur,16.78,Bawah Normal,18.23
+2022,Karangsambung,Mundur,19.0,Atas Normal,22,15.0,823.0,Mundur,16.89,Bawah Normal,18.57
+2022,Kebumen,Mundur,18.0,Atas Normal,22,14.0,638.0,Maju,13.51,Bawah Normal,16.14
+2022,Klirong,Mundur,18.0,Atas Normal,24,14.0,613.9,Maju,13.42,Bawah Normal,15.87
+2022,Kutowinangun,Mundur,18.0,Atas Normal,22,14.0,554.1,Mundur,14.59,Bawah Normal,16.47
+2022,Kuwarasan,Mundur,19.0,Atas Normal,24,14.0,697.8,Maju,13.53,Bawah Normal,15.93
+2022,Mirit,Mundur,18.0,Atas Normal,24,12.0,440.7,Sama,14.02,Bawah Normal,16.64
+2022,Padureso,Mundur,18.0,Atas Normal,22,14.0,613.7,Mundur,15.51,Bawah Normal,16.92
+2022,Pejagoan,Mundur,18.0,Atas Normal,24,14.0,728.8,Mundur,14.79,Bawah Normal,16.65
+2022,Petanahan,Mundur,18.0,Atas Normal,24,14.0,660.0,Maju,13.46,Bawah Normal,15.93
+2022,Poncowarno,Mundur,18.0,Atas Normal,22,14.0,616.1,Mundur,15.41,Bawah Normal,16.84
+2022,Prembun,Mundur,18.0,Atas Normal,24,14.0,511.4,Mundur,14.91,Bawah Normal,16.72
+2022,Puring,Mundur,18.0,Atas Normal,24,14.0,677.7,Maju,13.52,Bawah Normal,15.75
+2022,Rowokele,Mundur,19.0,Atas Normal,24,14.0,771.3,Mundur,15.14,Bawah Normal,15.58
+2022,Sadang,Mundur,19.0,Atas Normal,24,16.0,859.1,Mundur,16.17,Bawah Normal,18.71
+2022,Sempor,Mundur,19.0,Atas Normal,21,14.5,755.8,Mundur,16.54,Bawah Normal,17.44
+2022,Sruweng,Mundur,18.0,Atas Normal,22,14.0,709.5,Maju,14.12,Bawah Normal,16.35
+2023,Adimulyo,Sama,14.0,Bawah Normal,26,14.0,704.4,Mundur,16.08,Bawah Normal,17.72
+2023,Alian,Sama,14.0,Bawah Normal,26,14.0,698.6,Mundur,15.63,Bawah Normal,17.57
+2023,Ambal,Mundur,14.0,Bawah Normal,26,12.0,501.0,Mundur,14.91,Bawah Normal,17.48
+2023,Ayah,Sama,14.0,Bawah Normal,26,13.5,743.3,Mundur,16.07,Bawah Normal,17.71
+2023,Bonorowo,Mundur,14.0,Bawah Normal,26,12.0,440.9,Mundur,15.88,Atas Normal,24.98
+2023,Buayan,Sama,14.0,Bawah Normal,26,14.0,700.2,Mundur,16.13,Bawah Normal,17.73
+2023,Buluspesantren,Sama,14.0,Bawah Normal,26,13.5,557.4,Mundur,15.96,Bawah Normal,17.63
+2023,Gombong,Sama,14.0,Bawah Normal,26,14.0,722.6,Mundur,16.2,Bawah Normal,17.83
+2023,Karanganyar,Sama,14.0,Bawah Normal,26,14.0,720.8,Mundur,16.09,Bawah Normal,17.75
+2023,Karanggayam,Maju,14.0,Bawah Normal,26,15.0,823.2,Mundur,15.94,Bawah Normal,17.79
+2023,Karangsambung,Maju,14.0,Bawah Normal,26,15.0,823.0,Mundur,15.58,Bawah Normal,17.83
+2023,Kebumen,Sama,14.0,Bawah Normal,26,14.0,638.0,Mundur,15.84,Bawah Normal,17.57
+2023,Klirong,Sama,14.0,Bawah Normal,26,14.0,613.9,Mundur,15.94,Bawah Normal,17.57
+2023,Kutowinangun,Sama,14.0,Bawah Normal,26,14.0,554.1,Mundur,19.46,Bawah Normal,24.88
+2023,Kuwarasan,Sama,14.0,Bawah Normal,26,14.0,697.8,Mundur,16.16,Bawah Normal,17.77
+2023,Mirit,Mundur,14.0,Bawah Normal,26,12.0,440.7,Mundur,14.76,Bawah Normal,20.61
+2023,Padureso,Sama,14.0,Bawah Normal,26,14.0,613.7,Mundur,16.11,Bawah Normal,18.53
+2023,Pejagoan,Sama,14.0,Bawah Normal,26,14.0,728.8,Mundur,15.91,Bawah Normal,17.69
+2023,Petanahan,Sama,14.0,Bawah Normal,26,14.0,660.0,Mundur,15.96,Bawah Normal,17.6
+2023,Poncowarno,Sama,14.0,Bawah Normal,26,14.0,616.1,Mundur,16.33,Bawah Normal,18.89
+2023,Prembun,Sama,14.0,Bawah Normal,26,14.0,511.4,Mundur,19.92,Bawah Normal,24.94
+2023,Puring,Sama,14.0,Bawah Normal,26,14.0,677.7,Mundur,16.04,Bawah Normal,17.65
+2023,Rowokele,Sama,14.0,Bawah Normal,26,14.0,771.3,Mundur,16.14,Bawah Normal,17.82
+2023,Sadang,Maju,14.0,Bawah Normal,26,16.0,859.1,Mundur,15.59,Bawah Normal,18.48
+2023,Sempor,Sama,14.0,Bawah Normal,26,14.5,755.8,Mundur,16.12,Bawah Normal,17.78
+2023,Sruweng,Sama,14.0,Bawah Normal,26,14.0,709.5,Mundur,16.01,Bawah Normal,17.7
+2024,Adimulyo,Maju,13.0,Bawah Normal,26,14.0,704.4,Maju,13.47,Atas Normal,16.42
+2024,Alian,Maju,13.0,Bawah Normal,26,14.0,698.6,Maju,13.52,Atas Normal,16.31
+2024,Ambal,Mundur,13.0,Bawah Normal,26,12.0,501.0,Sama,13.7,Atas Normal,21.1
+2024,Ayah,Sama,13.0,Bawah Normal,26,13.5,743.3,Sama,13.98,Atas Normal,16.87
+2024,Bonorowo,Mundur,13.0,Bawah Normal,26,12.0,440.9,Maju,13.62,Atas Normal,21.95
+2024,Buayan,Maju,13.0,Bawah Normal,26,14.0,700.2,Maju,13.36,Atas Normal,16.38
+2024,Buluspesantren,Sama,13.0,Bawah Normal,26,13.5,557.4,Maju,13.19,Bawah Normal,16.99
+2024,Gombong,Maju,13.0,Bawah Normal,26,14.0,722.6,Maju,13.59,Atas Normal,16.61
+2024,Karanganyar,Maju,13.0,Bawah Normal,26,14.0,720.8,Maju,13.6,Atas Normal,16.54
+2024,Karanggayam,Maju,13.0,Bawah Normal,20,15.0,823.2,Maju,13.34,Atas Normal,16.3
+2024,Karangsambung,Maju,13.0,Bawah Normal,26,15.0,823.0,Maju,13.33,Atas Normal,16.15
+2024,Kebumen,Maju,13.0,Bawah Normal,26,14.0,638.0,Maju,12.8,Bawah Normal,16.01
+2024,Klirong,Maju,13.0,Bawah Normal,26,14.0,613.9,Maju,12.79,Bawah Normal,16.1
+2024,Kutowinangun,Maju,13.0,Bawah Normal,26,14.0,554.1,Maju,12.85,Bawah Normal,16.39
+2024,Kuwarasan,Maju,13.0,Bawah Normal,26,14.0,697.8,Maju,13.31,Atas Normal,16.39
+2024,Mirit,Mundur,13.0,Bawah Normal,26,12.0,440.7,Sama,13.62,Atas Normal,21.88
+2024,Padureso,Maju,13.0,Bawah Normal,26,14.0,613.7,Maju,12.86,Bawah Normal,16.17
+2024,Pejagoan,Maju,13.0,Bawah Normal,26,14.0,728.8,Maju,13.55,Atas Normal,16.35
+2024,Petanahan,Maju,13.0,Bawah Normal,26,14.0,660.0,Maju,12.87,Bawah Normal,16.01
+2024,Poncowarno,Maju,13.0,Bawah Normal,26,14.0,616.1,Maju,12.83,Bawah Normal,16.11
+2024,Prembun,Maju,13.0,Bawah Normal,26,14.0,511.4,Maju,12.97,Bawah Normal,16.76
+2024,Puring,Maju,13.0,Bawah Normal,26,14.0,677.7,Maju,12.88,Bawah Normal,16.05
+2024,Rowokele,Maju,13.0,Bawah Normal,26,14.0,771.3,Maju,13.63,Atas Normal,16.35
+2024,Sadang,Maju,13.0,Bawah Normal,26,16.0,859.1,Maju,13.47,Atas Normal,16.75
+2024,Sempor,Maju,13.0,Bawah Normal,20,14.5,755.8,Maju,13.45,Atas Normal,16.29
+2024,Sruweng,Maju,13.0,Bawah Normal,26,14.0,709.5,Maju,13.54,Atas Normal,16.44
+2025,Adimulyo,Maju,11.0,Atas Normal,17,14.0,704.4,Sama,13.99,Bawah Normal,20.11
+2025,Alian,Mundur,17.0,Atas Normal,18,14.0,698.6,Sama,14.2,Bawah Normal,21.38
+2025,Ambal,Maju,10.0,Atas Normal,25,12.0,501.0,Maju,11.34,Bawah Normal,18.55
+2025,Ayah,Maju,10.0,Atas Normal,25,13.5,743.3,Sama,13.68,Bawah Normal,18.79
+2025,Bonorowo,Maju,10.0,Atas Normal,25,12.0,440.9,Maju,10.8,Bawah Normal,18.11
+2025,Buayan,Maju,10.0,Atas Normal,17,14.0,700.2,Maju,13.54,Bawah Normal,18.85
+2025,Buluspesantren,Maju,10.0,Atas Normal,25,13.5,557.4,Mundur,14.56,Bawah Normal,21.95
+2025,Gombong,Maju,11.0,Atas Normal,18,14.0,722.6,Maju,12.58,Bawah Normal,17.06
+2025,Karanganyar,Mundur,17.0,Atas Normal,18,14.0,720.8,Sama,13.51,Bawah Normal,19.2
+2025,Karanggayam,Mundur,17.0,Atas Normal,18,15.0,823.2,Maju,13.49,Bawah Normal,18.72
+2025,Karangsambung,Mundur,17.0,Atas Normal,18,15.0,823.0,Maju,14.18,Bawah Normal,20.58
+2025,Kebumen,Mundur,16.0,Atas Normal,25,14.0,638.0,Mundur,14.6,Bawah Normal,22.19
+2025,Klirong,Maju,10.0,Atas Normal,25,14.0,613.9,Mundur,16.15,Normal,24.56
+2025,Kutowinangun,Maju,10.0,Atas Normal,25,14.0,554.1,Mundur,15.36,Normal,23.58
+2025,Kuwarasan,Maju,10.0,Atas Normal,17,14.0,697.8,Maju,13.14,Bawah Normal,18.03
+2025,Mirit,Maju,10.0,Atas Normal,25,12.0,440.7,Maju,11.01,Bawah Normal,18.47
+2025,Padureso,Mundur,17.0,Atas Normal,25,14.0,613.7,Mundur,15.88,Normal,24.32
+2025,Pejagoan,Mundur,17.0,Atas Normal,18,14.0,728.8,Sama,13.64,Bawah Normal,19.58
+2025,Petanahan,Maju,11.0,Atas Normal,25,14.0,660.0,Mundur,15.69,Normal,23.82
+2025,Poncowarno,Mundur,16.0,Atas Normal,25,14.0,616.1,Mundur,15.29,Normal,23.6
+2025,Prembun,Maju,10.0,Atas Normal,25,14.0,511.4,Mundur,15.21,Normal,23.56
+2025,Puring,Maju,10.0,Atas Normal,19,14.0,677.7,Sama,14.53,Bawah Normal,21.44
+2025,Rowokele,Maju,10.0,Atas Normal,20,14.0,771.3,Maju,13.05,Bawah Normal,17.7
+2025,Sadang,Mundur,17.0,Atas Normal,18,16.0,859.1,Maju,12.93,Bawah Normal,17.43
+2025,Sempor,Mundur,17.0,Atas Normal,20,14.5,755.8,Maju,13.15,Bawah Normal,18.27
+2025,Sruweng,Mundur,17.0,Atas Normal,18,14.0,709.5,Sama,13.88,Bawah Normal,20.18

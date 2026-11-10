@@ -1,0 +1,6 @@
+Model,Akurasi_Kategori_AMK_%,F1_Macro_Kategori,MAE_Dasarian_AMK,MAE_Hari_AMK,Akurasi_Sifat_Hujan_%,MAE_Dasarian_PMK
+Baseline RF (Tabular),38.76,0.297,1.93,19.3,33.73,4.48
+LightGBM (GBDT),36.09,0.288,2.02,20.2,26.63,4.15
+Bi-LSTM Multi-Head,42.46,0.392,2.33,23.3,33.28,4.49
+LSTM Multi-Head,43.2,0.415,2.57,25.7,29.44,5.41
+GRU Multi-Head,45.27,0.435,2.14,21.4,30.77,5.47

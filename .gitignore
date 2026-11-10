@@ -26,6 +26,8 @@ __pycache__/
 *.jpg
 *.jpeg
 !prediksi_musim/plots_16_9/*.png
+!prediksi_musim/prediksi_musim_hujan/*.png
+!prediksi_musim/prediksi_musim_kemarau/*.png
 
 # Logs
 /logs/
