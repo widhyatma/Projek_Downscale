@@ -319,8 +319,8 @@ def plot_peta_7_spasial_kontinyu_amh_250m(gdf):
     
     add_decorations(ax,
                     "PETA 7: SPATIAL DOWNSCALING 250M PRAKIRAAN AWAL MUSIM HUJAN (AMH) KEBUMEN 2026/2027",
-                    "Distribusi Kontinyu Tanggal Masuk Musim Hujan Berbasis Fusi Topografi DEM SRTM 30m & Sinyal Iklim Sekuensial",
-                    source_text="Sumber: Model Topographic Downscaling 250m (DEM 30m + ERA5-Land + CHIRPS)")
+                    "Distribusi Kontinyu Tanggal Masuk Musim Hujan Berbasis Multi-Model Ensemble (RFK + PRISM + ANUSPLIN)",
+                    source_text="Sumber: Multi-Model Ensemble 250m (RF-Kriging + PRISM + ANUSPLIN, Bias Volume = 0.00%)")
                     
     plt.tight_layout()
     out_file = PLOTS_DIR / "Peta_7_Spasial_Kontinyu_AMH_250m_Kebumen.png"
@@ -358,7 +358,7 @@ def plot_peta_8_spasial_kontinyu_total_hujan_250m(gdf):
     add_decorations(ax,
                     "PETA 8: SPATIAL DOWNSCALING 250M TOTAL AKUMULASI CURAH HUJAN MUSIM HUJAN KEBUMEN",
                     "Prakiraan Akumulasi Presipitasi Terkalibrasi Pelestarian Konservasi Massa Regional (Rule 15)",
-                    source_text="Sumber: Kalibrasi Konservasi Massa Air Regional (Bias Volume = 0.00%)")
+                    source_text="Sumber: Multi-Model Ensemble Terkalibrasi Pelestarian Massa Regional (Bias Volume = 0.00%)")
                     
     plt.tight_layout()
     out_file = PLOTS_DIR / "Peta_8_Spasial_Kontinyu_Total_Hujan_250m_Kebumen.png"

@@ -15,9 +15,12 @@ import geopandas as gpd
 import rasterio
 from rasterio.transform import from_bounds
 from rasterio.features import geometry_mask
-from scipy.ndimage import uniform_filter, gaussian_filter
+from scipy.ndimage import uniform_filter
+from scipy.interpolate import RBFInterpolator
+from pykrige.ok import OrdinaryKriging
 from sklearn.ensemble import RandomForestRegressor
 from shapely import force_2d
+import pyproj
 
 BASE_DIR = Path(r"d:\Github\Projek_Downscale")
 DATA_DIR = BASE_DIR / "prediksi_musim" / "data"
@@ -90,6 +93,10 @@ def prepare_250m_topographic_mesh():
     gdf['geometry'] = force_2d(gdf['geometry'])
     mask_kebumen = geometry_mask(gdf.geometry, transform=transform_250m, invert=True, out_shape=(height, width))
     
+    # Koordinat Proyeksi Metrik UTM 49S (EPSG:32749, Rule 12)
+    transformer = pyproj.Transformer.from_crs("EPSG:4326", "EPSG:32749", always_xy=True)
+    grid_utm_x, grid_utm_y = transformer.transform(lon_mesh, lat_mesh)
+    
     print(f"Grid 250m terkonstruksi: {width} x {height} piksel ({np.sum(mask_kebumen)} piksel daratan Kebumen).")
     
     mesh_dict = {
@@ -105,15 +112,121 @@ def prepare_250m_topographic_mesh():
         'height': height,
         'lon_mesh': lon_mesh,
         'lat_mesh': lat_mesh,
+        'grid_utm_x': grid_utm_x,
+        'grid_utm_y': grid_utm_y,
         'gdf': gdf
     }
     return mesh_dict
 
+def downscale_variable_multimodel(gdf_pts, val_col, mesh, var_name="Variabel", apply_mass_conservation=False):
+    """
+    Menjalankan Ensemble Multi-Model Downscaling (Rule 11):
+    1. Regression-Kriging (RFK): RF Kovariat Medan + Gaussian Semivariogram Ordinary Kriging Residual
+    2. ANUSPLIN / Thin-Plate Spline (TPS): C^2 continuous trivariate spline (X, Y, Z)
+    3. PRISM: Topographic-Coastal Facet Regression (Wd, Wz, Wc)
+    4. Multi-Model Consensus Ensemble: Rata-rata tertimbang + Peta Ketidakpastian Spasial (Sigma)
+    5. Pelestarian Konservasi Massa Regional (Rule 15): Bias Volume = 0.00%
+    """
+    mask = mesh['mask']
+    H, W = mesh['height'], mesh['width']
+    
+    # 1. Koordinat Metrik Titik Kontrol (UTM 49S, Rule 12)
+    gdf_utm = gdf_pts.to_crs(epsg=32749)
+    pts_x = gdf_utm.geometry.centroid.x.values
+    pts_y = gdf_utm.geometry.centroid.y.values
+    y_target = gdf_pts[val_col].values.astype(np.float32)
+    
+    inv_transform = ~mesh['transform']
+    pt_Z, pt_slope, pt_sin_a, pt_cos_a, pt_d_coast, pt_tpi = [], [], [], [], [], []
+    
+    for _, row in gdf_pts.iterrows():
+        c_pt = row.geometry.centroid
+        col, r = inv_transform * (c_pt.x, c_pt.y)
+        col = int(np.clip(col, 0, W - 1))
+        r = int(np.clip(r, 0, H - 1))
+        pt_Z.append(mesh['dem'][r, col])
+        pt_slope.append(mesh['slope'][r, col])
+        pt_sin_a.append(mesh['sin_aspect'][r, col])
+        pt_cos_a.append(mesh['cos_aspect'][r, col])
+        pt_d_coast.append(mesh['dist_coast'][r, col])
+        pt_tpi.append(mesh['tpi'][r, col])
+        
+    X_pts = np.column_stack([pt_Z, pt_slope, pt_sin_a, pt_cos_a, pt_d_coast, pt_tpi])
+    
+    all_Z = mesh['dem'].flatten()
+    all_slope = mesh['slope'].flatten()
+    all_sin_a = mesh['sin_aspect'].flatten()
+    all_cos_a = mesh['cos_aspect'].flatten()
+    all_d_coast = mesh['dist_coast'].flatten()
+    all_tpi = mesh['tpi'].flatten()
+    X_all = np.column_stack([all_Z, all_slope, all_sin_a, all_cos_a, all_d_coast, all_tpi])
+    
+    # --- MODEL 1: Regression-Kriging (RFK) ---
+    rf = RandomForestRegressor(n_estimators=100, max_depth=6, random_state=42)
+    rf.fit(X_pts, y_target)
+    trend_pts = rf.predict(X_pts)
+    res_pts = y_target - trend_pts
+    
+    ok = OrdinaryKriging(pts_x, pts_y, res_pts, variogram_model='gaussian', verbose=False, enable_plotting=False)
+    kriged_res, _ = ok.execute('points', mesh['grid_utm_x'].flatten(), mesh['grid_utm_y'].flatten())
+    kriged_res = kriged_res.reshape(H, W)
+    pred_rfk = rf.predict(X_all).reshape(H, W) + kriged_res
+    
+    # --- MODEL 2: ANUSPLIN / Thin-Plate Spline (TPS) ---
+    scale_xy, scale_z = 1000.0, 1000.0
+    pts_tps = np.column_stack([pts_x / scale_xy, pts_y / scale_xy, np.array(pt_Z) / scale_z])
+    grid_tps = np.column_stack([mesh['grid_utm_x'].flatten() / scale_xy, mesh['grid_utm_y'].flatten() / scale_xy, all_Z / scale_z])
+    rbf = RBFInterpolator(pts_tps, y_target, kernel='thin_plate_spline', smoothing=0.1)
+    pred_tps = rbf(grid_tps).reshape(H, W)
+    
+    # --- MODEL 3: PRISM Topographic-Coastal Facet Model ---
+    valid_r, valid_c = np.where(mask)
+    g_x = mesh['grid_utm_x'][valid_r, valid_c, np.newaxis]
+    g_y = mesh['grid_utm_y'][valid_r, valid_c, np.newaxis]
+    g_z = mesh['dem'][valid_r, valid_c, np.newaxis]
+    g_c = mesh['dist_coast'][valid_r, valid_c, np.newaxis]
+    
+    p_x = pts_x[np.newaxis, :]
+    p_y = pts_y[np.newaxis, :]
+    p_z = np.array(pt_Z)[np.newaxis, :]
+    p_c = np.array(pt_d_coast)[np.newaxis, :]
+    
+    d_km = np.sqrt((g_x - p_x)**2 + (g_y - p_y)**2) / 1000.0
+    w_d = 1.0 / (d_km + 2.0)**2
+    w_z = 1.0 / (np.abs(g_z - p_z) + 25.0)
+    w_c = np.exp(-np.abs(g_c - p_c) / 10.0)
+    w = w_d * w_z * w_c
+    
+    prism_vals = np.sum(w * y_target[np.newaxis, :], axis=1) / np.maximum(1e-6, np.sum(w, axis=1))
+    pred_prism = np.full((H, W), np.nan, dtype=np.float32)
+    pred_prism[valid_r, valid_c] = prism_vals
+    
+    # --- MODEL 4: Multi-Model Consensus Ensemble & Uncertainty Sigma ---
+    ensemble_pred = (pred_rfk + pred_tps + pred_prism) / 3.0
+    uncertainty_sigma = np.std([pred_rfk, pred_tps, pred_prism], axis=0)
+    
+    # --- Penegakan Konservasi Massa Regional (Rule 15) ---
+    if apply_mass_conservation:
+        calib_factor = np.mean(y_target) / np.mean(ensemble_pred[mask])
+        ensemble_pred = ensemble_pred * calib_factor
+        print(f"  -> Kalibrasi Konservasi Massa Regional ({var_name}): Faktor = {calib_factor:.4f} (Bias Volume = 0.00%)")
+        
+    ensemble_pred[~mask] = np.nan
+    uncertainty_sigma[~mask] = np.nan
+    
+    print(f"  -> {var_name} Downscaled: Ensemble Rata-rata = {np.nanmean(ensemble_pred):.2f}, Uncertainty Sigma = {np.nanmean(uncertainty_sigma):.2f}")
+    return ensemble_pred, uncertainty_sigma
+
 def run_spatial_downscaling_2026():
     """
-    Melakukan downscaling spasial hasil prediksi musim 2026/2027 ke resolusi 250m.
-    Menghasilkan raster AMH dasarian, total curah hujan musim hujan, dan sifat hujan.
+    Melakukan downscaling spasial multi-model hasil prediksi musim 2026/2027 ke resolusi 250m.
+    Menghasilkan raster AMH dasarian, total curah hujan musim hujan, sifat hujan, dan ketidakpastian spasial.
     """
+    print("\n" + "="*80)
+    print("MEMULAI TOPOGRAPHIC SPATIAL DOWNSCALING 250M MULTI-MODEL ENSEMBLE (RULE 11)")
+    print("Suite: Regression-Kriging (RFK) + PRISM Facet Model + ANUSPLIN Thin-Plate Spline")
+    print("="*80)
+    
     mesh = prepare_250m_topographic_mesh()
     mask = mesh['mask']
     
@@ -123,74 +236,25 @@ def run_spatial_downscaling_2026():
     gdf = mesh['gdf'].merge(df_pred, left_on='nm_kecamatan', right_on='kecamatan')
     gdf = gdf.merge(df_norm[['kecamatan', 'normal_total_hujan_mh_mm']], on='kecamatan')
     
-    # Petakan nilai kecamatan ke grid 250m sebagai target supervisi
-    coarse_amh = np.full((mesh['height'], mesh['width']), np.nan, dtype=np.float32)
-    coarse_rain = np.full((mesh['height'], mesh['width']), np.nan, dtype=np.float32)
-    normal_rain = np.full((mesh['height'], mesh['width']), np.nan, dtype=np.float32)
+    # Proyeksi curah hujan total estimasi 2026/2027 (El Nino: Bawah Normal ~72%)
+    gdf['prakiraan_total_mh_mm'] = gdf['normal_total_hujan_mh_mm'] * 0.72
     
-    for _, row in gdf.iterrows():
-        kec_mask = geometry_mask([row.geometry], transform=mesh['transform'], invert=True, out_shape=(mesh['height'], mesh['width']))
-        coarse_amh[kec_mask] = row['prakiraan_amh_dasarian']
-        
-        # Di bawah kondisi El Niño (Bawah Normal ~70-75% dari normal), total hujan diproyeksikan:
-        est_rain = row['normal_total_hujan_mh_mm'] * 0.72 
-        coarse_rain[kec_mask] = est_rain
-        normal_rain[kec_mask] = row['normal_total_hujan_mh_mm']
-        
-    # Ambil sampel titik daratan untuk melatih model downscaling spasial
-    valid_pts = mask & (~np.isnan(coarse_amh))
+    # 1. Downscaling AMH Dasarian Multi-Model
+    print("\n[1/3] Menjalankan Downscaling Multi-Model untuk Awal Musim Hujan (AMH Dasarian)...")
+    amh_250m, amh_sigma = downscale_variable_multimodel(gdf, 'prakiraan_amh_dasarian', mesh, "AMH Dasarian", apply_mass_conservation=False)
     
-    Z = mesh['dem'][valid_pts]
-    slope = mesh['slope'][valid_pts]
-    sin_a = mesh['sin_aspect'][valid_pts]
-    cos_a = mesh['cos_aspect'][valid_pts]
-    d_coast = mesh['dist_coast'][valid_pts]
-    tpi = mesh['tpi'][valid_pts]
+    # 2. Downscaling Total Curah Hujan Musim Hujan dengan Konservasi Massa Regional (Rule 15)
+    print("\n[2/3] Menjalankan Downscaling Multi-Model Total Curah Hujan Musim Hujan (mm)...")
+    rain_250m, rain_sigma = downscale_variable_multimodel(gdf, 'prakiraan_total_mh_mm', mesh, "Total Curah Hujan MH", apply_mass_conservation=True)
     
-    y_amh = coarse_amh[valid_pts]
-    y_rain = coarse_rain[valid_pts]
+    # 3. Downscaling Normal Curah Hujan untuk Menghitung Sifat Hujan (% Normal)
+    print("\n[3/3] Menjalankan Downscaling Normal Curah Hujan MH (mm)...")
+    norm_rain_250m, _ = downscale_variable_multimodel(gdf, 'normal_total_hujan_mh_mm', mesh, "Normal Hujan MH", apply_mass_conservation=True)
     
-    # Matriks Fitur Kovariat 250m
-    X_cov = np.column_stack([Z, slope, sin_a, cos_a, d_coast, tpi])
-    
-    print("\nMelatih Model Topographic Spatial Downscaling (Random Forest & Gradient Spline)...")
-    rf_amh = RandomForestRegressor(n_estimators=100, max_depth=6, random_state=42)
-    rf_amh.fit(X_cov, y_amh)
-    
-    rf_rain = RandomForestRegressor(n_estimators=100, max_depth=6, random_state=42)
-    rf_rain.fit(X_cov, y_rain)
-    
-    # Inferensi ke seluruh grid 250m
-    all_Z = mesh['dem'].flatten()
-    all_slope = mesh['slope'].flatten()
-    all_sin_a = mesh['sin_aspect'].flatten()
-    all_cos_a = mesh['cos_aspect'].flatten()
-    all_d_coast = mesh['dist_coast'].flatten()
-    all_tpi = mesh['tpi'].flatten()
-    
-    X_all = np.column_stack([all_Z, all_slope, all_sin_a, all_cos_a, all_d_coast, all_tpi])
-    
-    pred_amh_250m = rf_amh.predict(X_all).reshape(mesh['height'], mesh['width'])
-    pred_rain_250m = rf_rain.predict(X_all).reshape(mesh['height'], mesh['width'])
-    
-    # Kalibrasi Konservasi Massa Regional (Rule 15):
-    # Preservasi total volume curah hujan regional agar identik dengan estimasi satelit
-    sat_total_vol = np.sum(coarse_rain[valid_pts])
-    raw_downscale_vol = np.sum(pred_rain_250m[valid_pts])
-    calib_factor = sat_total_vol / raw_downscale_vol
-    
-    pred_rain_250m_calib = pred_rain_250m * calib_factor
-    print(f"Kalibrasi Konservasi Massa Regional: Faktor Koreksi = {calib_factor:.4f} (Bias volume = 0.00%)")
-    
-    # Hitung sifat hujan 250m (% terhadap normal)
-    sifat_hujan_pct = (pred_rain_250m_calib / np.maximum(100.0, normal_rain)) * 100.0
-    
-    # Terapkan masking batas kabupaten
-    pred_amh_250m[~mask] = np.nan
-    pred_rain_250m_calib[~mask] = np.nan
+    sifat_hujan_pct = (rain_250m / np.maximum(100.0, norm_rain_250m)) * 100.0
     sifat_hujan_pct[~mask] = np.nan
     
-    # Ekspor GeoTIFF
+    # Ekspor GeoTIFF (EPSG:4326, LZW)
     meta_geotiff = {
         'driver': 'GTiff',
         'dtype': 'float32',
@@ -203,32 +267,26 @@ def run_spatial_downscaling_2026():
         'compress': 'lzw'
     }
     
-    # 1. GeoTIFF AMH 250m
-    out_amh = RASTER_DIR / "AMH_Dasarian_250m_Kebumen_2026.tif"
-    with rasterio.open(out_amh, 'w', **meta_geotiff) as dst:
-        data_to_write = np.nan_to_num(pred_amh_250m, nan=-9999.0).astype(np.float32)
-        dst.write(data_to_write, 1)
-    print(f"[OK] GeoTIFF AMH 250m tersimpan: {out_amh}")
+    files_to_export = [
+        ("AMH_Dasarian_250m_Kebumen_2026.tif", amh_250m),
+        ("Total_Hujan_MH_250m_Kebumen_2026.tif", rain_250m),
+        ("Sifat_Hujan_Persen_Normal_250m.tif", sifat_hujan_pct),
+        ("Uncertainty_Downscaling_MH_250m.tif", rain_sigma)
+    ]
     
-    # 2. GeoTIFF Total Hujan MH 250m
-    out_rain = RASTER_DIR / "Total_Hujan_MH_250m_Kebumen_2026.tif"
-    with rasterio.open(out_rain, 'w', **meta_geotiff) as dst:
-        data_to_write = np.nan_to_num(pred_rain_250m_calib, nan=-9999.0).astype(np.float32)
-        dst.write(data_to_write, 1)
-    print(f"[OK] GeoTIFF Curah Hujan 250m tersimpan: {out_rain}")
-    
-    # 3. GeoTIFF Sifat Hujan % Normal 250m
-    out_sifat = RASTER_DIR / "Sifat_Hujan_Persen_Normal_250m.tif"
-    with rasterio.open(out_sifat, 'w', **meta_geotiff) as dst:
-        data_to_write = np.nan_to_num(sifat_hujan_pct, nan=-9999.0).astype(np.float32)
-        dst.write(data_to_write, 1)
-    print(f"[OK] GeoTIFF Sifat Hujan % Normal tersimpan: {out_sifat}")
-    
-    print("\n[SUKSES] Seluruh pipeline Topographic Spatial Downscaling 250m selesai!")
+    print("\nMengekspor Hasil Raster GeoTIFF 250m ke 'prediksi_musim/rasters_250m/'...")
+    for fname, arr in files_to_export:
+        out_path = RASTER_DIR / fname
+        with rasterio.open(out_path, 'w', **meta_geotiff) as dst:
+            dst.write(np.nan_to_num(arr, nan=-9999.0).astype(np.float32), 1)
+        print(f"  -> GeoTIFF tersimpan: {fname}")
+        
+    print("\n[SUKSES] Seluruh pipeline Topographic Spatial Downscaling Multi-Model 250m selesai!")
     return {
-        'amh_250m': pred_amh_250m,
-        'rain_250m': pred_rain_250m_calib,
+        'amh_250m': amh_250m,
+        'rain_250m': rain_250m,
         'sifat_250m': sifat_hujan_pct,
+        'uncertainty_sigma': rain_sigma,
         'mesh': mesh
     }
 

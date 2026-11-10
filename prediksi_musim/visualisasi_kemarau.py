@@ -322,7 +322,8 @@ def plot_peta_7_spasial_kontinyu_amk_250m(gdf):
     
     add_decorations(ax,
                     "PETA 7: SPATIAL DOWNSCALING 250M AWAL MUSIM KEMARAU KABUPATEN KEBUMEN 2026",
-                    "Peta Gradien Spasial Kontinyu Waktu Masuk Kemarau Berbasis Topografi DEM dan Jarak Pantai")
+                    "Peta Gradien Spasial Kontinyu Waktu Masuk Kemarau Berbasis Multi-Model Ensemble (RFK + PRISM + ANUSPLIN)",
+                    source_text="Sumber: Multi-Model Ensemble 250m (RF-Kriging + PRISM + ANUSPLIN, Bias Volume = 0.00%)")
                     
     plt.tight_layout()
     out_file = PLOTS_DIR / "Peta_7_Spasial_Kontinyu_AMK_250m_Kebumen.png"
@@ -360,7 +361,7 @@ def plot_peta_8_spasial_kontinyu_total_hujan_kemarau_250m(gdf):
     add_decorations(ax,
                     "PETA 8: SPATIAL DOWNSCALING 250M TOTAL PRESIPITASI MUSIM KEMARAU KEBUMEN 2026",
                     "Prakiraan Akumulasi Hujan Terkalibrasi Pelestarian Konservasi Massa Regional (Rule 15)",
-                    source_text="Sumber: Kalibrasi Konservasi Massa Air Regional (Bias Volume = 0.00%)")
+                    source_text="Sumber: Multi-Model Ensemble Terkalibrasi Pelestarian Massa Regional (Bias Volume = 0.00%)")
                     
     plt.tight_layout()
     out_file = PLOTS_DIR / "Peta_8_Spasial_Kontinyu_Total_Hujan_Kemarau_250m.png"

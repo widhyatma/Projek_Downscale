@@ -3,74 +3,35 @@
 """
 Modul Spatial Downscaling Topografi Resolusi Ultra-Tinggi (250m) Prediksi Musim Kemarau Kebumen
 Memproyeksikan Awal Musim Kemarau (AMK), Akumulasi Presipitasi Kemarau, dan Indeks Kerawanan Kekeringan
-ke grid raster kontinyu 250m dengan kalibrasi Pelestarian Konservasi Massa Regional (Rule 15).
+ke grid raster kontinyu 250m dengan Multi-Model Ensemble (RFK + PRISM + ANUSPLIN) & Rule 15.
 """
 
+import sys
 from pathlib import Path
 import numpy as np
 import pandas as pd
 import geopandas as gpd
 import rasterio
-from rasterio.transform import from_bounds
-from rasterio.features import geometry_mask
-from scipy.ndimage import uniform_filter
-from sklearn.ensemble import RandomForestRegressor
-from shapely import force_2d
 
 BASE_DIR = Path(r"d:\Github\Projek_Downscale")
+sys.path.insert(0, str(BASE_DIR))
+
+from prediksi_musim.topographic_downscaling import prepare_250m_topographic_mesh, downscale_variable_multimodel
+
 DATA_DIR = BASE_DIR / "prediksi_musim" / "data"
 RASTER_DIR = BASE_DIR / "prediksi_musim" / "rasters_kemarau_250m"
-DEM_PATH = BASE_DIR / "data" / "DEM_Topografi_Kebumen_30m.tif"
-GEOJSON_PATH = BASE_DIR / "33.05_kecamatan.geojson"
-
 RASTER_DIR.mkdir(parents=True, exist_ok=True)
-PIXEL_SIZE_DEG = 0.00225
-
-def prepare_250m_topographic_mesh():
-    """Mengekstrak dan me-resample 5 kovariat topografi ke grid 250m."""
-    with rasterio.open(DEM_PATH) as src:
-        bounds = src.bounds
-        dem_raw = src.read(1).astype(np.float32)
-        dem_raw[dem_raw < -100] = 0.0
-        
-    west, south, east, north = bounds.left, bounds.bottom, bounds.right, bounds.top
-    width = int(np.round((east - west) / PIXEL_SIZE_DEG))
-    height = int(np.round((north - south) / PIXEL_SIZE_DEG))
-    transform_250m = from_bounds(west, south, east, north, width, height)
-    
-    y_idx = np.linspace(0, dem_raw.shape[0] - 1, height).astype(int)
-    x_idx = np.linspace(0, dem_raw.shape[1] - 1, width).astype(int)
-    dem_250m = np.clip(dem_raw[np.ix_(y_idx, x_idx)], 0.0, 1100.0)
-    
-    dx_m = PIXEL_SIZE_DEG * 110000.0
-    dy_m = PIXEL_SIZE_DEG * 111000.0
-    grad_y, grad_x = np.gradient(dem_250m, dy_m, dx_m)
-    slope_deg = np.degrees(np.arctan(np.sqrt(grad_x**2 + grad_y**2)))
-    
-    aspect_rad = np.arctan2(-grad_y, grad_x)
-    sin_aspect = np.sin(aspect_rad)
-    cos_aspect = np.cos(aspect_rad)
-    
-    lats = np.linspace(north, south, height)
-    lons = np.linspace(west, east, width)
-    lon_mesh, lat_mesh = np.meshgrid(lons, lats)
-    dist_coast_km = np.maximum(0.0, (lat_mesh - (-7.82)) * 111.0)
-    
-    tpi_250m = dem_250m - uniform_filter(dem_250m, size=5)
-    
-    gdf = gpd.read_file(GEOJSON_PATH)
-    gdf['geometry'] = force_2d(gdf['geometry'])
-    mask_kebumen = geometry_mask(gdf.geometry, transform=transform_250m, invert=True, out_shape=(height, width))
-    
-    return {
-        'dem': dem_250m, 'slope': slope_deg, 'sin_aspect': sin_aspect, 'cos_aspect': cos_aspect,
-        'dist_coast': dist_coast_km, 'tpi': tpi_250m, 'mask': mask_kebumen,
-        'transform': transform_250m, 'width': width, 'height': height, 'gdf': gdf
-    }
 
 def run_spatial_downscaling_kemarau_2026():
-    """Menjalankan proses downscaling spasial 250m musim kemarau 2026."""
-    print("\n[INFO] Memulai Downscaling Spasial Topografi 250m Musim Kemarau...")
+    """
+    Menjalankan proses downscaling spasial multi-model (RFK + PRISM + ANUSPLIN) 250m musim kemarau 2026.
+    Memproyeksikan AMK dasarian, akumulasi hujan kemarau, indeks kekeringan, dan ketidakpastian spasial.
+    """
+    print("\n" + "="*80)
+    print("MEMULAI TOPOGRAPHIC SPATIAL DOWNSCALING 250M MUSIM KEMARAU MULTI-MODEL ENSEMBLE (RULE 11)")
+    print("Suite: Regression-Kriging (RFK) + PRISM Facet Model + ANUSPLIN Thin-Plate Spline")
+    print("="*80)
+    
     mesh = prepare_250m_topographic_mesh()
     mask = mesh['mask']
     gdf = mesh['gdf']
@@ -97,61 +58,20 @@ def run_spatial_downscaling_kemarau_2026():
     
     gdf_pred = gdf.merge(df_pred, left_on='nm_kecamatan', right_on='kecamatan')
     
-    # Rasterize target
-    coarse_amk = np.full((mesh['height'], mesh['width']), np.nan, dtype=np.float32)
-    coarse_tot = np.full((mesh['height'], mesh['width']), np.nan, dtype=np.float32)
-    coarse_norm_tot = np.full((mesh['height'], mesh['width']), np.nan, dtype=np.float32)
-    
-    for _, row in gdf_pred.iterrows():
-        k_mask = geometry_mask([row.geometry], transform=mesh['transform'], invert=True, out_shape=(mesh['height'], mesh['width']))
-        coarse_amk[k_mask] = row['prakiraan_amk_dasarian']
-        coarse_tot[k_mask] = row['prakiraan_total_mk_mm']
-        coarse_norm_tot[k_mask] = row['normal_total_hujan_mk_mm']
-        
-    valid_train = mask & (~np.isnan(coarse_amk))
-    
-    X_train = np.column_stack([
-        mesh['dem'][valid_train],
-        mesh['slope'][valid_train],
-        mesh['sin_aspect'][valid_train],
-        mesh['cos_aspect'][valid_train],
-        mesh['dist_coast'][valid_train],
-        mesh['tpi'][valid_train]
-    ])
-    
-    all_Z = mesh['dem'].flatten()
-    all_slope = mesh['slope'].flatten()
-    all_sin_a = mesh['sin_aspect'].flatten()
-    all_cos_a = mesh['cos_aspect'].flatten()
-    all_d_coast = mesh['dist_coast'].flatten()
-    all_tpi = mesh['tpi'].flatten()
-    X_all = np.column_stack([all_Z, all_slope, all_sin_a, all_cos_a, all_d_coast, all_tpi])
-    
-    # 1. Downscaling AMK Dasarian
-    rf_amk = RandomForestRegressor(n_estimators=100, max_depth=6, random_state=42)
-    rf_amk.fit(X_train, coarse_amk[valid_train])
-    pred_amk_250m = rf_amk.predict(X_all).reshape(mesh['height'], mesh['width'])
-    pred_amk_250m[~mask] = np.nan
+    # 1. Downscaling AMK Dasarian Multi-Model
+    print("\n[1/3] Menjalankan Downscaling Multi-Model untuk Awal Musim Kemarau (AMK Dasarian)...")
+    amk_250m, amk_sigma = downscale_variable_multimodel(gdf_pred, 'prakiraan_amk_dasarian', mesh, "AMK Dasarian", apply_mass_conservation=False)
     
     # 2. Downscaling Total Presipitasi Kemarau dengan Konservasi Massa Regional (Rule 15)
-    rf_tot = RandomForestRegressor(n_estimators=100, max_depth=6, random_state=42)
-    rf_tot.fit(X_train, coarse_tot[valid_train])
-    pred_tot_raw = rf_tot.predict(X_all).reshape(mesh['height'], mesh['width'])
+    print("\n[2/3] Menjalankan Downscaling Multi-Model Total Curah Hujan Kemarau (mm)...")
+    tot_mk_250m, tot_mk_sigma = downscale_variable_multimodel(gdf_pred, 'prakiraan_total_mk_mm', mesh, "Total Hujan Kemarau", apply_mass_conservation=True)
     
-    sat_vol = np.sum(coarse_tot[valid_train])
-    down_vol = np.sum(pred_tot_raw[valid_train])
-    calib_factor = sat_vol / down_vol if down_vol > 0 else 1.0
-    pred_tot_250m = pred_tot_raw * calib_factor
-    pred_tot_250m[~mask] = np.nan
-    
-    # 3. Downscaling Normal Total Presipitasi
-    rf_norm = RandomForestRegressor(n_estimators=100, max_depth=6, random_state=42)
-    rf_norm.fit(X_train, coarse_norm_tot[valid_train])
-    norm_tot_250m = rf_norm.predict(X_all).reshape(mesh['height'], mesh['width'])
-    norm_tot_250m[~mask] = np.nan
+    # 3. Downscaling Normal Total Presipitasi Kemarau
+    print("\n[3/3] Menjalankan Downscaling Multi-Model Normal Total Presipitasi Kemarau (mm)...")
+    norm_tot_250m, _ = downscale_variable_multimodel(gdf_pred, 'normal_total_hujan_mk_mm', mesh, "Normal Hujan Kemarau", apply_mass_conservation=True)
     
     # Persentase terhadap Normal
-    persen_normal_250m = (pred_tot_250m / np.maximum(norm_tot_250m, 1.0)) * 100.0
+    persen_normal_250m = (tot_mk_250m / np.maximum(norm_tot_250m, 1.0)) * 100.0
     persen_normal_250m[~mask] = np.nan
     
     # 4. Indeks Kerentanan Kekeringan Pertanian 250m (0..100)
@@ -162,7 +82,7 @@ def run_spatial_downscaling_kemarau_2026():
     indeks_kekeringan = defisit_score + pantai_score + lereng_score
     indeks_kekeringan[~mask] = np.nan
     
-    # Ekspor GeoTIFF
+    # Ekspor GeoTIFF (EPSG:4326, LZW)
     meta_gtiff = {
         'driver': 'GTiff', 'dtype': 'float32', 'nodata': -9999.0,
         'width': mesh['width'], 'height': mesh['height'], 'count': 1,
@@ -170,21 +90,29 @@ def run_spatial_downscaling_kemarau_2026():
     }
     
     files_to_export = [
-        ('AMK_Dasarian_250m_Kebumen_2026.tif', pred_amk_250m),
-        ('Total_Hujan_MK_250m_Kebumen_2026.tif', pred_tot_250m),
+        ('AMK_Dasarian_250m_Kebumen_2026.tif', amk_250m),
+        ('Total_Hujan_MK_250m_Kebumen_2026.tif', tot_mk_250m),
         ('Sifat_Hujan_MK_Persen_Normal_250m.tif', persen_normal_250m),
-        ('Indeks_Kerawanan_Kekeringan_250m.tif', indeks_kekeringan)
+        ('Indeks_Kerawanan_Kekeringan_250m.tif', indeks_kekeringan),
+        ('Uncertainty_Downscaling_MK_250m.tif', tot_mk_sigma)
     ]
     
+    print("\nMengekspor Hasil Raster GeoTIFF 250m ke 'prediksi_musim/rasters_kemarau_250m/'...")
     for fname, arr in files_to_export:
         out_path = RASTER_DIR / fname
         with rasterio.open(out_path, 'w', **meta_gtiff) as dst:
             dst.write(np.nan_to_num(arr, nan=-9999.0).astype(np.float32), 1)
-        print(f"  -> GeoTIFF tersimpan: {out_path.name}")
+        print(f"  -> GeoTIFF tersimpan: {fname}")
         
-    print(f"\n[SUKSES] Seluruh raster downscaling spasial 250m tersimpan di: {RASTER_DIR}")
-    print(f"Kalibrasi Konservasi Massa Regional: Faktor = {calib_factor:.4f} (Bias Volume = 0.00%)")
+    print(f"\n[SUKSES] Seluruh raster downscaling spasial multi-model 250m tersimpan di: {RASTER_DIR}")
+    return {
+        'amk_250m': amk_250m,
+        'tot_mk_250m': tot_mk_250m,
+        'persen_normal_250m': persen_normal_250m,
+        'indeks_kekeringan': indeks_kekeringan,
+        'uncertainty_sigma': tot_mk_sigma,
+        'mesh': mesh
+    }
 
 if __name__ == "__main__":
     run_spatial_downscaling_kemarau_2026()
-
