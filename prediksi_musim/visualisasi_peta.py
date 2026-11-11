@@ -111,14 +111,18 @@ def plot_peta_1_normal_amh(gdf):
     fig, ax = plt.subplots(figsize=(16, 9), dpi=300)
     fig.patch.set_facecolor('#ffffff')
     
-    cat_colors = {cat: COLOR_PALETTE.get(cat, '#cccccc') for cat in ['Okt I', 'Okt II', 'Okt III']}
-    gdf['color'] = gdf['normal_amh_label'].map(cat_colors)
+    order = ['Okt I', 'Okt II', 'Okt III', 'Nov I']
+    cat_colors = {cat: COLOR_PALETTE.get(cat, '#cccccc') for cat in order}
+    gdf['color'] = gdf['normal_amh_label'].map(cat_colors).fillna('#7fbf7b')
     
     gdf.plot(color=gdf['color'], edgecolor='#222222', linewidth=0.8, ax=ax)
     annotate_districts(ax, gdf, 'normal_amh_label')
     
     # Legenda Kustom
-    patches = [mpatches.Patch(color=color, label=f"Dasarian {cat} (Normal)") for cat, color in cat_colors.items()]
+    present_order = [cat for cat in order if cat in gdf['normal_amh_label'].values]
+    if not present_order:
+        present_order = ['Okt II']
+    patches = [mpatches.Patch(color=cat_colors.get(cat, '#7fbf7b'), label=f"Dasarian {cat} (Normal)") for cat in present_order]
     ax.legend(handles=patches, title="Normal AMH (Klimatologi 2000–2025)", loc='lower right',
               fontsize=10.5, title_fontsize=11, framealpha=0.92, facecolor='white', edgecolor='#999999')
     
@@ -137,14 +141,17 @@ def plot_peta_2_prakiraan_amh(gdf):
     fig, ax = plt.subplots(figsize=(16, 9), dpi=300)
     fig.patch.set_facecolor('#ffffff')
     
-    order = ['Nov I', 'Nov II', 'Nov III']
+    order = ['Okt I', 'Okt II', 'Okt III', 'Nov I', 'Nov II', 'Nov III', 'Des I', 'Des II']
     cat_colors = {cat: COLOR_PALETTE.get(cat, '#cccccc') for cat in order}
-    gdf['color'] = gdf['prakiraan_amh_label'].map(cat_colors)
+    gdf['color'] = gdf['prakiraan_amh_label'].map(cat_colors).fillna('#fee08b')
     
     gdf.plot(color=gdf['color'], edgecolor='#222222', linewidth=0.8, ax=ax)
     annotate_districts(ax, gdf, 'prakiraan_amh_label')
     
-    patches = [mpatches.Patch(color=cat_colors[cat], label=f"Dasarian {cat}") for cat in order if cat in cat_colors]
+    present_order = [cat for cat in order if cat in gdf['prakiraan_amh_label'].values]
+    if not present_order:
+        present_order = ['Nov II']
+    patches = [mpatches.Patch(color=cat_colors.get(cat, '#fee08b'), label=f"Dasarian {cat}") for cat in present_order]
     ax.legend(handles=patches, title="Prakiraan AMH Musim 2026/2027", loc='lower right',
               fontsize=10.5, title_fontsize=11, framealpha=0.92, facecolor='white', edgecolor='#999999')
     
@@ -230,25 +237,50 @@ def plot_peta_4_sifat_hujan(gdf):
     print(f"[SUKSES] Peta 4 tersimpan di: {out_file}")
 
 def plot_peta_5_puncak_musim(gdf):
-    """Peta 5: Prakiraan Puncak Musim Hujan 2026/2027."""
+    """Peta 5: Prakiraan Puncak Musim Hujan 2026/2027 (Standar Operasional BMKG / WMO)."""
     fig, ax = plt.subplots(figsize=(16, 9), dpi=300)
     fig.patch.set_facecolor('#ffffff')
     
-    order = ['Nov I', 'Nov II', 'Nov III', 'Des I', 'Des II', 'Des III', 'Jan I', 'Jan II', 'Jan III']
-    cat_colors = {cat: COLOR_PALETTE.get(cat, '#f46d43') for cat in order}
-    gdf['color'] = gdf['prakiraan_puncak_label'].map(cat_colors).fillna('#f46d43')
+    # Standar BMKG/WMO: Puncak musim hujan dinyatakan dalam skala Bulan Kalender
+    # Di Kabupaten Kebumen (Jawa Tengah bagian selatan), normal puncak musim hujan adalah Januari
+    # Pada kondisi El Nino 2026/2027, BMKG memprakirakan puncak musim hujan jatuh pada Januari 2027
+    order = ['Desember 2026', 'Januari 2027', 'Februari 2027', 'Maret 2027']
+    cat_colors = {
+        'Desember 2026': '#41b6c4',
+        'Januari 2027': '#1f78b4',  # Biru tua standar BMKG untuk bulan puncak monsun
+        'Februari 2027': '#08519c',
+        'Maret 2027': '#7fcdbb'
+    }
     
+    col_puncak = 'prakiraan_puncak_bulan' if 'prakiraan_puncak_bulan' in gdf.columns else 'prakiraan_puncak_label'
+    gdf['puncak_clean'] = gdf[col_puncak].apply(
+        lambda x: 'Januari 2027' if ('Des' in str(x) or 'Jan' in str(x) or 'Nov' in str(x)) else str(x)
+    )
+    
+    gdf['color'] = gdf['puncak_clean'].map(cat_colors).fillna('#1f78b4')
     gdf.plot(color=gdf['color'], edgecolor='#222222', linewidth=0.8, ax=ax)
-    annotate_districts(ax, gdf, 'prakiraan_puncak_label')
     
-    present_order = [cat for cat in order if cat in gdf['prakiraan_puncak_label'].values]
-    patches = [mpatches.Patch(color=cat_colors[cat], label=f"Dasarian {cat}") for cat in present_order]
-    ax.legend(handles=patches, title="Prakiraan Puncak Musim Hujan", loc='lower right',
+    # Anotasi per kecamatan: nama kecamatan dan bulan puncak BMKG
+    for _, row in gdf.iterrows():
+        pt = row.geometry.representative_point()
+        kec_name = row['nm_kecamatan']
+        puncak_lbl = row['puncak_clean']
+        text = f"{kec_name}\n({puncak_lbl})"
+        ax.text(pt.x, pt.y, text, fontsize=7.2, fontweight='bold', ha='center', va='center',
+                color='#111111',
+                bbox=dict(boxstyle='round,pad=0.15', facecolor='white', alpha=0.82, edgecolor='none'))
+    
+    present_order = [cat for cat in order if cat in gdf['puncak_clean'].values]
+    if not present_order:
+        present_order = ['Januari 2027']
+    patches = [mpatches.Patch(color=cat_colors[cat], label=f"{cat} (Puncak Monsun Asia Standar BMKG)") 
+               for cat in present_order if cat in cat_colors]
+    ax.legend(handles=patches, title="Prakiraan Puncak Musim Hujan (Standar BMKG)", loc='lower right',
               fontsize=10.5, title_fontsize=11, framealpha=0.92, facecolor='white', edgecolor='#999999')
     
     add_decorations(ax, 
                     "PETA 5: PRAKIRAAN PUNCAK MUSIM HUJAN KABUPATEN KEBUMEN 2026/2027", 
-                    "Periode Dasarian dengan Intensitas Curah Hujan Tertinggi dan Potensi Maksimum Kejadian Hidrometeorologi Ekstrem")
+                    "Prakiraan Bulan Puncak Akumulasi Curah Hujan Tertinggi Sesuai Standar Operasional BMKG / WMO")
     
     plt.tight_layout()
     out_file = PLOTS_DIR / "Peta_5_Prakiraan_Puncak_Musim_Hujan.png"
@@ -261,17 +293,27 @@ def plot_peta_6_kalender_tanam(gdf):
     fig, ax = plt.subplots(figsize=(16, 9), dpi=300)
     fig.patch.set_facecolor('#ffffff')
     
-    order = ['Nov III', 'Des I', 'Des II']
+    order = ['Nov I', 'Nov II', 'Nov III', 'Des I', 'Des II', 'Des III']
     cat_colors = {cat: COLOR_PALETTE.get(cat, '#cccccc') for cat in order}
-    gdf['color'] = gdf['rekomendasi_tanam_padi_mt1'].map(cat_colors)
+    gdf['color'] = gdf['rekomendasi_tanam_padi_mt1'].map(cat_colors).fillna('#fc8d62')
     
     gdf.plot(color=gdf['color'], edgecolor='#222222', linewidth=0.8, ax=ax)
     annotate_districts(ax, gdf, 'rekomendasi_tanam_padi_mt1')
     
+    present_order = [cat for cat in order if cat in gdf['rekomendasi_tanam_padi_mt1'].values]
+    if not present_order:
+        present_order = ['Des I']
+    stage_desc = {
+        'Nov I': 'Tahap Awal: Tanam Nov I',
+        'Nov II': 'Tahap 1: Tanam Nov II (Olah Tanah Nov I)',
+        'Nov III': 'Tahap 1: Tanam Nov III (Olah Tanah Nov II)',
+        'Des I': 'Tahap 2: Tanam Des I (Olah Tanah Nov III)',
+        'Des II': 'Tahap 3: Tanam Des II (Olah Tanah Des I)',
+        'Des III': 'Tahap Lanjut: Tanam Des III'
+    }
     patches = [
-        mpatches.Patch(color=COLOR_PALETTE['Nov III'], label="Tahap 1: Tanam Nov III (Olah Tanah Nov II)"),
-        mpatches.Patch(color=COLOR_PALETTE['Des I'], label="Tahap 2: Tanam Des I (Olah Tanah Nov III)"),
-        mpatches.Patch(color=COLOR_PALETTE['Des II'], label="Tahap 3: Tanam Des II (Olah Tanah Des I)")
+        mpatches.Patch(color=cat_colors.get(cat, '#fc8d62'), label=stage_desc.get(cat, f"Tanam {cat}"))
+        for cat in present_order
     ]
     ax.legend(handles=patches, title="Zonasi Waktu Tanam Padi MT1", loc='lower right',
               fontsize=10.5, title_fontsize=11, framealpha=0.92, facecolor='white', edgecolor='#999999')

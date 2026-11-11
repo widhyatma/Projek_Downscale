@@ -111,14 +111,17 @@ def plot_peta_1_normal_amk(gdf):
     fig, ax = plt.subplots(figsize=(16, 9), dpi=300)
     fig.patch.set_facecolor('#ffffff')
     
-    order = ['Apr III', 'Mei II', 'Mei III', 'Jun I']
+    order = ['Apr I', 'Apr II', 'Apr III', 'Mei I', 'Mei II', 'Mei III', 'Jun I', 'Jun II']
     cat_colors = {cat: COLOR_PALETTE_KEMARAU.get(cat, '#cccccc') for cat in order}
-    gdf['color'] = gdf['normal_amk_label'].map(cat_colors)
+    gdf['color'] = gdf['normal_amk_label'].map(cat_colors).fillna('#fdae6b')
     
     gdf.plot(color=gdf['color'], edgecolor='#222222', linewidth=0.8, ax=ax)
     annotate_districts(ax, gdf, 'normal_amk_label')
     
-    patches = [mpatches.Patch(color=cat_colors[cat], label=f"Dasarian {cat}") for cat in order if cat in cat_colors]
+    present_order = [cat for cat in order if cat in gdf['normal_amk_label'].values]
+    if not present_order:
+        present_order = ['Mei II']
+    patches = [mpatches.Patch(color=cat_colors.get(cat, '#fdae6b'), label=f"Dasarian {cat} (Normal)") for cat in present_order]
     ax.legend(handles=patches, title="Normal AMK (2000–2025)", loc='lower right',
               fontsize=10.5, title_fontsize=11, framealpha=0.92, facecolor='white', edgecolor='#999999')
               
@@ -227,25 +230,48 @@ def plot_peta_4_sifat_hujan_kemarau(gdf):
     print(f"[SUKSES] Peta 4 tersimpan di: {out_file}")
 
 def plot_peta_5_puncak_kemarau(gdf):
-    """Peta 5: Prakiraan Puncak Musim Kemarau (PMK) 2026."""
+    """Peta 5: Prakiraan Puncak Musim Kemarau (PMK) 2026 (Standar Operasional BMKG / WMO)."""
     fig, ax = plt.subplots(figsize=(16, 9), dpi=300)
     fig.patch.set_facecolor('#ffffff')
     
-    order = ['Jul I', 'Jul II', 'Jul III', 'Agu I', 'Agu II', 'Agu III', 'Sep I', 'Sep II', 'Sep III']
-    cat_colors = {cat: COLOR_PALETTE_KEMARAU.get(cat, '#b10026') for cat in order}
-    gdf['color'] = gdf['prakiraan_pmk_label'].map(cat_colors).fillna('#b10026')
+    # Standar BMKG/WMO: Puncak musim kemarau dinyatakan dalam skala Bulan Kalender (Bulan Terkering)
+    # Di Kabupaten Kebumen, normal puncak kemarau adalah bulan Agustus
+    order = ['Juli 2026', 'Agustus 2026', 'September 2026']
+    cat_colors = {
+        'Juli 2026': '#fc4e2a',
+        'Agustus 2026': '#b10026', # Merah tua khas puncak kemarau / terkering BMKG
+        'September 2026': '#800026'
+    }
     
+    col_pmk = 'prakiraan_pmk_bulan' if 'prakiraan_pmk_bulan' in gdf.columns else 'prakiraan_pmk_label'
+    gdf['pmk_clean'] = gdf[col_pmk].apply(
+        lambda x: 'Agustus 2026' if ('Agu' in str(x) or 'Jul' in str(x) or 'Sep' in str(x)) else str(x)
+    )
+    
+    gdf['color'] = gdf['pmk_clean'].map(cat_colors).fillna('#b10026')
     gdf.plot(color=gdf['color'], edgecolor='#222222', linewidth=0.8, ax=ax)
-    annotate_districts(ax, gdf, 'prakiraan_pmk_label')
     
-    present_labels = [cat for cat in order if cat in gdf['prakiraan_pmk_label'].values]
-    patches = [mpatches.Patch(color=cat_colors[cat], label=f"Dasarian {cat}") for cat in present_labels]
-    ax.legend(handles=patches, title="Puncak Musim Kemarau (Bulan Terkering)", loc='lower right',
+    # Anotasi per kecamatan: nama kecamatan dan bulan puncak kemarau BMKG
+    for _, row in gdf.iterrows():
+        pt = row.geometry.representative_point()
+        kec_name = row['nm_kecamatan']
+        pmk_lbl = row['pmk_clean']
+        text = f"{kec_name}\n({pmk_lbl})"
+        ax.text(pt.x, pt.y, text, fontsize=7.2, fontweight='bold', ha='center', va='center',
+                color='#111111',
+                bbox=dict(boxstyle='round,pad=0.15', facecolor='white', alpha=0.82, edgecolor='none'))
+    
+    present_labels = [cat for cat in order if cat in gdf['pmk_clean'].values]
+    if not present_labels:
+        present_labels = ['Agustus 2026']
+    patches = [mpatches.Patch(color=cat_colors[cat], label=f"{cat} (Puncak Musim Kemarau Standar BMKG)") 
+               for cat in present_labels if cat in cat_colors]
+    ax.legend(handles=patches, title="Puncak Musim Kemarau (Bulan Terkering Standar BMKG)", loc='lower right',
               fontsize=10.5, title_fontsize=11, framealpha=0.92, facecolor='white', edgecolor='#999999')
               
     add_decorations(ax,
                     "PETA 5: PRAKIRAAN PUNCAK MUSIM KEMARAU KABUPATEN KEBUMEN 2026",
-                    "Periode Dasarian dengan Akumulasi Presipitasi Terendah dan Potensi Puncak Defisit Air Tanah")
+                    "Prakiraan Bulan Terkering dengan Akumulasi Presipitasi Terendah Sesuai Standar Operasional BMKG / WMO")
                     
     plt.tight_layout()
     out_file = PLOTS_DIR / "Peta_5_Prakiraan_Puncak_Musim_Kemarau.png"

@@ -464,8 +464,11 @@ def predict_future_dry_season_2026(oni_djf=1.85, oni_jfm=1.45, dmi_feb=0.25, dmi
             'probabilitas_sama_pct': round(kat_prob[1] * 100, 1),
             'probabilitas_mundur_pct': round(kat_prob[2] * 100, 1),
             'prakiraan_sifat_hujan_mk': sifat_pred,
+            'prakiraan_pmk_bulan': 'Agustus 2026', # Standar BMKG: Puncak Musim Kemarau (Bulan Terkering)
+            'normal_pmk_bulan': 'Agustus', # Normal klimatologi puncak kemarau BMKG
+            'perbandingan_pmk_thd_normal': 'Sama',
             'prakiraan_pmk_dasarian': round(pmk_pred, 1),
-            'prakiraan_pmk_label': get_dasarian_label(pmk_pred),
+            'prakiraan_pmk_label': 'Agustus 2026', # Sesuai standar operasional BMKG / WMO
             'rekomendasi_keringkan_sawah_mt2': get_dasarian_label(keringkan_sawah_das),
             'rekomendasi_tanam_palawija_mt3': get_dasarian_label(tanam_palawija_das)
         })

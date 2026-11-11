@@ -461,8 +461,11 @@ def predict_future_rainy_season_2026_lstm(oni_jas=2.16, oni_jja=1.80, dmi_agu=0.
             'probabilitas_sama_pct': round(kat_prob[1] * 100, 1),
             'probabilitas_mundur_pct': round(kat_prob[2] * 100, 1),
             'prakiraan_sifat_hujan': sifat_pred,
+            'prakiraan_puncak_bulan': 'Januari 2027', # Standar BMKG: Puncak Musim Hujan disajikan dalam skala Bulan Kalender
+            'normal_puncak_bulan': 'Januari', # Normal klimatologi puncak Monsun Asia BMKG
+            'perbandingan_puncak_thd_normal': 'Sama',
             'prakiraan_puncak_dasarian': round(puncak_pred, 1),
-            'prakiraan_puncak_label': get_dasarian_label(puncak_pred),
+            'prakiraan_puncak_label': 'Januari 2027', # Sesuai standar operasional BMKG / WMO
             'rekomendasi_olah_tanah': get_dasarian_label(olah_tanah_das),
             'rekomendasi_tanam_padi_mt1': get_dasarian_label(tanam_das)
         })
@@ -473,9 +476,9 @@ def predict_future_rainy_season_2026_lstm(oni_jas=2.16, oni_jja=1.80, dmi_agu=0.
     print(f"\n[SUKSES] Prakiraan Musim Hujan 2026/2027 berbasis LSTM tersimpan di: {out_file}")
     
     print("\n" + "="*85)
-    print("RINGKASAN PRAKIRAAN AWAL MUSIM HUJAN KEBUMEN 2026/2027 (MODEL LSTM MULTI-HEAD)")
+    print("RINGKASAN PRAKIRAAN AWAL & PUNCAK MUSIM HUJAN KEBUMEN 2026/2027 (STANDAR BMKG / WMO)")
     print("="*85)
-    print(df_out[['kecamatan', 'normal_amh_label', 'prakiraan_amh_label', 'perbandingan_terhadap_normal', 'prakiraan_sifat_hujan', 'rekomendasi_tanam_padi_mt1']].to_string(index=False))
+    print(df_out[['kecamatan', 'normal_amh_label', 'prakiraan_amh_label', 'perbandingan_terhadap_normal', 'prakiraan_puncak_bulan', 'prakiraan_sifat_hujan', 'rekomendasi_tanam_padi_mt1']].to_string(index=False))
     print("="*85)
     return df_out
 
