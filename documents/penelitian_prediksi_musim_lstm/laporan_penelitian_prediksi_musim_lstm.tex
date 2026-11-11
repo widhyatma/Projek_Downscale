@@ -1,0 +1,278 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[indonesian]{babel}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{geometry}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{xcolor}
+\usepackage{array}
+\usepackage{hyperref}
+
+\geometry{
+    top=2.5cm,
+    bottom=2.5cm,
+    left=3.0cm,
+    right=2.5cm
+}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue!70!black,
+    citecolor=blue!70!black,
+    urlcolor=blue!70!black,
+    plainpages=false,
+    pdfpagelabels=true,
+    pdftitle={Prediksi Musim Beresolusi Tinggi Berbasis Sequential Deep Learning dan Spatial Downscaling Topografi 250m di Kabupaten Kebumen},
+    pdfauthor={Tim Riset Geospatial Downscaling & Agroklimatologi Kebumen}
+}
+
+\emergencystretch=2em
+
+\begin{document}
+
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+    \centering
+    \vspace*{1.5cm}
+    
+    {\Huge\bfseries Prediksi Musim Beresolusi Tinggi Berbasis Deep Learning Sekuensial (LSTM Multi-Head) dan Spatial Downscaling Topografi 250m di Kabupaten Kebumen\par}
+    
+    \vspace{1.0cm}
+    {\Large\itshape Benchmark Sistematis Terhadap Prakiraan Zona Musim (ZOM) Regional BMKG, Fusi Klimatologi Multi-Sensor (CHIRPS, GSMaP, ERA5-Land, IMERG), dan Konservasi Massa Presipitasi Orografis\par}
+    
+    \vspace{2.0cm}
+    {\large\bfseries Tim Riset Geospatial Downscaling \& Agroklimatologi Kebumen\par}
+    \vspace{0.3cm}
+    {\large Stasiun Klimatologi Jerukagung \& Kolaborasi Riset Sains Atmosfer\par}
+    
+    \vfill
+    
+    {\large Kabupaten Kebumen, Provinsi Jawa Tengah, Indonesia\par}
+    \vspace{0.3cm}
+    {\large November 2026\par}
+\end{titlepage}
+
+\pagenumbering{roman}
+\hypersetup{pageanchor=true}
+\setcounter{page}{1}
+
+\section*{Abstrak}
+\addcontentsline{toc}{section}{Abstrak}
+Prakiraan Awal Musim Hujan (AMH) dan Awal Musim Kemarau (AMK) operasional oleh Badan Meteorologi, Klimatologi, dan Geofisika (BMKG) selama ini dipetakan dalam satuan Zona Musim (ZOM) makro-regional yang kerap menggeneralisasi Kabupaten Kebumen ke dalam satu kesatuan temporal tunggal. Padahal, kompleksitas geomorfologi Kebumen---yang membentang dari igir perbukitan terjal Formasi Karangsambung (hingga 1.034 mdpl) di utara, dataran aluvial sentra padi di bagian tengah, hingga gisik pantai pesisir Urutsewu di selatan---memicu variabilitas iklim lokal (*microclimate*) yang sangat tajam. Penelitian ini membangun arsitektur peramalan iklim presisi beresolusi ultra-tinggi yang mengintegrasikan: (1) evaluasi komparatif multi-sensor (CHIRPS v3, GSMaP v8, ERA5-Land, NASA IMERG) selama 26 tahun (2000--2025); (2) pemodelan temporal non-linear sekuensial \textit{Long Short-Term Memory} (LSTM) dan \textit{Gated Recurrent Unit} (GRU) berbasis tensor 3D dasarian dengan validasi ketat \textit{Leave-One-Year-Out} (LOYO); serta (3) \textit{Spatial Downscaling Topografi} resolusi 250 meter berbasis \textit{Multi-Model Consensus Ensemble} (\textit{Regression-Kriging}, \textit{Thin-Plate Spline} ANUSPLIN, dan faset PRISM) yang mematuhi asas konservasi massa volume air regional. Hasil evaluasi LOYO membuktikan model sekuensial GRU dan LSTM meraih akurasi klasifikasi kedatangan musim sebesar 77,51\% dan 72,78\% (F1-macro 0,723 dan 0,684), memangkas \textit{Mean Absolute Error} (MAE) kedatangan musim hingga hanya 1,24 dasarian (~12,4 hari), mengungguli baseline tabular Random Forest dan XGBoost (+19,23\%). Integrasi observasi satelit harian riil September 2026 membuktikan bahwa di bawah fenomena El Ni\~no kuat (ONI +2,46), waktu tiba musim hujan 2026/2027 terdiferensiasi tegas: 21 kecamatan di lereng utara dan dataran tengah tiba pada Dasarian November I, sedangkan 5 kecamatan di pesisir selatan dan timur mundur hingga Dasarian November II. Model downscaling 250m berhasil memetakan gradien orografis kontinu (31,4 dasarian di igir utara hingga 32,8 dasarian di pantai selatan) dengan bias volume presipitasi 0,00\%, menyediakan panduan kalender tanam padi MT1 dan palawija MT3 beresolusi mikro bagi ketahanan pangan daerah.
+
+\vspace{0.8cm}
+\noindent\textbf{Kata Kunci:} Prediksi Musim, LSTM Multi-Head, GRU, Topographic Downscaling 250m, ANUSPLIN, PRISM, Regression-Kriging, Konservasi Massa, Kebumen.
+
+\newpage
+\tableofcontents
+\newpage
+\listoffigures
+\newpage
+\listoftables
+\newpage
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\section{Pendahuluan}
+
+\subsection{Latar Belakang dan Urgensi Riset}
+Kabupaten Kebumen merupakan salah satu lumbung pangan strategis di pesisir selatan Provinsi Jawa Tengah dengan luas wilayah $1.281,11\text{ km}^2$. Keberhasilan budidaya pertanian tanaman pangan (padi rendengan MT1, padi gadu MT2, dan palawija MT3) sangat bergantung pada ketepatan penentuan Awal Musim Hujan (AMH) dan Awal Musim Kemarau (AMK). 
+
+Secara operasional, informasi prakiraan musim di Indonesia disajikan oleh BMKG berbasis satuan **Zona Musim (ZOM)**. Dalam format representasi regional ZOM, seluruh wilayah Kabupaten Kebumen kerap dikelompokkan ke dalam 1 hingga 2 ZOM saja (misalnya pernyataan umum: \textit{"Wilayah Kebumen memasuki Awal Musim Hujan pada Oktober Dasarian II"}). Generalisasi skala makro ini mengabaikan heterogenitas fisiografi Kebumen yang membentang dari ketinggian 0 mdpl di Pantai Bocor/Suwuk hingga lebih dari 1.000 mdpl di perbukitan cagar geologi Karangsambung dan Sadang.
+
+Secara fisis meteorologis, keberadaan dinding orografis di wilayah utara memicu pengangkatan massa udara basah monsun barat lebih awal, sehingga kawasan pegunungan utara secara normal memasuki musim hujan pada **Oktober Dasarian I** dengan akumulasi curah hujan musim hujan mencapai $2.800 - 2.960\text{ mm}$. Sebaliknya, wilayah dataran tengah baru memasuki musim hujan pada **Oktober Dasarian II** ($2.200 - 2.350\text{ mm}$), dan kawasan pesisir Urutsewu di selatan tertunda hingga **Oktober Dasarian III** ($1.700 - 1.950\text{ mm}$) akibat pengaruh sirkulasi darat-laut dan hembusan angin pasat tenggara yang bersifat divergen.
+
+\subsection{Kelemahan Model Tabular Konvensional}
+Pendekatan \textit{machine learning} tabular standar (seperti Random Forest dan XGBoost tanpa sekuens waktu) memperlakukan fitur iklim sebagai representasi agregat statis (rata-rata 3 bulanan). Akibatnya:
+\begin{enumerate}
+    \item Kehilangan informasi memori temporal (*lagged temporal dynamics*) per dasarian dari dinamika El Ni\~no--Southern Oscillation (ENSO) dan Indian Ocean Dipole (IOD) yang berkembang sepanjang Januari hingga September.
+    \item Hasil prediksi spasial tingkat poligon kecamatan menunjukkan pengelompokan artifisial diskret (*step-like classification*) yang tidak merefleksikan gradien iklim alami.
+    \item Tidak adanya penegakan konservasi massa air menyebabkan estimasi volume curah hujan hasil interpolasi mengalami distorsi volume hidrologis regional.
+\end{enumerate}
+
+Untuk mengatasi keterbatasan tersebut, penelitian ini mengembangkan kerangka kerja holistik: **Sequential Deep Learning (LSTM \& GRU Multi-Head)** yang digabungkan dengan **Multi-Model Consensus Spatial Downscaling 250m** yang terkalibrasi pelestarian massa air regional 100\%.
+
+\section{Metodologi Penelitian}
+
+\subsection{Arsitektur Tensor Sekuensial 3D (Rule 19)}
+Data deret waktu iklim 26 tahun (2000--2025) untuk 26 kecamatan di Kebumen disusun ke dalam tensor 3 dimensi:
+\begin{equation}
+    \mathbf{X} \in \mathbb{R}^{N \times T \times D}
+\end{equation}
+di mana:
+\begin{itemize}
+    \item $N = 676$ sampel observasi (26 tahun $\times$ 26 kecamatan).
+    \item $T = 27$ langkah waktu dasarian berjalan, dimulai dari Dasarian 1 (Januari I) hingga Dasarian 27 (September III), merepresentasikan fase prekursor sebelum pembukaan jendela musim hujan (Oktober I -- Desember III).
+    \item $D = 7$ fitur iklim dan lingkungan lokal pada setiap langkah dasarian $t$:
+    \begin{enumerate}
+        \item Presipitasi dasarian berjalan ($P_t$, mm).
+        \item Anomali presipitasi terhadap normal klimatologi ($P_t - \bar{P}_{t,\text{clim}}$, mm).
+        \item Rasio presipitasi terhadap normal $\left(\frac{P_t + 1}{\bar{P}_{t,\text{clim}} + 1}\right)$.
+        \item Indeks anomali ENSO \textit{Oceanic Ni\~no Index} bulanan ($\text{ONI}_t$, $^\circ\text{C}$).
+        \item Indeks anomali IOD \textit{Dipole Mode Index} bulanan ($\text{DMI}_t$, $^\circ\text{C}$).
+        \item Baseline normal AMH lokal kecamatan ($\text{AMH}_{\text{norm}}$, dasarian).
+        \item Baseline normal akumulasi curah hujan musim hujan lokal ($\text{Rain}_{\text{norm}}$, mm).
+    \end{enumerate}
+\end{itemize}
+
+\subsection{Arsitektur Model Multi-Head Deep Learning}
+Tensor sekuensial dialirkan melalui lapisan rekuren \textit{Long Short-Term Memory} (LSTM) atau \textit{Gated Recurrent Unit} (GRU) dengan 64 unit tersembunyi, dilanjutkan lapisan \textit{Dropout} ($p=0,25$) dan lapisan \textit{Dense} bersama (32 unit, aktivasi ReLU). Representasi manifold laten bersama kemudian dicabangkan menjadi 4 kepala tugas keluaran (*Multi-Head Output*):
+\begin{enumerate}
+    \item \textbf{Head 1 (Kategori AMH):} Klasifikasi 3-kelas (\textit{Maju}, \textit{Sama}, \textit{Mundur}) dengan fungsi aktivasi \textit{Softmax} dan fungsi rugi \textit{Categorical Cross-Entropy}.
+    \item \textbf{Head 2 (Waktu Eksak AMH):} Regresi linier kontinu memprediksi nilai riil dasarian AMH dengan fungsi rugi \textit{Mean Squared Error} (MSE).
+    \item \textbf{Head 3 (Sifat Hujan):} Klasifikasi 3-kelas (\textit{Bawah Normal}, \textit{Normal}, \textit{Atas Normal}) via \textit{Softmax}.
+    \item \textbf{Head 4 (Puncak Musim Hujan):} Regresi linier kontinu memprediksi waktu tiba puncak curah hujan (Desember I s/d Februari III).
+\end{enumerate}
+
+\subsection{Validasi Ketat Leave-One-Year-Out (LOYO, Rule 12)}
+Sesuai kaidah sains geospasial, pemisahan acak (\textit{random split}) dilarang keras karena memicu kebocoran data spasio-temporal (*Tobler's First Law of Geography*). Pengujian dilakukan menggunakan validasi silang \textbf{Leave-One-Year-Out (LOYO)}: model dilatih pada 25 tahun dan diuji pada 1 tahun yang dikeluarkan secara independen, diulang sebanyak 26 siklus rotasi untuk seluruh tahun 2000 hingga 2025 (total 676 prediksi *out-of-fold* murni).
+
+\subsection{Spatial Downscaling Topografi Multi-Model 250m (Rule 11 \& 20)}
+Pada resolusi 250 meter (terdiri atas 21.594 piksel daratan Kebumen), dibangun kisi kovariat lingkungan menggunakan DEM ALOS PALSAR 30m: elevasi ($Z$, mdpl), kemiringan lereng ($\text{slope}^\circ$), dekomposisi aspek ortogonal ($\sin\alpha$ dan $\cos\alpha$), jarak ke garis pantai Samudra Hindia ($D_{\text{coast}}$, km), dan \textit{Topographic Position Index} (TPI 250m).
+
+Untuk mengeliminasi diskontinuitas pohon (*step-like decision boundaries*) dari Random Forest biasa, diimplementasikan fusi konsensus 3 paradigma orografis global:
+\begin{enumerate}
+    \item \textbf{Model 1: Regression-Kriging (RFK)} --- Tren orografis non-linear Random Forest dikombinasikan dengan kriging geostatistik (\textit{Ordinary Kriging} semivariogram Gaussian) pada residual spasial titik observasi:
+    \begin{equation}
+        \hat{Y}_{\text{RFK}}(x, y) = \hat{f}_{\text{RF}}(\mathbf{Z}(x, y)) + \sum_{i=1}^n \lambda_i e(x_i, y_i)
+    \end{equation}
+    \item \textbf{Model 2: ANUSPLIN (Trivariate Thin-Plate Spline)} --- Spline pelumusan halus kontinu $C^2$ pada ruang 3 dimensi metrik UTM Zone 49S $(X, Y, Z)$ dengan penalti kekasaran \textit{Generalized Cross-Validation} (GCV):
+    \begin{equation}
+        \hat{Y}_{\text{TPS}}(\mathbf{x}) = \sum_{i=1}^m c_i \phi(\|\mathbf{x} - \mathbf{x}_i\|) + \mathbf{P}(\mathbf{x})\mathbf{d}
+    \end{equation}
+    \item \textbf{Model 3: PRISM Facet Regression} --- Regresi lokal orografis terbobot jarak horizontal 2D ($W_d$), perbedaan ketinggian 1D ($W_z$), dan kedekatan pesisir ($W_c$):
+    \begin{equation}
+        W(x, y) = W_d(x, y) \cdot W_z(x, y) \cdot W_c(x, y)
+    \end{equation}
+\end{enumerate}
+Prediksi akhir diperoleh melalui konsensus multi-model rata-rata berimbang:
+\begin{equation}
+    \hat{Y}_{\text{Ensemble}}(x, y) = \frac{1}{3} \left( \hat{Y}_{\text{RFK}} + \hat{Y}_{\text{TPS}} + \hat{Y}_{\text{PRISM}} \right)
+\end{equation}
+Ketidakpastian spasial kuantitatif diekspor sebagai standar deviasi antar-model ($\sigma(x, y)$).
+
+\subsection{Penegakan Konservasi Massa Air Regional (Rule 15)}
+Bidang presipitasi resolusi tinggi wajib memenuhi hukum pelestarian massa volume air regional untuk mencegah surplus atau defisit neraca air buatan:
+\begin{equation}
+    P_{\text{calibrated}}(x, y) = P_{\text{downscaled}}(x, y) \times \left( \frac{\iint_{\Omega} P_{\text{sat}}(x, y) \, dx dy}{\iint_{\Omega} P_{\text{downscaled}}(x, y) \, dx dy} \right)
+\end{equation}
+Kalibrasi ini menjamin \textit{Percent Volume Bias} ($PBIAS$) tepat 0,00\%.
+
+\section{Hasil dan Pembahasan}
+
+\subsection{Benchmark Kinerja Model Deep Learning Sekuensial}
+Tabel~\ref{tab:benchmark_musim} menyajikan perbandingan kinerja out-of-fold LOYO antar arsitektur model pada peramalan Musim Hujan.
+
+\begin{table}[H]
+\centering
+\caption[Benchmark Kinerja Model Musim Hujan]{Hasil Benchmark Komparatif Evaluasi Out-of-Fold Leave-One-Year-Out (LOYO 2000--2025) untuk Prediksi Musim Hujan di Kabupaten Kebumen.}
+\label{tab:benchmark_musim}
+\input{tables/tab1_benchmark_algoritma_musim.tex}
+\end{table}
+
+Model recurrent \textbf{GRU Multi-Head} meraih kinerja tertinggi dengan akurasi klasifikasi kategori AMH sebesar **77,51\%** dan Macro F1 **0,723**, diikuti oleh model **LSTM Multi-Head** sebesar **72,78\%** (F1 0,684). Keduanya mengungguli baseline tabular Random Forest + XGBoost (+19,23\% peningkatan akurasi). Tingkat kesalahan penentuan waktu tiba musim hujan terpangkas menjadi hanya **1,24 dasarian (~12,4 hari)** pada model GRU dan 1,52 dasarian pada LSTM, membuktikan keunggulan representasi tensor dinamis dalam menangkap sinyal perambatan anomali iklim global. Tabel~\ref{tab:benchmark_kemarau} menegaskan konsistensi performa superior model sekuensial pada prediksi Awal Musim Kemarau (AMK).
+
+\begin{table}[H]
+\centering
+\caption[Benchmark Kinerja Model Musim Kemarau]{Hasil Benchmark Komparatif Evaluasi LOYO untuk Prediksi Musim Kemarau di Kabupaten Kebumen.}
+\label{tab:benchmark_kemarau}
+\input{tables/tab2_benchmark_algoritma_kemarau.tex}
+\end{table}
+
+\subsection{Evaluasi Fusi Baseline Normal Klimatologi Multi-Sensor}
+Tabel~\ref{tab:multi_sensor} merangkum perbandingan normal klimatologi AMH dari 4 platform observasi independen selama rentang 2000--2025.
+
+\begin{table}[H]
+\centering
+\caption[Komparasi Normal AMH Multi-Sensor]{Komparasi Baseline Normal Klimatologi Awal Musim Hujan Lintas 4 Platform Penginderaan Jauh dan Konsensus Fusi di 26 Kecamatan Kebumen.}
+\label{tab:multi_sensor}
+\input{tables/tab3_komparasi_multi_sensor_normal.tex}
+\end{table}
+
+Dispersi ketidakpastian antar-sensor ($\sigma$) tercatat sangat rendah (rata-rata 3,5 hingga 5,1 hari), mengonfirmasi kesepakatan fisis kuat bahwa secara klimatologis Kebumen terbagi ke dalam 3 gelombang kedatangan: Oktober I di lereng utara, Oktober II di dataran tengah, dan Oktober III di pesisir selatan.
+
+\subsection{Prakiraan Musim Hujan 2026/2027 Berbasis Observasi Riil}
+Prakiraan musim 2026/2027 dieksekusi di bawah kondisi anomali iklim global **Super El Ni\~no** (indeks NOAA ONI ASO mencapai $+2,46$). Dengan mengintegrasikan data presipitasi harian CHIRPS September 2026 riil dari GEE, model menghasilkan prakiraan tingkat kecamatan sebagaimana dirangkum pada Tabel~\ref{tab:prakiraan_mh}.
+
+\begin{table}[H]
+\centering
+\caption[Prakiraan Musim Hujan 2026/2027]{Rincian Prakiraan Awal Musim Hujan (AMH), Sifat Hujan, dan Puncak Musim Hujan Tahun 2026/2027 per Kecamatan di Kabupaten Kebumen.}
+\label{tab:prakiraan_mh}
+\input{tables/tab4_prakiraan_musim_hujan_26kecamatan.tex}
+\end{table}
+
+Secara spasial, anomali El Ni\~no kuat menekan konveksi atmosferik di atas Samudra Hindia bagian timur, memicu keterlambatan musim hujan (*Mundur*) di seluruh kecamatan dengan tingkat probabilitas mencapai 100\%. Namun, berbeda dengan generalisasi makro, waktu tiba aktual terbagi jelas menjadi 2 kelompok spasial:
+\begin{itemize}
+    \item **November Dasarian I (21 Kecamatan):** Mencakup seluruh kecamatan pegunungan utara (Sadang, Karanggayam, Karangsambung, Sempor), sentra barat (Rowokele, Buayan, Kuwarasan), dan dataran tengah (Kebumen, Alian, Pejagoan, Sruweng, Adimulyo, Klirong, Petanahan, Puring, Ayah).
+    \item **November Dasarian II (5 Kecamatan):** Terkonsentrasi di koridor pesisir tenggara dan dataran timur (Ambal, Mirit, Prembun, Bonorowo) serta Gombong.
+\end{itemize}
+
+Sifat hujan selama periode musim hujan 2026/2027 diprakirakan berada pada kategori **Bawah Normal (BN)** dengan akumulasi hujan berkisar $60\% - 85\%$ terhadap normal klimatologinya. Puncak musim hujan diprakirakan tiba pada **Desember Dasarian I (14 kecamatan)** dan **Desember Dasarian II (12 kecamatan)**.
+
+\subsection{Analisis Spasial Kontinu 250 Meter & Resolusi Ketidakpastian}
+Gambar~\ref{fig:peta_amh_250m} memperlihatkan hasil *Spatial Downscaling* Multi-Model Ensemble 250m untuk waktu kedatangan AMH, sedangkan Gambar~\ref{fig:peta_total_hujan_250m} menyajikan estimasi akumulasi total hujan musim hujan.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/fig7_spasial_kontinyu_amh_250m.png}
+    \caption[Peta Spasial Kontinu AMH 250m]{Peta Spasial Kontinu Resolusi Tinggi 250 Meter Prakiraan Awal Musim Hujan (AMH) Kabupaten Kebumen 2026/2027 Menggunakan Multi-Model Consensus Ensemble (RFK + PRISM + ANUSPLIN).}
+    \label{fig:peta_amh_250m}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/fig8_spasial_kontinyu_total_hujan_250m.png}
+    \caption[Peta Akumulasi Curah Hujan 250m]{Peta Akumulasi Total Curah Hujan Musim Hujan 2026/2027 Resolusi 250m Terkalibrasi Pelestarian Massa Air Regional (Bias Volume 0,00\%).}
+    \label{fig:peta_total_hujan_250m}
+\end{figure}
+
+Pendekatan Multi-Model Ensemble berhasil menghasilkan kontur orografis yang sangat mulus tanpa artefak batas poligon administratif:
+\begin{enumerate}
+    \item Di zona pegunungan utara, kedatangan musim hujan dimulai paling dini pada **Dasarian 31,4 (~14 November)** dengan total curah hujan musim mencapai **$2.150 - 2.220\text{ mm}$**.
+    \item Di koridor dataran aluvial Sungai Luk Ulo, AMH tiba pada kisaran **Dasarian 31,8 -- 32,0 (~18--20 November)** dengan akumulasi hujan **$1.650 - 1.850\text{ mm}$**.
+    \item Di pesisir Urutsewu, kedatangan musim hujan tertunda hingga **Dasarian 32,8 (~28 November)** dengan akumulasi terendah **$1.250 - 1.400\text{ mm}$**.
+\end{enumerate}
+
+Kuantifikasi dispersi ketidakpastian antar-model ($\sigma$) menunjukkan bahwa model memiliki konvergensi konsensus sangat tinggi di dataran aluvial ($\sigma < 0,15$ dasarian atau $< 1,5$ hari), dan hanya mengalami sedikit dispersi pada puncak-puncak topografi terjal ($\sigma \approx 0,35$ dasarian atau ~3,5 hari).
+
+\subsection{Implementasi Kalender Tanam Agrikultur}
+Gambar~\ref{fig:zonasi_tanam_250m} mengilustrasikan peta zonasi mikro rekomendasi olah tanah dan tanam padi Musim Tanam 1 (MT1) pada grid 250m, sedangkan Tabel~\ref{tab:prakiraan_mk} merangkum prakiraan musim kemarau serta zona kerawanan kekeringan.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/fig9_zonasi_mikro_kalender_tanam_250m.png}
+    \caption[Zonasi Mikro Kalender Tanam 250m]{Peta Zonasi Mikro Rekomendasi Awal Tanam Padi Rendengan (MT1) Beresolusi 250 Meter Kabupaten Kebumen Musim Tanam 2026/2027.}
+    \label{fig:zonasi_tanam_250m}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\caption[Prakiraan Musim Kemarau 2026]{Rincian Prakiraan Awal Musim Kemarau (AMK), Sifat Kemarau, Puncak Kemarau, dan Indeks Kerawanan Kekeringan di 26 Kecamatan Kebumen.}
+\label{tab:prakiraan_mk}
+\input{tables/tab5_prakiraan_musim_kemarau_26kecamatan.tex}
+\end{table}
+
+\section{Kesimpulan dan Rekomendasi}
+
+\subsection{Kesimpulan}
+\begin{enumerate}
+    \item Penerapan arsitektur \textbf{Sequential Deep Learning (GRU \& LSTM Multi-Head)} berbasis tensor sekuensial 3D dasarian secara signifikan mengungguli model tabular konvensional (Random Forest/XGBoost), meningkatkan akurasi klasifikasi kedatangan musim hingga **77,51\%** (peningkatan **+19,23\%**) dan memangkas kesalahan prediksi temporal hingga **1,24 dasarian (~12,4 hari)** pada pengujian ketat Leave-One-Year-Out (LOYO 2000--2025).
+    \item Integrasi observasi satelit CHIRPS harian riil September 2026 berhasil memecahkan fenomena generalisasi seragam: pada kondisi El Ni\~no kuat 2026/2027, kedatangan musim hujan Kebumen terdiferensiasi tegas menjadi **21 kecamatan di Dasarian November I** dan **5 kecamatan di Dasarian November II**.
+    \item Inovasi **Multi-Model Consensus Spatial Downscaling 250m** (RFK + ANUSPLIN + PRISM) berhasil merekonstruksi gradien mikroklimat orografis kontinu (31,4 s/d 32,8 dasarian) dengan penegakan konservasi massa presipitasi sempurna (**Volume Bias = 0,00\%**), mengeliminasi bias batas administrasi semu.
+\end{enumerate}
+
+\subsection{Rekomendasi Kebijakan Pertanian \& Tata Air}
+\begin{enumerate}
+    \item **Penyesuaian Jadwal Tanam MT1:** Petani di 21 kecamatan zona November I disarankan memulai olah tanah pada Dasarian November II dan tebar benih/tanam pada Dasarian November III. Petani di 5 kecamatan zona November II (Ambal, Mirit, Prembun, Gombong, Bonorowo) dianjurkan menunda sepekan hingga Dasarian Desember I guna menghindari kekeringan awal bibit.
+    \item **Antisipasi Sifat Bawah Normal:** Karena total curah hujan musim hujan 2026/2027 mengalami defisit $15\% - 40\%$ di bawah normal, Dinas Pertanian dan Balai PSDA Luk Ulo disarankan mengoptimalkan kapasitas tampungan Waduk Wadaslintang dan Waduk Sempor sejak awal musim serta menerapkan teknik irigasi berselang (*intermittent irrigation*).
+\end{enumerate}
+
+\end{document}

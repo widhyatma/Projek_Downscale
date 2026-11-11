@@ -1,0 +1,13 @@
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{lccccc}
+\hline\hline
+\textbf{Arsitektur Model} & \textbf{Akurasi Kategori (\%)} & \textbf{Macro F1} & \textbf{MAE Dasarian} & \textbf{MAE (Hari)} & \textbf{Akurasi Sifat (\%)} \\
+\hline
+Baseline RF (Tabular) & 38.76\% & 0.297 & 1.93 & 19.3 & 33.73\% \\
+LightGBM (GBDT) & 36.09\% & 0.288 & 2.02 & 20.2 & 26.63\% \\
+Bi-LSTM Multi-Head & 42.46\% & 0.392 & 2.33 & 23.3 & 33.28\% \\
+LSTM Multi-Head & 43.20\% & 0.415 & 2.57 & 25.7 & 29.44\% \\
+GRU Multi-Head & 45.27\% & 0.435 & 2.14 & 21.4 & 30.77\% \\
+\hline\hline
+\end{tabular}%
+}
