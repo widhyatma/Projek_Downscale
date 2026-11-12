@@ -210,3 +210,12 @@
 - **Standard Cartographic & Raster Deliverables:**
   - Downscaled outputs must be exported as georeferenced GeoTIFFs (EPSG:4326/WGS84) with LZW compression and visualized on 16:9 aspect ratio thematic maps (300 DPI) with administrative boundaries and contour overlays.
 
+## 21. BMKG/WMO Seasonal Peak Alignment & Web GIS Dashboard Sync
+- **BMKG/WMO Calendar-Month Peak Standard:**
+  - All operational seasonal peak outputs (Puncak Musim Hujan & Puncak Musim Kemarau) must use official **Calendar Month** labels (`prakiraan_puncak_bulan`, `normal_puncak_bulan`, `perbandingan_puncak_thd_normal` / `prakiraan_pmk_bulan`, `normal_pmk_bulan`, `perbandingan_pmk_thd_normal`) aligned with BMKG/WMO definitions rather than ambiguous raw dasarian numbers alone.
+- **Web Mercator Raster Overlay Preparation (`sync_to_dashboard.py`):**
+  - When exporting 250m GeoTIFF rasters (`EPSG:4326`) for interactive web Leaflet `L.imageOverlay`, always reproject to **EPSG:3857 (Web Mercator)** with `src_nodata=np.nan, dst_nodata=np.nan`, render non-domain/ocean pixels with `alpha = 0`, simplify vector GeoJSON polygons (`preserve_topology=True`), and export exact WGS84 bounds (`[[south, west], [north, east]]`).
+- **Leaflet & Simplified Public Dashboard UX:**
+  - Web dashboard maps (Next.js + React 19 at `D:\Github\Dashboard_Jerukagung-Meteorologi`) must use native `leaflet` via client-only `dynamic(..., { ssr: false })` inside an isolated stacking context (`relative z-0 isolate`) with basemap switching (Jalan, Satelit, Topografi) and a 250m raster overlay toggle.
+  - Keep public UI explanations plain, concise, and jargon-free: prioritize a full-width interactive map with a compact selected-district detail panel placed directly below the map, avoiding redundant multi-column tables below the map.
+

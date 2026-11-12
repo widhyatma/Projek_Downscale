@@ -32,6 +32,7 @@ def parse_args():
     parser.add_argument("--build-atlas-250m", action="store_true", help="Bangun 36 raster GeoTIFF Atlas Normal Dasarian 250m sepanjang tahun.")
     parser.add_argument("--downscale-250m", action="store_true", help="Jalankan spatial downscaling topografi resolusi 250m (GeoTIFF).")
     parser.add_argument("--export-plots", action="store_true", help="Otomatis hasilkan 10 peta tematik resolusi tinggi 16:9 (300 DPI).")
+    parser.add_argument("--sync-dashboard", action="store_true", help="Sinkronkan GeoJSON & JSON hasil ke repositori web Dashboard_Jerukagung-Meteorologi.")
     parser.add_argument("--output-dir", type=str, default=str(BASE_DIR / "prediksi_musim" / "data"), help="Direktori output CSV hasil.")
     return parser.parse_args()
 
@@ -85,6 +86,11 @@ def run_prediction_pipeline(args):
         generate_all_maps()
     else:
         print("\n[STEP 4/4] Pembuatan peta dilewati (Gunakan flag --export-plots untuk membuat peta).")
+
+    if args.sync_dashboard:
+        print("\n[STEP 5] Menyinkronkan data & peta interaktif ke Dashboard_Jerukagung-Meteorologi...")
+        from prediksi_musim.sync_to_dashboard import sync_to_dashboard
+        sync_to_dashboard()
         
     print("\n[SELESAI] Pipeline Prediksi Musim Hujan berhasil dituntaskan!\n")
 

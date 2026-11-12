@@ -34,6 +34,7 @@ def main():
     parser.add_argument("--run-loyo", action="store_true", help="Jalankan evaluasi komparatif Leave-One-Year-Out (LOYO 2000-2025)")
     parser.add_argument("--downscale-250m", action="store_true", help="Jalankan downscaling spasial topografi 250m dan konservasi massa")
     parser.add_argument("--export-plots", action="store_true", help="Ekspor 10 peta tematik standar publikasi 16:9 (300 DPI)")
+    parser.add_argument("--sync-dashboard", action="store_true", help="Sinkronkan GeoJSON & JSON hasil ke repositori web Dashboard_Jerukagung-Meteorologi")
     parser.add_argument("--all", action="store_true", help="Jalankan seluruh rangkaian pipeline secara berurutan")
 
     args = parser.parse_args()
@@ -61,6 +62,11 @@ def main():
     if args.all or args.export_plots:
         print("\n>>> Mengekspor 10 Peta Tematik Standar 16:9 (300 DPI) ke 'prediksi_musim/prediksi_musim_kemarau/'...")
         generate_all_kemarau_maps()
+
+    if args.all or args.sync_dashboard:
+        print("\n>>> Menyinkronkan data & peta interaktif ke Dashboard_Jerukagung-Meteorologi...")
+        from prediksi_musim.sync_to_dashboard import sync_to_dashboard
+        sync_to_dashboard()
 
     print("\n" + "=" * 85)
     print("PIPELINE PREDIKSI MUSIM KEMARAU SELESAI DENGAN SUKSES!")
