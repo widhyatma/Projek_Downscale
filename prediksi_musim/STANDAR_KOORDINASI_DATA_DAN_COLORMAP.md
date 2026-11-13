@@ -105,6 +105,18 @@ Agar peta poligon, overlay raster GeoTIFF 250m, dan legenda web selaras, disepak
 
 ---
 
+### B.1. Klasifikasi Akumulasi Curah Hujan Musim Hujan (MH)
+| Kategori Kelas | Rentang Nilai (mm) | Kode Hex | Visual Label |
+| :--- | :---: | :---: | :--- |
+| `< 1.500 mm` | $< 1.500$ | `#fecc5c` | Kuning (Curah Hujan Rendah / Defisit) |
+| `1.500–1.750 mm` | $1.500 \le x < 1.750$ | `#a1d99b` | Hijau Muda (Menengah Bawah) |
+| `1.750–2.000 mm` | $1.750 \le x < 2.000$ | `#41ab5d` | Hijau Sedang (Menengah) |
+| `2.000–2.500 mm` | $2.000 \le x < 2.500$ | `#41b6c4` | Biru Muda / Toska (Menengah Atas) |
+| `2.500–3.000 mm` | $2.500 \le x < 3.000$ | `#225ea8` | Biru Tua (Tinggi) |
+| `> 3.000 mm` | $\ge 3.000$ | `#7a0177` | Ungu Pekat (Sangat Tinggi / La Niña) |
+
+---
+
 ### C. Awal Musim Hujan (AMH) Dasarian
 | Dasarian | Periode Tanggal | Kode Hex | Karakteristik Visual |
 | :--- | :--- | :---: | :--- |
