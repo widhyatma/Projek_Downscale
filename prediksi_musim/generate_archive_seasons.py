@@ -583,6 +583,7 @@ def generate_archive_season_year(
     desa_amk_das = None
     desa_tot_mh = None
     desa_tot_mk = None
+    desa_dr_score = None
 
     if mesh is not None:
         overlay_dir = season_dir / "overlays"
@@ -715,6 +716,54 @@ def generate_archive_season_year(
         except Exception as e_tot_mk:
             print(f"  [WARN] Gagal render overlay Total MK {year}: {e_tot_mk}")
 
+        # 5. Indeks Kerawanan Kekeringan 250m
+        try:
+            # Model komposit biofisik kekeringan:
+            # Defisit Hujan MK (maks 60) + Intrusi Pantai/Salinitas (maks 25) + Kelerengan (maks 15)
+            defisit_score = np.clip((600.0 - tot_mk_grid) / 600.0 * 60.0, 0.0, 60.0)
+            pantai_score = np.clip((30.0 - mesh["dist_coast"]) / 30.0 * 25.0, 0.0, 25.0)
+            lereng_score = np.clip(mesh["slope"] / 40.0 * 15.0, 0.0, 15.0)
+            dr_grid = defisit_score + pantai_score + lereng_score
+            dr_grid[~mesh["mask"]] = np.nan
+
+            temp_dr = season_dir / f"temp_dr_{year}.tif"
+            with rasterio.open(temp_dr, "w", **meta_tif) as dst:
+                dst.write(np.nan_to_num(dr_grid, nan=-9999.0).astype(np.float32), 1)
+
+            dst_dr_png = overlay_dir / "kerawanan_kekeringan_250m.png"
+            dr_meta = render_raster_overlay_png(
+                temp_dr,
+                dst_dr_png,
+                "YlOrRd",
+                "kekeringan_250m",
+                "kemarau",
+                f"Kerawanan Kekeringan 250m ({year})",
+                "Skor",
+                is_dasarian=False,
+            )
+            dr_meta["url"] = f"/data/arsip/musim_{year}/overlays/kerawanan_kekeringan_250m.png"
+            overlays_list.append(dr_meta)
+
+            kec_dr_score = compute_zonal_means(gdf_kec, temp_dr)
+            desa_dr_score = compute_zonal_means(gdf_desa, temp_dr)
+
+            # Update nilai skor kekeringan real per kecamatan
+            kec_dr_map = {
+                str(nm).strip(): round(float(score), 1)
+                for nm, score in zip(gdf_kec["nm_kecamatan"], kec_dr_score)
+            }
+            for r in kemarau_records:
+                k_name = r["kecamatan"]
+                if k_name in kec_dr_map:
+                    val = kec_dr_map[k_name]
+                    r["kekeringan_skor"] = val
+                    r["kelas_kekeringan"] = classify_kekeringan(val)
+
+            if temp_dr.exists():
+                temp_dr.unlink()
+        except Exception as e_dr:
+            print(f"  [WARN] Gagal render overlay Kekeringan {year}: {e_dr}")
+
     # Susun Payload JSON Kecamatan
     prediksi_musim_payload = {
         "metadata": {
@@ -783,6 +832,7 @@ def generate_archive_season_year(
         amk_val = round(float(desa_amk_das[idx_d]), 2) if desa_amk_das else round(parent_k["prakiraan_amk_dasarian"], 2)
         tot_mk_val = round(float(desa_tot_mk[idx_d]), 1) if desa_tot_mk else round(parent_k["total_hujan_mk_mm"], 1)
 
+        dr_desa = round(float(desa_dr_score[idx_d]), 1) if desa_dr_score else parent_k["kekeringan_skor"]
         d_k = dict(parent_k)
         d_k.update({
             "code": code,
@@ -792,8 +842,8 @@ def generate_archive_season_year(
             "kelas_hujan_mk": classify_hujan_mk(tot_mk_val),
             "amk_dasarian_250m": amk_val,
             "amk_label_250m": dasarian_to_short_label(amk_val),
-            "kekeringan_skor": 45.0,
-            "kelas_kekeringan": "Sedang (< 60)",
+            "kekeringan_skor": dr_desa,
+            "kelas_kekeringan": classify_kekeringan(dr_desa),
         })
         desa_kemarau_records.append(d_k)
 
