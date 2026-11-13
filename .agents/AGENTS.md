@@ -219,3 +219,13 @@
   - Web dashboard maps (Next.js + React 19 at `D:\Github\Dashboard_Jerukagung-Meteorologi`) must use native `leaflet` via client-only `dynamic(..., { ssr: false })` inside an isolated stacking context (`relative z-0 isolate`) with basemap switching (Jalan, Satelit, Topografi) and a 250m raster overlay toggle.
   - Keep public UI explanations plain, concise, and jargon-free: prioritize a full-width interactive map with a compact selected-district detail panel placed directly below the map, avoiding redundant multi-column tables below the map.
 
+## 22. Dual Core Responsibilities: Geospatial Pipeline & Web Dashboard Engineering
+- **Pilar 1 - Analisis Data Spasial & Pemodelan Prediksi (`Projek_Downscale`):**
+  - Bertanggung jawab penuh atas akuisisi data satelit/reanalisis (CHIRPS, GSMaP, ERA5-Land, DEM), pemodelan deep learning (LSTM Multi-Head), spatial downscaling 250m multi-model (RFK, PRISM, ANUSPLIN), kalibrasi konservasi massa regional, dan ekstraksi zonal statistics (26 Kecamatan & 460 Desa).
+  - Menghasilkan aset geospasial siap pakai: GeoTIFF 250m, PNG overlay Web Mercator (EPSG:3857), GeoJSON teroptimasi, serta matriks indikator agroklimat & CEWS BMKG (HTH, SPI, Katam).
+- **Pilar 2 - Pengembangan & Pemeliharaan Web Dashboard (`Dashboard_Jerukagung-Meteorologi`):**
+  - Bertanggung jawab penuh atas frontend/UI/UX (Next.js 15, React 19, Tailwind CSS, Leaflet Web GIS, ECharts), integrasi komponen grafis, manajemen tema (Dark/Light mode), dan rute navigasi.
+  - Setiap perubahan fitur wajib melewati verifikasi kompilasi produksi (`npm run build` kode exit 0) dan sinkronisasi Git otomatis ke repositori produksi (`origin/main`).
+- **Protokol Eksekusi & Kebersihan Workspace:**
+  - Menjaga kepatuhan aturan scratch directory: seluruh file pengujian sementara wajib berada di `scratch/` dan langsung dibersihkan setelah selesai (Rule 10).
+
