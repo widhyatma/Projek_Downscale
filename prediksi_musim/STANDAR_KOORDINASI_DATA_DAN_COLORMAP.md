@@ -141,3 +141,4 @@ Agar peta poligon, overlay raster GeoTIFF 250m, dan legenda web selaras, disepak
 | **Total Hujan MH 250m** | `Blues` | `#f7fbff` $\rightarrow$ `#6baed6` $\rightarrow$ `#08306b` | 1.200 mm s.d. 2.500 mm |
 | **Total Hujan MK 250m** | `YlGn` | `#ffffe5` $\rightarrow$ `#78c679` $\rightarrow$ `#004529` | 300 mm s.d. 650 mm |
 | **Kerawanan Kekeringan** | `YlOrRd` | `#ffffb2` $\rightarrow$ `#fd8d3c` $\rightarrow$ `#bd0026` | Skor 40 (Sedang) s.d. 85 (Sangat Tinggi) |
+
