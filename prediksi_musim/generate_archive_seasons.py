@@ -91,14 +91,14 @@ def classify_hujan_mh(mm: float) -> str:
 def classify_hujan_mk(mm: float) -> str:
     if pd.isna(mm) or mm <= 0:
         return "-"
-    if mm < 400:
-        return "< 400 mm"
-    elif mm < 600:
-        return "400–600 mm"
-    elif mm <= 800:
-        return "600–800 mm"
+    if mm < 430:
+        return "< 430 mm"
+    elif mm < 485:
+        return "430–485 mm"
+    elif mm <= 525:
+        return "485–525 mm"
     else:
-        return "> 800 mm"
+        return "> 525 mm"
 
 
 def classify_kekeringan(score: float) -> str:
@@ -473,6 +473,7 @@ def generate_archive_season_year(
         hujan_records.append(rec)
 
     # 5. Susun Records Musim Kemarau
+    hujan_by_kec_map = {r["kecamatan"]: r for r in hujan_records}
     kemarau_records = []
     tot_eval_amk_match = 0
     selisih_das_k_list = []
@@ -508,7 +509,19 @@ def generate_archive_season_year(
         else:
             status_eval_amk = f"Prediksi Lebih Lambat ({diff_das:.1f} Dasarian)"
 
-        katam = build_katam_profile(dasarian_to_short_label(norm_amk), pred_sifat)
+        # Rekomendasi Pola Tanam & Mitigasi Kekeringan:
+        # Waktu pengeringan sawah Padi MT2: 1 dasarian sebelum AMK
+        # Masa tanam Palawija MT3: saat awal kemarau (AMK)
+        keringkan_das = max(10, int(round(pred_amk)) - 1)
+        tanam_palawija_das = int(round(pred_amk))
+        rekomendasi_keringkan = dasarian_to_short_label(keringkan_das)
+        rekomendasi_palawija = dasarian_to_short_label(tanam_palawija_das)
+
+        # Gunakan KATAM dari siklus tahun pertanian terpadu (MT1 di Musim Hujan)
+        katam = hujan_by_kec_map.get(kec, {}).get("katam")
+        if not katam:
+            katam = build_katam_profile(dasarian_to_short_label(norm_amk), pred_sifat)
+
         cews = cews_map.get(kec, {})
         chart = chart_map.get(kec, {})
         pk_maju, pk_sama, pk_mundur = compute_prediction_probabilities(pred_amk, norm_amk, pred_kat)
@@ -534,8 +547,8 @@ def generate_archive_season_year(
             "kelas_hujan_mk": classify_hujan_mk(tot_mk),
             "kekeringan_skor": 45.0,
             "kelas_kekeringan": "Sedang (< 60)",
-            "rekomendasi_keringkan_sawah_mt2": katam["mt2"]["panen"],
-            "rekomendasi_tanam_palawija_mt3": katam["mt3"]["tanam"],
+            "rekomendasi_keringkan_sawah_mt2": rekomendasi_keringkan,
+            "rekomendasi_tanam_palawija_mt3": rekomendasi_palawija,
             "hth_hari": cews.get("hth_hari", 5),
             "hth_kategori": cews.get("hth_kategori", "Sangat Pendek (1–5 hari)"),
             "spi_1_bulan": cews.get("spi_1_bulan", 0.0),
