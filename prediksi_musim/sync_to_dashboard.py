@@ -754,13 +754,13 @@ def sync_to_dashboard(dashboard_dir: Path = DEFAULT_DASHBOARD_DIR) -> dict:
             "hujan": {
                 "id": "hujan",
                 "title": "Musim Hujan 2026/2027",
-                "enso_context": "El Niño Kuat (ONI +2.16)",
+                "enso_context": "El Niño Kuat",
                 "normal_period": "Normal 2000–2025",
             },
             "kemarau": {
                 "id": "kemarau",
                 "title": "Musim Kemarau 2026",
-                "enso_context": "El Niño (ONI +1.85)",
+                "enso_context": "El Niño",
                 "normal_period": "Normal 2000–2025",
             },
         },

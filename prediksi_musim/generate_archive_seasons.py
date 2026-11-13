@@ -35,17 +35,17 @@ DEFAULT_DASHBOARD_DIR = Path(r"D:\Github\Dashboard_Jerukagung-Meteorologi")
 
 # Konteks Klimatologi Global (ENSO & IOD) 2015–2025
 CLIMATE_CONTEXT = {
-    2015: "Super El Niño (Kemarau sangat panjang & ekstrem kering)",
-    2016: "La Niña Lemah / Kemarau Basah (Curah hujan melimpah)",
-    2017: "Kondisi Netral / Normal",
-    2018: "El Niño Lemah (Curah hujan cenderung di bawah normal)",
-    2019: "IOD Positif Kuat + El Niño Lemah (Kemarau sangat kering di Jawa)",
-    2020: "La Niña Moderat (Tahun 1 Triple-Dip La Niña)",
-    2021: "La Niña Moderat (Tahun 2 Triple-Dip La Niña)",
-    2022: "La Niña Lemah (Tahun 3 Triple-Dip La Niña)",
-    2023: "Super El Niño + IOD Positif Kuat (Kemarau ekstrem kering & panjang)",
-    2024: "Transisi El Niño Menuju Netral",
-    2025: "Kondisi Netral / Normal"
+    2015: "Super El Niño",
+    2016: "La Niña Lemah",
+    2017: "Netral",
+    2018: "El Niño Lemah",
+    2019: "El Niño Lemah / IOD+",
+    2020: "La Niña Moderat",
+    2021: "La Niña Moderat",
+    2022: "La Niña Lemah",
+    2023: "Super El Niño",
+    2024: "Transisi Netral",
+    2025: "Netral"
 }
 
 BULAN_NAMES = [
@@ -970,7 +970,7 @@ def main():
         "kemarau_title": "Musim Kemarau 2026",
         "is_active": True,
         "has_evaluation": False,
-        "climate_desc": "El Niño Kuat (ONI +2.16)",
+        "climate_desc": "El Niño Kuat",
         "akurasi_amh_pct": None,
         "akurasi_amk_pct": None,
         "akurasi_sifat_pct": None,
