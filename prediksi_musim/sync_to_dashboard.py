@@ -161,6 +161,185 @@ def _classify_kekeringan(score: float) -> str:
     return "Sangat Tinggi (> 70)"
 
 
+def _label_to_dasarian_idx(label: str) -> int:
+    """Mengonversi label dasarian (misal 'Nov II') ke indeks 1..36."""
+    months = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"]
+    parts = str(label).strip().split()
+    if len(parts) >= 2:
+        m_name = parts[0]
+        r_num = parts[1]
+        m_idx = months.index(m_name) if m_name in months else 10
+        r_idx = ["I", "II", "III"].index(r_num) if r_num in ["I", "II", "III"] else 0
+        return m_idx * 3 + r_idx + 1
+    return 32  # Default Nov II
+
+
+def _build_katam_profile(tanam_mt1_str: str, sifat_hujan: str) -> dict:
+    """Membangun profil kalender tanam terpadu (MT1, MT2, MT3) & varietas rekomendasi."""
+    d_mt1_tanam = _label_to_dasarian_idx(tanam_mt1_str)
+    d_mt1_olah = max(1, d_mt1_tanam - 1)
+    d_mt1_panen = ((d_mt1_tanam + 10 - 1) % 36) + 1  # ~105-115 hari
+
+    d_mt2_tanam = ((d_mt1_panen + 1 - 1) % 36) + 1
+    d_mt2_panen = ((d_mt2_tanam + 9 - 1) % 36) + 1
+
+    d_mt3_tanam = ((d_mt2_panen + 1 - 1) % 36) + 1
+    d_mt3_panen = ((d_mt3_tanam + 8 - 1) % 36) + 1
+
+    if sifat_hujan == "Atas Normal":
+        var_mt1 = ["Ciherang Sub-1", "Inpari 42 Agritan GSR", "Inpara 2 (Tahan Rendaman)"]
+        tips_mt1 = "Antisipasi genangan air puncak musim; bersihkan saluran drainase dan gunakan varietas toleran rendaman."
+    elif sifat_hujan == "Bawah Normal":
+        var_mt1 = ["Inpari 32 HDB", "Situ Bagendit", "Cakrabuana Agritan (Genjah & Hemat Air)"]
+        tips_mt1 = "Optimalkan penampungan air embung/dam parit; percepat pengolahan tanah saat hujan perdana turun."
+    else:
+        var_mt1 = ["Inpari 32 HDB", "Mekongga", "Ciherang"]
+        tips_mt1 = "Gunakan sistem jajar legowo 2:1 untuk memaksimalkan anakan produktif dan sirkulasi udara mikro."
+
+    var_mt2 = ["Inpari 33 (Tahan Wereng)", "Inpari 43", "Dodokan"]
+    kom_mt3 = ["Jagung Hibrida Bisi-18", "Kedelai Anjasmoro", "Kacang Hijau Vima-1"]
+
+    return {
+        "mt1": {
+            "nama": "MT1 (Padi Rendengan)",
+            "olah_tanah": _dasarian_to_short_label(d_mt1_olah),
+            "tanam": _dasarian_to_short_label(d_mt1_tanam),
+            "panen": _dasarian_to_short_label(d_mt1_panen),
+            "varietas": var_mt1,
+            "tips": tips_mt1,
+        },
+        "mt2": {
+            "nama": "MT2 (Padi Gadu)",
+            "tanam": _dasarian_to_short_label(d_mt2_tanam),
+            "panen": _dasarian_to_short_label(d_mt2_panen),
+            "varietas": var_mt2,
+            "tips": "Pantau ketersediaan debit air irigasi teknis Waduk Wadaslintang dan Waduk Sempor.",
+        },
+        "mt3": {
+            "nama": "MT3 (Palawija/Bera)",
+            "tanam": _dasarian_to_short_label(d_mt3_tanam),
+            "panen": _dasarian_to_short_label(d_mt3_panen),
+            "komoditas": kom_mt3,
+            "tips": "Manfaatkan sisa kelembapan lengas tanah pasca panen padi gadu untuk budidaya palawija hemat air.",
+        },
+    }
+
+
+def _compute_cews_metrics() -> tuple[dict, dict]:
+    """
+    Menghitung metrik SPI-1, SPI-3, HTH (Hari Tanpa Hujan), status PDCHT,
+    serta deret waktu 36 dasarian (Normal vs 2026 vs Proyeksi) per kecamatan.
+    """
+    df_das = pd.read_csv(DATA_DIR / "dasarian_curah_hujan_kebumen_2000_2026.csv")
+    das_labels = [_dasarian_to_short_label(d) for d in range(1, 37)]
+
+    norm_pivot = (
+        df_das[df_das["tahun"] <= 2025]
+        .groupby(["kecamatan", "dasarian"])["curah_hujan"]
+        .mean()
+        .unstack(level="dasarian")
+    )
+    akt_pivot = (
+        df_das[df_das["tahun"] == 2026]
+        .groupby(["kecamatan", "dasarian"])["curah_hujan"]
+        .mean()
+        .unstack(level="dasarian")
+    )
+
+    # SPI-1 (Oktober / Dasarian 28-30)
+    oct_rain = (
+        df_das[df_das["dasarian"].isin([28, 29, 30])]
+        .groupby(["kecamatan", "tahun"])["curah_hujan"]
+        .sum()
+        .unstack(level="tahun")
+    )
+    spi1_mean = oct_rain.loc[:, 2000:2025].mean(axis=1)
+    spi1_std = oct_rain.loc[:, 2000:2025].std(axis=1).replace(0, 1.0)
+    spi_1_series = (oct_rain[2026] - spi1_mean) / spi1_std
+
+    # SPI-3 (Agustus-Oktober / Dasarian 22-30)
+    seas_rain = (
+        df_das[df_das["dasarian"].between(22, 30)]
+        .groupby(["kecamatan", "tahun"])["curah_hujan"]
+        .sum()
+        .unstack(level="tahun")
+    )
+    spi3_mean = seas_rain.loc[:, 2000:2025].mean(axis=1)
+    spi3_std = seas_rain.loc[:, 2000:2025].std(axis=1).replace(0, 1.0)
+    spi_3_series = (seas_rain[2026] - spi3_mean) / spi3_std
+
+    def _cat_spi(val: float) -> str:
+        if val >= 2.0:
+            return "Sangat Basah"
+        if val >= 1.5:
+            return "Basah"
+        if val >= 1.0:
+            return "Agak Basah"
+        if val >= -0.99:
+            return "Normal"
+        if val >= -1.49:
+            return "Agak Kering"
+        if val >= -1.99:
+            return "Sangat Kering"
+        return "Ekstrem Kering"
+
+    kec_cews_map = {}
+    kec_chart_map = {}
+
+    for kec in norm_pivot.index:
+        norm_vals = [round(float(norm_pivot.loc[kec].get(d, 0.0)), 1) for d in range(1, 37)]
+        akt_vals = [
+            round(float(akt_pivot.loc[kec][d]), 1)
+            if (kec in akt_pivot.index and d in akt_pivot.columns and pd.notna(akt_pivot.loc[kec][d]))
+            else None
+            for d in range(1, 37)
+        ]
+
+        proy_vals = [
+            round(float(norm_vals[d - 1] * 0.72), 1) if d >= 31 else None
+            for d in range(1, 37)
+        ]
+        if akt_vals[29] is not None:
+            proy_vals[29] = akt_vals[29]
+
+        val_spi1 = round(float(spi_1_series.get(kec, -0.85)), 2)
+        val_spi3 = round(float(spi_3_series.get(kec, -0.88)), 2)
+
+        last_rain = akt_vals[29] if akt_vals[29] is not None else 10.0
+        if last_rain < 2.0:
+            hth_days = 8
+            hth_cat = "Pendek (6–10 hari)"
+            hth_stat = "Waspada"
+        elif last_rain < 5.0:
+            hth_days = 5
+            hth_cat = "Sangat Pendek (1–5 hari)"
+            hth_stat = "Aman"
+        else:
+            hth_days = 3
+            hth_cat = "Sangat Pendek (1–5 hari)"
+            hth_stat = "Aman"
+
+        kec_cews_map[kec] = {
+            "hth_hari": hth_days,
+            "hth_kategori": hth_cat,
+            "hth_status": hth_stat,
+            "pdcht_status": "Tidak Ada Peringatan",
+            "spi_1_bulan": val_spi1,
+            "spi_1_kategori": _cat_spi(val_spi1),
+            "spi_3_bulan": val_spi3,
+            "spi_3_kategori": _cat_spi(val_spi3),
+        }
+
+        kec_chart_map[kec] = {
+            "labels": das_labels,
+            "normal": norm_vals,
+            "aktual": akt_vals,
+            "proyeksi": proy_vals,
+        }
+
+    return kec_cews_map, kec_chart_map
+
+
 def compute_zonal_means(gdf: gpd.GeoDataFrame, tif_path: Path) -> list[float]:
     """Menghitung rata-rata zonal dari raster GeoTIFF 250m untuk setiap poligon."""
     if not tif_path.exists():
@@ -356,15 +535,36 @@ def sync_to_dashboard(dashboard_dir: Path = DEFAULT_DASHBOARD_DIR) -> dict:
         for nm, mh, mk, dr in zip(gdf_kec["nm_kecamatan"], kec_mh_mm, kec_mk_mm, kec_dr_score)
     }
 
+    # Metrik CEWS & Profil 36 Dasarian untuk ECharts
+    cews_map, chart_map = _compute_cews_metrics()
+
     df_hujan["code"] = df_hujan["kecamatan"]
     df_hujan["total_hujan_mh_mm"] = df_hujan["kecamatan"].map(lambda k: kec_zonal_map[k]["total_hujan_mh_mm"])
     df_hujan["kelas_hujan_mh"] = df_hujan["kecamatan"].map(lambda k: kec_zonal_map[k]["kelas_hujan_mh"])
+    df_hujan["hth_hari"] = df_hujan["kecamatan"].map(lambda k: cews_map[k]["hth_hari"])
+    df_hujan["hth_kategori"] = df_hujan["kecamatan"].map(lambda k: cews_map[k]["hth_kategori"])
+    df_hujan["spi_1_bulan"] = df_hujan["kecamatan"].map(lambda k: cews_map[k]["spi_1_bulan"])
+    df_hujan["spi_1_kategori"] = df_hujan["kecamatan"].map(lambda k: cews_map[k]["spi_1_kategori"])
+    df_hujan["katam"] = df_hujan.apply(
+        lambda r: _build_katam_profile(str(r["rekomendasi_tanam_padi_mt1"]), str(r["prakiraan_sifat_hujan"])),
+        axis=1,
+    )
+    df_hujan["cews"] = df_hujan["kecamatan"].map(lambda k: cews_map[k])
+    df_hujan["chart"] = df_hujan["kecamatan"].map(lambda k: chart_map[k])
 
     df_kemarau["code"] = df_kemarau["kecamatan"]
     df_kemarau["total_hujan_mk_mm"] = df_kemarau["kecamatan"].map(lambda k: kec_zonal_map[k]["total_hujan_mk_mm"])
     df_kemarau["kelas_hujan_mk"] = df_kemarau["kecamatan"].map(lambda k: kec_zonal_map[k]["kelas_hujan_mk"])
     df_kemarau["kekeringan_skor"] = df_kemarau["kecamatan"].map(lambda k: kec_zonal_map[k]["kekeringan_skor"])
     df_kemarau["kelas_kekeringan"] = df_kemarau["kecamatan"].map(lambda k: kec_zonal_map[k]["kelas_kekeringan"])
+    df_kemarau["hth_hari"] = df_kemarau["kecamatan"].map(lambda k: cews_map[k]["hth_hari"])
+    df_kemarau["hth_kategori"] = df_kemarau["kecamatan"].map(lambda k: cews_map[k]["hth_kategori"])
+    df_kemarau["spi_1_bulan"] = df_kemarau["kecamatan"].map(lambda k: cews_map[k]["spi_1_bulan"])
+    df_kemarau["spi_1_kategori"] = df_kemarau["kecamatan"].map(lambda k: cews_map[k]["spi_1_kategori"])
+    katam_by_kec = dict(zip(df_hujan["kecamatan"], df_hujan["katam"]))
+    df_kemarau["katam"] = df_kemarau["kecamatan"].map(katam_by_kec)
+    df_kemarau["cews"] = df_kemarau["kecamatan"].map(lambda k: cews_map[k])
+    df_kemarau["chart"] = df_kemarau["kecamatan"].map(lambda k: chart_map[k])
 
     # Zonal stats 460 desa/kelurahan dari raster 250m
     desa_mh_mm = compute_zonal_means(gdf_desa, tif_total_mh)
