@@ -16,8 +16,14 @@ from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
 import geopandas as gpd
+import matplotlib
 import numpy as np
 import pandas as pd
+import rasterio
+
+sys.path.append(str(Path(__file__).resolve().parent))
+from topographic_downscaling import prepare_250m_topographic_mesh, downscale_variable_multimodel
+from sync_to_dashboard import render_raster_overlay_png
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "prediksi_musim" / "data"
@@ -285,6 +291,7 @@ def generate_archive_season_year(
     gdf_kec: gpd.GeoDataFrame,
     gdf_desa: gpd.GeoDataFrame,
     out_dir: Path,
+    mesh: dict = None,
 ) -> dict:
     """Menghasilkan berkas prediksi_musim.json dan prediksi_musim_desa.json untuk satu tahun arsip."""
     year_str = str(year)
@@ -445,6 +452,81 @@ def generate_archive_season_year(
         "keterangan_kinerja": f"Ketepatan Awal Musim {akurasi_amh_pct}%, Sifat Hujan {akurasi_sifat_pct}%",
     }
 
+    # Downscaling Raster 250m & Render Overlay PNG (EPSG:3857)
+    overlays_list = []
+    if mesh is not None:
+        overlay_dir = season_dir / "overlays"
+        overlay_dir.mkdir(parents=True, exist_ok=True)
+        meta_tif = {
+            "driver": "GTiff",
+            "dtype": "float32",
+            "nodata": -9999.0,
+            "width": mesh["width"],
+            "height": mesh["height"],
+            "count": 1,
+            "crs": "EPSG:4326",
+            "transform": mesh["transform"],
+            "compress": "lzw",
+        }
+
+        # 1. Downscale AMH 250m
+        try:
+            df_h_sub = pd.DataFrame(hujan_records)
+            gdf_h = gdf_kec.merge(df_h_sub, left_on="nm_kecamatan", right_on="kecamatan")
+            amh_grid, _ = downscale_variable_multimodel(
+                gdf_h, "prakiraan_amh_dasarian", mesh, f"AMH_{year}", apply_mass_conservation=False
+            )
+            temp_amh = season_dir / f"temp_amh_{year}.tif"
+            with rasterio.open(temp_amh, "w", **meta_tif) as dst:
+                dst.write(np.nan_to_num(amh_grid, nan=-9999.0).astype(np.float32), 1)
+
+            dst_amh_png = overlay_dir / "amh_dasarian_250m.png"
+            amh_meta = render_raster_overlay_png(
+                temp_amh,
+                dst_amh_png,
+                "YlGnBu_r",
+                f"amh_dasarian_250m_{year}",
+                "hujan",
+                f"Awal Musim Hujan 250m ({year}/{year+1})",
+                "Dasarian",
+                is_dasarian=True,
+            )
+            amh_meta["url"] = f"/data/arsip/musim_{year}/overlays/amh_dasarian_250m.png"
+            overlays_list.append(amh_meta)
+            if temp_amh.exists():
+                temp_amh.unlink()
+        except Exception as e_amh:
+            print(f"  [WARN] Gagal render overlay AMH {year}: {e_amh}")
+
+        # 2. Downscale AMK 250m
+        try:
+            df_k_sub = pd.DataFrame(kemarau_records)
+            gdf_k = gdf_kec.merge(df_k_sub, left_on="nm_kecamatan", right_on="kecamatan")
+            amk_grid, _ = downscale_variable_multimodel(
+                gdf_k, "prakiraan_amk_dasarian", mesh, f"AMK_{year}", apply_mass_conservation=False
+            )
+            temp_amk = season_dir / f"temp_amk_{year}.tif"
+            with rasterio.open(temp_amk, "w", **meta_tif) as dst:
+                dst.write(np.nan_to_num(amk_grid, nan=-9999.0).astype(np.float32), 1)
+
+            dst_amk_png = overlay_dir / "amk_dasarian_250m.png"
+            amk_meta = render_raster_overlay_png(
+                temp_amk,
+                dst_amk_png,
+                "YlOrRd",
+                f"amk_dasarian_250m_{year}",
+                "kemarau",
+                f"Awal Musim Kemarau 250m ({year})",
+                "Dasarian",
+                is_dasarian=True,
+            )
+            amk_meta["url"] = f"/data/arsip/musim_{year}/overlays/amk_dasarian_250m.png"
+            overlays_list.append(amk_meta)
+            if temp_amk.exists():
+                temp_amk.unlink()
+        except Exception as e_amk:
+            print(f"  [WARN] Gagal render overlay AMK {year}: {e_amk}")
+
     # Susun Payload JSON Kecamatan
     prediksi_musim_payload = {
         "metadata": {
@@ -471,7 +553,7 @@ def generate_archive_season_year(
                 },
             },
         },
-        "overlays": [],
+        "overlays": overlays_list,
         "hujan": hujan_records,
         "kemarau": kemarau_records,
     }
@@ -591,6 +673,9 @@ def main():
     df_loyo_k = pd.read_csv(loyo_kemarau_path)
     df_dasarian = pd.read_csv(dasarian_path)
 
+    print("\n[2.5/4] Menginisialisasi mesh topografi DEM 250m untuk rendering raster overlay...")
+    mesh = prepare_250m_topographic_mesh()
+
     arsip_dir = args.output_dir / "arsip"
     arsip_dir.mkdir(parents=True, exist_ok=True)
 
@@ -612,11 +697,11 @@ def main():
         "folder": "",  # Root data folder
     })
 
-    print("\n[3/4] Mengekstrak data arsip musim dan menghitung metrik evaluasi per tahun...")
+    print("\n[3/4] Mengekstrak data arsip musim, downscaling 250m & menghitung evaluasi...")
     for yr in range(args.end_year, args.start_year - 1, -1):
-        print(f"Memproses Arsip Tahun {yr}...")
+        print(f"Memproses Arsip Tahun {yr} (Data + Raster 250m)...")
         entry = generate_archive_season_year(
-            yr, df_loyo_h, df_loyo_k, df_dasarian, gdf_kec, gdf_desa, arsip_dir
+            yr, df_loyo_h, df_loyo_k, df_dasarian, gdf_kec, gdf_desa, arsip_dir, mesh=mesh
         )
         if entry:
             catalog_entries.append(entry)
