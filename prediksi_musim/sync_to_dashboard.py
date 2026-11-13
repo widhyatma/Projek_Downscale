@@ -132,13 +132,19 @@ def _dasarian_to_short_label(val: float) -> str:
 
 
 def _classify_hujan_mh(mm: float) -> str:
+    if pd.isna(mm) or mm <= 0:
+        return "-"
     if mm < 1500:
         return "< 1.500 mm"
-    if mm < 1600:
-        return "1.500–1.600 mm"
     if mm < 1750:
-        return "1.600–1.750 mm"
-    return "> 1.750 mm"
+        return "1.500–1.750 mm"
+    if mm < 2000:
+        return "1.750–2.000 mm"
+    if mm < 2500:
+        return "2.000–2.500 mm"
+    if mm < 3000:
+        return "2.500–3.000 mm"
+    return "> 3.000 mm"
 
 
 def _classify_hujan_mk(mm: float) -> str:

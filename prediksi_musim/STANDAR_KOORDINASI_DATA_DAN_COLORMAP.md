@@ -27,7 +27,7 @@ Dokumen ini merupakan **Data Contract & Style Guide resmi** untuk menjamin konsi
 | `prakiraan_puncak_bulan` | `string` | Bulan Kalender | `Desember`, `Januari`, `Februari` | Format standar kalender BMKG |
 | `normal_puncak_bulan` | `string` | Bulan Kalender | `Januari` | Rata-rata puncak historis |
 | `total_hujan_mh_mm` | `float` | mm | 1.200 s.d. 2.400 mm | Total akumulasi presipitasi MH |
-| `kelas_hujan_mh` | `string` | Interval | `< 1.500 mm`, `1.500–1.600 mm`, `1.600–1.750 mm`, `> 1.750 mm` | Klasifikasi potensi air |
+| `kelas_hujan_mh` | `string` | Interval | `< 1.500 mm`, `1.500–1.750 mm`, `1.750–2.000 mm`, `2.000–2.500 mm`, `2.500–3.000 mm`, `> 3.000 mm` | Klasifikasi potensi air multi-dekade |
 | `rekomendasi_olah_tanah` | `string` | Label Dasarian | `Sep II` s.d. `Okt II` | Rekomendasi agronomi persiapan sawah |
 | `rekomendasi_tanam_padi_mt1`| `string` | Label Dasarian | `Okt I` s.d. `Nov I` | Jadwal hambur/tanam Padi MT1 |
 

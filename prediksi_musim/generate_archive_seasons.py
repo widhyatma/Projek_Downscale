@@ -80,12 +80,16 @@ def classify_hujan_mh(mm: float) -> str:
         return "-"
     if mm < 1500:
         return "< 1.500 mm"
-    elif mm < 1600:
-        return "1.500–1.600 mm"
-    elif mm <= 1750:
-        return "1.600–1.750 mm"
+    elif mm < 1750:
+        return "1.500–1.750 mm"
+    elif mm < 2000:
+        return "1.750–2.000 mm"
+    elif mm < 2500:
+        return "2.000–2.500 mm"
+    elif mm < 3000:
+        return "2.500–3.000 mm"
     else:
-        return "> 1.750 mm"
+        return "> 3.000 mm"
 
 
 def classify_hujan_mk(mm: float) -> str:
