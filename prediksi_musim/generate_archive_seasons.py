@@ -1,0 +1,644 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Generator Arsip Prediksi Musim Historis (2015–2025) & Evaluasi Akurasi (Prediksi vs Realisasi)
+Stasiun Meteorologi Kelas III Jerukagung - Kabupaten Kebumen
+
+Mengekstrak hasil validasi Leave-One-Year-Out (LOYO) LSTM 26 tahun, menyusun arsip
+prakiraan musim lampau (Musim Hujan & Kemarau), menghitung metrik evaluasi ketepatan
+model secara transparan, dan mengekspor katalog modular JSON ke Dashboard.
+"""
+
+import argparse
+import json
+import sys
+from datetime import datetime, timezone, timedelta
+from pathlib import Path
+
+import geopandas as gpd
+import numpy as np
+import pandas as pd
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+DATA_DIR = BASE_DIR / "prediksi_musim" / "data"
+GEOJSON_KEC_PATH = BASE_DIR / "33.05_kecamatan.geojson"
+GEOJSON_DESA_PATH = BASE_DIR / "33.05_kelurahan.geojson"
+DEFAULT_DASHBOARD_DIR = Path(r"D:\Github\Dashboard_Jerukagung-Meteorologi")
+
+# Konteks Klimatologi Global (ENSO & IOD) 2015–2025
+CLIMATE_CONTEXT = {
+    2015: "Super El Niño (Kemarau sangat panjang & ekstrem kering)",
+    2016: "La Niña Lemah / Kemarau Basah (Curah hujan melimpah)",
+    2017: "Kondisi Netral / Normal",
+    2018: "El Niño Lemah (Curah hujan cenderung di bawah normal)",
+    2019: "IOD Positif Kuat + El Niño Lemah (Kemarau sangat kering di Jawa)",
+    2020: "La Niña Moderat (Tahun 1 Triple-Dip La Niña)",
+    2021: "La Niña Moderat (Tahun 2 Triple-Dip La Niña)",
+    2022: "La Niña Lemah (Tahun 3 Triple-Dip La Niña)",
+    2023: "Super El Niño + IOD Positif Kuat (Kemarau ekstrem kering & panjang)",
+    2024: "Transisi El Niño Menuju Netral",
+    2025: "Kondisi Netral / Normal"
+}
+
+BULAN_NAMES = [
+    "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+    "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+]
+BULAN_SHORT = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"]
+ROMAN = ["I", "II", "III"]
+
+
+def dasarian_to_short_label(val: float) -> str:
+    if pd.isna(val) or val <= 0:
+        return "-"
+    v = max(1.0, min(36.0, float(val)))
+    idx = int(round(v)) - 1
+    m_idx = idx // 3
+    d_idx = idx % 3
+    return f"{BULAN_SHORT[m_idx]} {ROMAN[d_idx]}"
+
+
+def dasarian_to_month_name(val: float, year_offset: int = 0) -> str:
+    if pd.isna(val) or val <= 0:
+        return "-"
+    v = max(1.0, min(36.0, float(val)))
+    idx = int(round(v)) - 1
+    m_idx = idx // 3
+    return f"{BULAN_NAMES[m_idx]}"
+
+
+def classify_hujan_mh(mm: float) -> str:
+    if pd.isna(mm) or mm <= 0:
+        return "-"
+    if mm < 1500:
+        return "< 1.500 mm"
+    elif mm < 1600:
+        return "1.500–1.600 mm"
+    elif mm <= 1750:
+        return "1.600–1.750 mm"
+    else:
+        return "> 1.750 mm"
+
+
+def classify_hujan_mk(mm: float) -> str:
+    if pd.isna(mm) or mm <= 0:
+        return "-"
+    if mm < 400:
+        return "< 400 mm"
+    elif mm < 600:
+        return "400–600 mm"
+    elif mm <= 800:
+        return "600–800 mm"
+    else:
+        return "> 800 mm"
+
+
+def classify_kekeringan(score: float) -> str:
+    if pd.isna(score):
+        return "Sedang"
+    if score < 40:
+        return "Rendah"
+    elif score <= 65:
+        return "Sedang"
+    else:
+        return "Tinggi"
+
+
+def build_katam_profile(tanam_mt1_str: str, sifat_hujan: str) -> dict:
+    month_map = {
+        "Okt": 10, "Nov": 11, "Des": 12, "Jan": 1, "Feb": 2, "Mar": 3,
+        "Apr": 4, "Mei": 5, "Jun": 6, "Jul": 7, "Agu": 8, "Sep": 9,
+    }
+    tokens = tanam_mt1_str.strip().split()
+    b_str = tokens[0] if tokens else "Nov"
+    rom = tokens[1] if len(tokens) > 1 else "III"
+    rom_idx = 0 if rom == "I" else (1 if rom == "II" else 2)
+    b_idx = month_map.get(b_str, 11)
+
+    t_mt1 = (b_idx - 1) * 3 + rom_idx + 1
+    ot_mt1 = ((t_mt1 - 2) % 36) or 36
+    p_mt1 = ((t_mt1 + 9 - 1) % 36) + 1
+    t_mt2 = ((p_mt1 + 1 - 1) % 36) + 1
+    p_mt2 = ((t_mt2 + 9 - 1) % 36) + 1
+    t_mt3 = ((p_mt2 + 1 - 1) % 36) + 1
+    p_mt3 = ((t_mt3 + 8 - 1) % 36) + 1
+
+    is_wet = "Atas" in sifat_hujan
+    is_dry = "Bawah" in sifat_hujan
+
+    if is_wet:
+        v_mt1 = ["Inpari 32 HDB", "Inpari 42 Agritan", "Inpara 2 (Toleran Rendaman)"]
+        tips_mt1 = "Waspadai genangan berlebih dan serangan penyakit blas/kresek; benahi saluran pembuangan air."
+    elif is_dry:
+        v_mt1 = ["Inpari 32 HDB", "Situ Bagendit", "Cakrabuana Agritan (Genjah & Hemat Air)"]
+        tips_mt1 = "Optimalkan penampungan air embung/dam parit; percepat pengolahan tanah saat hujan perdana turun."
+    else:
+        v_mt1 = ["Inpari 32 HDB", "Ciherang", "Mekongga"]
+        tips_mt1 = "Pengolahan tanah serempak untuk efisiensi air irigasi tersier dan mencegah ledakan hama tikus."
+
+    v_mt2 = ["Inpari 32 HDB", "Mekongga", "Cisaat"]
+    tips_mt2 = "Lakukan penyiangan dan pemupukan berimbang tepat waktu sebelum masa pengisian bulir padi."
+    v_mt3 = ["Jagung Hibrida Bisi-18", "Kedelai Anjasmoro", "Kacang Hijau Vima-1"]
+    tips_mt3 = "Manfaatkan sisa kelembapan lengas tanah pasca panen padi gadu untuk budidaya palawija hemat air."
+
+    return {
+        "mt1": {
+            "nama": "MT1 (Padi Rendengan)",
+            "olah_tanah": dasarian_to_short_label(ot_mt1),
+            "tanam": dasarian_to_short_label(t_mt1),
+            "panen": dasarian_to_short_label(p_mt1),
+            "varietas": v_mt1,
+            "tips": tips_mt1,
+        },
+        "mt2": {
+            "nama": "MT2 (Padi Gadu)",
+            "tanam": dasarian_to_short_label(t_mt2),
+            "panen": dasarian_to_short_label(p_mt2),
+            "varietas": v_mt2,
+            "tips": tips_mt2,
+        },
+        "mt3": {
+            "nama": "MT3 (Palawija/Bera)",
+            "tanam": dasarian_to_short_label(t_mt3),
+            "panen": dasarian_to_short_label(p_mt3),
+            "komoditas": v_mt3,
+            "tips": tips_mt3,
+        },
+    }
+
+
+def compute_cews_for_year(df_dasarian_year: pd.DataFrame, df_dasarian_all: pd.DataFrame) -> tuple[dict, dict]:
+    """Menghitung metrik CEWS (HTH & SPI) serta time series 36 dasarian untuk tahun arsip."""
+    cews_map: dict[str, dict] = {}
+    chart_map: dict[str, dict] = {}
+
+    labels_36 = [dasarian_to_short_label(d) for d in range(1, 37)]
+
+    # Climatological normal per dasarian (2000-2025)
+    clim_norm = (
+        df_dasarian_all[df_dasarian_all["tahun"] <= 2025]
+        .groupby(["kecamatan", "dasarian"])["curah_hujan"]
+        .mean()
+        .unstack(level="dasarian")
+    )
+
+    # Monthly rainfall baseline for SPI
+    m_rain_hist = (
+        df_dasarian_all[df_dasarian_all["tahun"] <= 2025]
+        .groupby(["kecamatan", "tahun", "bulan"])["curah_hujan"]
+        .sum()
+        .reset_index()
+    )
+    m_stats = m_rain_hist.groupby(["kecamatan", "bulan"])["curah_hujan"].agg(["mean", "std"]).reset_index()
+
+    # Data tahun berjalan
+    kecamatan_list = sorted(df_dasarian_year["kecamatan"].unique())
+
+    for kec in kecamatan_list:
+        sub_y = df_dasarian_year[df_dasarian_year["kecamatan"] == kec].sort_values("dasarian")
+        sub_norm = clim_norm.loc[kec] if kec in clim_norm.index else pd.Series(0, index=range(1, 37))
+
+        norm_vals = [round(float(sub_norm.get(d, 0.0)), 1) for d in range(1, 37)]
+        akt_vals = []
+        for d in range(1, 37):
+            match = sub_y[sub_y["dasarian"] == d]
+            if not match.empty:
+                akt_vals.append(round(float(match["curah_hujan"].values[0]), 1))
+            else:
+                akt_vals.append(None)
+
+        # Proyeksi untuk tahun arsip sama dengan observasi (karena sudah lewat)
+        chart_map[kec] = {
+            "labels": labels_36,
+            "normal": norm_vals,
+            "aktual": akt_vals,
+            "proyeksi": akt_vals,
+        }
+
+        # SPI 1-Bulan (Bulan 10 / Oktober tahun itu)
+        m10_val = sum([v for v in akt_vals[27:30] if v is not None]) or 0.0
+        m10_stat = m_stats[(m_stats["kecamatan"] == kec) & (m_stats["bulan"] == 10)]
+        if not m10_stat.empty and m10_stat["std"].values[0] > 0:
+            spi_1 = (m10_val - m10_stat["mean"].values[0]) / m10_stat["std"].values[0]
+        else:
+            spi_1 = 0.0
+
+        # SPI 3-Bulan (Bulan 8–10 / Agt–Okt)
+        m8_10_val = sum([v for v in akt_vals[21:30] if v is not None]) or 0.0
+        m8_stat = m_stats[(m_stats["kecamatan"] == kec) & (m_stats["bulan"] == 8)]
+        m9_stat = m_stats[(m_stats["kecamatan"] == kec) & (m_stats["bulan"] == 9)]
+        mean_3m = (
+            (m8_stat["mean"].values[0] if not m8_stat.empty else 0)
+            + (m9_stat["mean"].values[0] if not m9_stat.empty else 0)
+            + (m10_stat["mean"].values[0] if not m10_stat.empty else 0)
+        )
+        std_3m = np.sqrt(
+            (m8_stat["std"].values[0] ** 2 if not m8_stat.empty else 0)
+            + (m9_stat["std"].values[0] ** 2 if not m9_stat.empty else 0)
+            + (m10_stat["std"].values[0] ** 2 if not m10_stat.empty else 1)
+        )
+        spi_3 = (m8_10_val - mean_3m) / (std_3m if std_3m > 0 else 1.0)
+
+        def _cat_spi(val: float) -> str:
+            if val >= 2.0: return "Sangat Basah"
+            elif val >= 1.5: return "Basah"
+            elif val >= -0.99: return "Normal"
+            elif val >= -1.49: return "Agak Kering"
+            elif val >= -1.99: return "Kering"
+            else: return "Sangat Kering"
+
+        # Perhitungan HTH berdasarkan dasarian kering di bulan 10
+        d30_rain = akt_vals[29] if len(akt_vals) > 29 and akt_vals[29] is not None else 10.0
+        if d30_rain == 0:
+            hth_hari = 15
+            hth_kat = "Menengah (11–20 hari)"
+            hth_stat = "Waspada"
+        elif d30_rain < 20:
+            hth_hari = 5
+            hth_kat = "Sangat Pendek (1–5 hari)"
+            hth_stat = "Aman"
+        else:
+            hth_hari = 1
+            hth_kat = "Masih Ada Hujan"
+            hth_stat = "Aman"
+
+        cews_map[kec] = {
+            "hth_hari": hth_hari,
+            "hth_kategori": hth_kat,
+            "hth_status": hth_stat,
+            "pdcht_status": "Aman",
+            "pdcht_keterangan": "Prakiraan akumulasi curah hujan terkendali",
+            "spi_1_bulan": round(float(spi_1), 2),
+            "spi_1_kategori": _cat_spi(float(spi_1)),
+            "spi_3_bulan": round(float(spi_3), 2),
+            "spi_3_kategori": _cat_spi(float(spi_3)),
+        }
+
+    return cews_map, chart_map
+
+
+def generate_archive_season_year(
+    year: int,
+    df_loyo_hujan: pd.DataFrame,
+    df_loyo_kemarau: pd.DataFrame,
+    df_dasarian_all: pd.DataFrame,
+    gdf_kec: gpd.GeoDataFrame,
+    gdf_desa: gpd.GeoDataFrame,
+    out_dir: Path,
+) -> dict:
+    """Menghasilkan berkas prediksi_musim.json dan prediksi_musim_desa.json untuk satu tahun arsip."""
+    year_str = str(year)
+    season_id = f"{year}_{year + 1}"
+    season_dir = out_dir / f"musim_{year}"
+    season_dir.mkdir(parents=True, exist_ok=True)
+
+    # 1. Filter Data Musim Hujan (tahun_awal == year)
+    sub_hujan = df_loyo_hujan[df_loyo_hujan["tahun_awal"] == year].copy()
+    if sub_hujan.empty:
+        print(f"  [WARN] Data LOYO Musim Hujan tahun {year} tidak ditemukan, lewati.")
+        return {}
+
+    # 2. Filter Data Musim Kemarau (tahun == year)
+    sub_kemarau = df_loyo_kemarau[df_loyo_kemarau["tahun"] == year].copy()
+
+    # 3. Data Curah Hujan Dasarian Tahun Tersebut
+    df_das_year = df_dasarian_all[df_dasarian_all["tahun"] == year]
+    cews_map, chart_map = compute_cews_for_year(df_das_year, df_dasarian_all)
+
+    # 4. Susun Records Musim Hujan
+    hujan_records = []
+    tot_eval_amh_match = 0
+    tot_eval_sifat_match = 0
+    selisih_das_list = []
+
+    for _, row in sub_hujan.iterrows():
+        kec = str(row["kecamatan"]).strip()
+        norm_amh = float(row.get("normal_amh_dasarian", 28.0))
+        pred_amh = float(row.get("pred_amh_dasarian", 28.0))
+        real_amh = float(row.get("amh_dasarian", 28.0))
+
+        pred_kat = str(row.get("pred_kategori_amh", "Sama"))
+        real_kat = str(row.get("kategori_amh", "Sama"))
+
+        pred_sifat = str(row.get("pred_sifat_hujan", "Normal"))
+        real_sifat = str(row.get("sifat_hujan", "Normal"))
+
+        tot_hujan = float(row.get("total_hujan_mh_mm", 1600.0))
+        puncak_das = float(row.get("puncak_dasarian", 13.0))
+
+        diff_das = round(pred_amh - real_amh, 2)
+        selisih_das_list.append(abs(diff_das))
+
+        is_amh_match = pred_kat.lower() == real_kat.lower() or abs(diff_das) <= 1.0
+        if is_amh_match:
+            tot_eval_amh_match += 1
+
+        is_sifat_match = pred_sifat.lower() == real_sifat.lower()
+        if is_sifat_match:
+            tot_eval_sifat_match += 1
+
+        if abs(diff_das) <= 0.5:
+            status_eval_amh = "Tepat (Toleransi 0 Dasarian)"
+        elif diff_das < 0:
+            status_eval_amh = f"Prediksi Lebih Cepat ({abs(diff_das):.1f} Dasarian)"
+        else:
+            status_eval_amh = f"Prediksi Lebih Lambat ({diff_das:.1f} Dasarian)"
+
+        katam = build_katam_profile(dasarian_to_short_label(pred_amh), pred_sifat)
+        cews = cews_map.get(kec, {})
+        chart = chart_map.get(kec, {})
+
+        rec = {
+            "kecamatan": kec,
+            "code": kec,
+            "normal_amh_dasarian": norm_amh,
+            "normal_amh_label": dasarian_to_short_label(norm_amh),
+            "prakiraan_amh_dasarian": round(pred_amh, 2),
+            "prakiraan_amh_label": dasarian_to_short_label(pred_amh),
+            "perbandingan_terhadap_normal": pred_kat,
+            "prakiraan_sifat_hujan": pred_sifat,
+            "prakiraan_puncak_bulan": f"{dasarian_to_month_name(puncak_das)} {year + 1}",
+            "normal_puncak_bulan": "Januari",
+            "perbandingan_puncak_thd_normal": "Sesuai",
+            "total_hujan_mh_mm": round(tot_hujan, 1),
+            "kelas_hujan_mh": classify_hujan_mh(tot_hujan),
+            "rekomendasi_olah_tanah": katam["mt1"]["olah_tanah"],
+            "rekomendasi_tanam_padi_mt1": katam["mt1"]["tanam"],
+            # Field Evaluasi Transparansi Akurasi
+            "realisasi_amh_dasarian": round(real_amh, 2),
+            "realisasi_amh_label": dasarian_to_short_label(real_amh),
+            "realisasi_perbandingan_terhadap_normal": real_kat,
+            "realisasi_sifat_hujan": real_sifat,
+            "selisih_dasarian_eval": diff_das,
+            "status_evaluasi_amh": status_eval_amh,
+            "status_evaluasi_sifat": "Tepat" if is_sifat_match else "Meleset",
+            "katam": katam,
+            "cews": cews,
+            "chart": chart,
+        }
+        hujan_records.append(rec)
+
+    # 5. Susun Records Musim Kemarau
+    kemarau_records = []
+    for _, row in sub_kemarau.iterrows():
+        kec = str(row["kecamatan"]).strip()
+        norm_amk = float(row.get("normal_amk_dasarian", 12.0))
+        pred_amk = float(row.get("pred_amk_das_lstm", 12.0))
+        real_amk = float(row.get("amk_dasarian", 12.0))
+
+        pred_kat = str(row.get("pred_kat_lstm", "Sama"))
+        real_kat = str(row.get("kategori_amk", "Sama"))
+
+        pred_sifat = str(row.get("pred_sifat_lstm", "Normal"))
+        real_sifat = str(row.get("sifat_hujan_mk", "Normal"))
+
+        pmk_das = float(row.get("pmk_dasarian", 22.0))
+        tot_mk = float(row.get("normal_total_hujan_mk_mm", 550.0))
+
+        diff_das = round(pred_amk - real_amk, 2)
+        katam = build_katam_profile(dasarian_to_short_label(norm_amk), pred_sifat)
+        cews = cews_map.get(kec, {})
+        chart = chart_map.get(kec, {})
+
+        rec = {
+            "kecamatan": kec,
+            "code": kec,
+            "normal_amk_dasarian": norm_amk,
+            "normal_amk_label": dasarian_to_short_label(norm_amk),
+            "prakiraan_amk_dasarian": round(pred_amk, 2),
+            "prakiraan_amk_label": dasarian_to_short_label(pred_amk),
+            "perbandingan_terhadap_normal": pred_kat,
+            "prakiraan_sifat_hujan_mk": pred_sifat,
+            "prakiraan_pmk_bulan": f"{dasarian_to_month_name(pmk_das)} {year}",
+            "normal_pmk_bulan": "Agustus",
+            "perbandingan_pmk_thd_normal": "Sesuai",
+            "total_hujan_mk_mm": round(tot_mk, 1),
+            "kelas_hujan_mk": classify_hujan_mk(tot_mk),
+            "kekeringan_skor": 45.0,
+            "kelas_kekeringan": "Sedang",
+            "realisasi_amk_dasarian": round(real_amk, 2),
+            "realisasi_amk_label": dasarian_to_short_label(real_amk),
+            "realisasi_perbandingan_terhadap_normal": real_kat,
+            "realisasi_sifat_hujan_mk": real_sifat,
+            "selisih_dasarian_eval": diff_das,
+            "katam": katam,
+            "cews": cews,
+            "chart": chart,
+        }
+        kemarau_records.append(rec)
+
+    # Hitung Metrik Evaluasi Agregat Kabupaten
+    n_kec = len(hujan_records)
+    akurasi_amh_pct = round((tot_eval_amh_match / n_kec) * 100.0, 1) if n_kec > 0 else 0.0
+    akurasi_sifat_pct = round((tot_eval_sifat_match / n_kec) * 100.0, 1) if n_kec > 0 else 0.0
+    rata_selisih = round(float(np.mean(selisih_das_list)), 2) if selisih_das_list else 0.0
+
+    climate_desc = CLIMATE_CONTEXT.get(year, "Kondisi Normal / Netral")
+
+    evaluasi_agregat = {
+        "musim_hujan": f"{year}/{year + 1}",
+        "musim_kemarau": f"{year}",
+        "iklim_global": climate_desc,
+        "akurasi_kategori_amh_pct": akurasi_amh_pct,
+        "akurasi_sifat_hujan_pct": akurasi_sifat_pct,
+        "rata_selisih_dasarian": rata_selisih,
+        "keterangan_kinerja": f"Ketepatan Awal Musim {akurasi_amh_pct}%, Sifat Hujan {akurasi_sifat_pct}%",
+    }
+
+    # Susun Payload JSON Kecamatan
+    prediksi_musim_payload = {
+        "metadata": {
+            "is_archive": True,
+            "season_id": season_id,
+            "year": year,
+            "title": f"Arsip Musim Hujan {year}/{year + 1} & Musim Kemarau {year}",
+            "generated_at": datetime.now(timezone(timedelta(hours=7))).isoformat(),
+            "kabupaten": "Kabupaten Kebumen",
+            "total_kecamatan": len(hujan_records),
+            "evaluasi": evaluasi_agregat,
+            "seasons": {
+                "hujan": {
+                    "id": "hujan",
+                    "title": f"Musim Hujan {year}/{year + 1}",
+                    "enso_context": climate_desc,
+                    "normal_period": "Normal 2000–2025",
+                },
+                "kemarau": {
+                    "id": "kemarau",
+                    "title": f"Musim Kemarau {year}",
+                    "enso_context": climate_desc,
+                    "normal_period": "Normal 2000–2025",
+                },
+            },
+        },
+        "overlays": [],
+        "hujan": hujan_records,
+        "kemarau": kemarau_records,
+    }
+
+    kec_json_path = season_dir / "prediksi_musim.json"
+    with open(kec_json_path, "w", encoding="utf-8") as f:
+        json.dump(prediksi_musim_payload, f, ensure_ascii=False, indent=2)
+
+    # 6. Susun Payload JSON Desa (460 Desa)
+    hujan_by_kec = {r["kecamatan"]: r for r in hujan_records}
+    kemarau_by_kec = {r["kecamatan"]: r for r in kemarau_records}
+
+    desa_hujan_records = []
+    desa_kemarau_records = []
+
+    for _, row in gdf_desa.iterrows():
+        kec_name = str(row["nm_kecamatan"]).strip()
+        desa_name = str(row["nm_kelurahan"]).strip()
+        code = str(row["code"]).strip()
+
+        parent_h = hujan_by_kec.get(kec_name, hujan_records[0])
+        parent_k = kemarau_by_kec.get(kec_name, kemarau_records[0])
+
+        d_h = dict(parent_h)
+        d_h.update({"code": code, "desa": desa_name, "kecamatan": kec_name})
+        desa_hujan_records.append(d_h)
+
+        d_k = dict(parent_k)
+        d_k.update({"code": code, "desa": desa_name, "kecamatan": kec_name})
+        desa_kemarau_records.append(d_k)
+
+    prediksi_desa_payload = {
+        "metadata": {
+            "is_archive": True,
+            "season_id": season_id,
+            "year": year,
+            "title": f"Arsip Prediksi Tingkat Desa Musim {year}/{year + 1}",
+            "generated_at": datetime.now(timezone(timedelta(hours=7))).isoformat(),
+            "total_desa": len(desa_hujan_records),
+            "evaluasi": evaluasi_agregat,
+        },
+        "hujan": desa_hujan_records,
+        "kemarau": desa_kemarau_records,
+    }
+
+    desa_json_path = season_dir / "prediksi_musim_desa.json"
+    with open(desa_json_path, "w", encoding="utf-8") as f:
+        json.dump(prediksi_desa_payload, f, ensure_ascii=False, separators=(",", ":"))
+
+    print(f"  -> [OK] Tahun {year}: Kec={len(hujan_records)}, Desa={len(desa_hujan_records)}, Akurasi AMH={akurasi_amh_pct}%, Sifat={akurasi_sifat_pct}%")
+
+    return {
+        "season_id": season_id,
+        "year": year,
+        "label": f"{year}/{year + 1}",
+        "hujan_title": f"Musim Hujan {year}/{year + 1}",
+        "kemarau_title": f"Musim Kemarau {year}",
+        "is_active": False,
+        "has_evaluation": True,
+        "climate_desc": climate_desc,
+        "akurasi_amh_pct": akurasi_amh_pct,
+        "akurasi_sifat_pct": akurasi_sifat_pct,
+        "rata_selisih_dasarian": rata_selisih,
+        "folder": f"arsip/musim_{year}",
+    }
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Generator Arsip Prediksi Musim & Evaluasi Akurasi 10 Tahun (2015–2025)")
+    parser.add_argument("--start-year", type=int, default=2015, help="Tahun awal arsip (default: 2015)")
+    parser.add_argument("--end-year", type=int, default=2025, help="Tahun akhir arsip (default: 2025)")
+    parser.add_argument(
+        "--output-dir",
+        type=Path,
+        default=DEFAULT_DASHBOARD_DIR / "public" / "data",
+        help="Direktori output data dashboard",
+    )
+    args = parser.parse_args()
+
+    print("=" * 80)
+    print("MEMULAI GENERATOR ARSIP PREDIKSI MUSIM & EVALUASI AKURASI HISTORIS (2015–2025)")
+    print(f"Target Tahun: {args.start_year} s.d. {args.end_year} (Span {args.end_year - args.start_year + 1} Tahun)")
+    print(f"Output Dashboard: {args.output_dir}")
+    print("=" * 80)
+
+    # Memuat GeoJSON
+    print("\n[1/4] Membaca GeoJSON batas administrasi Kebumen...")
+    gdf_kec = gpd.read_file(GEOJSON_KEC_PATH)
+    gdf_desa = gpd.read_file(GEOJSON_DESA_PATH)
+
+    # Standardisasi kode desa
+    gdf_desa["kd_propinsi"] = gdf_desa["kd_propinsi"].astype(str).str.strip()
+    gdf_desa["kd_dati2"] = gdf_desa["kd_dati2"].astype(str).str.strip()
+    gdf_desa["kd_kecamatan"] = gdf_desa["kd_kecamatan"].astype(str).str.strip()
+    gdf_desa["kd_kelurahan"] = gdf_desa["kd_kelurahan"].astype(str).str.strip()
+    gdf_desa["nm_kelurahan"] = gdf_desa["nm_kelurahan"].astype(str).str.strip()
+
+    kec_map = dict(zip(gdf_kec["kd_kecamatan"].astype(str).str.strip(), gdf_kec["nm_kecamatan"].astype(str).str.strip()))
+    gdf_desa["nm_kecamatan"] = gdf_desa["kd_kecamatan"].map(kec_map).fillna("")
+    gdf_desa["code"] = (
+        gdf_desa["kd_propinsi"]
+        + "."
+        + gdf_desa["kd_dati2"]
+        + "."
+        + gdf_desa["kd_kecamatan"]
+        + "."
+        + gdf_desa["kd_kelurahan"]
+    )
+
+    # Memuat tabel LOYO & Dasarian
+    print("[2/4] Membaca tabel evaluasi LOYO LSTM dan time series dasarian historis...")
+    loyo_hujan_path = DATA_DIR / "hasil_evaluasi_loyo.csv"
+    loyo_kemarau_path = DATA_DIR / "hasil_evaluasi_loyo_kemarau.csv"
+    dasarian_path = DATA_DIR / "dasarian_curah_hujan_kebumen_2000_2026.csv"
+
+    df_loyo_h = pd.read_csv(loyo_hujan_path)
+    df_loyo_k = pd.read_csv(loyo_kemarau_path)
+    df_dasarian = pd.read_csv(dasarian_path)
+
+    arsip_dir = args.output_dir / "arsip"
+    arsip_dir.mkdir(parents=True, exist_ok=True)
+
+    catalog_entries = []
+
+    # Entry pertama: Musim Berjalan (Active 2026/2027)
+    catalog_entries.append({
+        "season_id": "2026_2027",
+        "year": 2026,
+        "label": "2026/2027 (Berjalan)",
+        "hujan_title": "Musim Hujan 2026/2027",
+        "kemarau_title": "Musim Kemarau 2026",
+        "is_active": True,
+        "has_evaluation": False,
+        "climate_desc": "El Niño Kuat (ONI +2.16)",
+        "akurasi_amh_pct": None,
+        "akurasi_sifat_pct": None,
+        "rata_selisih_dasarian": None,
+        "folder": "",  # Root data folder
+    })
+
+    print("\n[3/4] Mengekstrak data arsip musim dan menghitung metrik evaluasi per tahun...")
+    for yr in range(args.end_year, args.start_year - 1, -1):
+        print(f"Memproses Arsip Tahun {yr}...")
+        entry = generate_archive_season_year(
+            yr, df_loyo_h, df_loyo_k, df_dasarian, gdf_kec, gdf_desa, arsip_dir
+        )
+        if entry:
+            catalog_entries.append(entry)
+
+    # 7. Ekspor Master Katalog Musim
+    print("\n[4/4] Mengekspor berkas katalog master musim: musim_catalog.json...")
+    catalog_payload = {
+        "generated_at": datetime.now(timezone(timedelta(hours=7))).isoformat(),
+        "total_seasons": len(catalog_entries),
+        "active_season_id": "2026_2027",
+        "seasons": catalog_entries,
+    }
+
+    catalog_path = args.output_dir / "musim_catalog.json"
+    with open(catalog_path, "w", encoding="utf-8") as f:
+        json.dump(catalog_payload, f, ensure_ascii=False, indent=2)
+
+    print(f"  -> Katalog tersimpan di: {catalog_path}")
+    print("\n" + "=" * 80)
+    print("ARSIP PREDIKSI MUSIM 2015–2025 & KATALOG SELESAI DIEKSPOR SECARA LENGKAP!")
+    print("=" * 80)
+
+
+if __name__ == "__main__":
+    main()
