@@ -658,7 +658,7 @@ def sync_to_dashboard(dashboard_dir: Path = DEFAULT_DASHBOARD_DIR) -> dict:
         {
             "src": tif_amh,
             "dst": overlays_dir / "amh_dasarian_250m.png",
-            "cmap": "RdYlGn_r",
+            "cmap": "YlGnBu_r",
             "id": "amh_250m",
             "season": "hujan",
             "label": "Awal Musim (AMH) 250m",
@@ -668,7 +668,7 @@ def sync_to_dashboard(dashboard_dir: Path = DEFAULT_DASHBOARD_DIR) -> dict:
         {
             "src": tif_total_mk,
             "dst": overlays_dir / "total_hujan_mk_250m.png",
-            "cmap": "YlGnBu",
+            "cmap": "YlGn",
             "id": "total_hujan_mk",
             "season": "kemarau",
             "label": "Total Hujan Kemarau 250m",
@@ -678,7 +678,7 @@ def sync_to_dashboard(dashboard_dir: Path = DEFAULT_DASHBOARD_DIR) -> dict:
         {
             "src": tif_amk,
             "dst": overlays_dir / "amk_dasarian_250m.png",
-            "cmap": "YlOrRd_r",
+            "cmap": "YlOrRd",
             "id": "amk_250m",
             "season": "kemarau",
             "label": "Awal Kemarau (AMK) 250m",

@@ -367,6 +367,8 @@ def generate_archive_season_year(
             "prakiraan_puncak_bulan": f"{dasarian_to_month_name(puncak_das)} {year + 1}",
             "normal_puncak_bulan": "Januari",
             "perbandingan_puncak_thd_normal": "Sesuai",
+            "prakiraan_puncak_dasarian": round(puncak_das, 1),
+            "prakiraan_puncak_label": dasarian_to_short_label(puncak_das),
             "total_hujan_mh_mm": round(tot_hujan, 1),
             "kelas_hujan_mh": classify_hujan_mh(tot_hujan),
             "rekomendasi_olah_tanah": katam["mt1"]["olah_tanah"],
@@ -376,6 +378,7 @@ def generate_archive_season_year(
             "realisasi_amh_label": dasarian_to_short_label(real_amh),
             "realisasi_perbandingan_terhadap_normal": real_kat,
             "realisasi_sifat_hujan": real_sifat,
+            "realisasi_puncak_bulan": "Januari",
             "selisih_dasarian_eval": diff_das,
             "status_evaluasi_amh": status_eval_amh,
             "status_evaluasi_sifat": "Tepat" if is_sifat_match else "Meleset",
@@ -387,6 +390,9 @@ def generate_archive_season_year(
 
     # 5. Susun Records Musim Kemarau
     kemarau_records = []
+    tot_eval_amk_match = 0
+    selisih_das_k_list = []
+
     for _, row in sub_kemarau.iterrows():
         kec = str(row["kecamatan"]).strip()
         norm_amk = float(row.get("normal_amk_dasarian", 12.0))
@@ -403,6 +409,21 @@ def generate_archive_season_year(
         tot_mk = float(row.get("normal_total_hujan_mk_mm", 550.0))
 
         diff_das = round(pred_amk - real_amk, 2)
+        selisih_das_k_list.append(abs(diff_das))
+
+        is_amk_match = pred_kat.lower() == real_kat.lower()
+        if is_amk_match:
+            tot_eval_amk_match += 1
+
+        is_sifat_k_match = pred_sifat.lower() == real_sifat.lower()
+
+        if abs(diff_das) <= 0.5:
+            status_eval_amk = "Tepat (Toleransi 0 Dasarian)"
+        elif diff_das < 0:
+            status_eval_amk = f"Prediksi Lebih Cepat ({abs(diff_das):.1f} Dasarian)"
+        else:
+            status_eval_amk = f"Prediksi Lebih Lambat ({diff_das:.1f} Dasarian)"
+
         katam = build_katam_profile(dasarian_to_short_label(norm_amk), pred_sifat)
         cews = cews_map.get(kec, {})
         chart = chart_map.get(kec, {})
@@ -419,15 +440,23 @@ def generate_archive_season_year(
             "prakiraan_pmk_bulan": f"{dasarian_to_month_name(pmk_das)} {year}",
             "normal_pmk_bulan": "Agustus",
             "perbandingan_pmk_thd_normal": "Sesuai",
+            "prakiraan_pmk_dasarian": round(pmk_das, 1),
+            "prakiraan_pmk_label": dasarian_to_short_label(pmk_das),
             "total_hujan_mk_mm": round(tot_mk, 1),
             "kelas_hujan_mk": classify_hujan_mk(tot_mk),
             "kekeringan_skor": 45.0,
-            "kelas_kekeringan": "Sedang",
+            "kelas_kekeringan": "Sedang (< 60)",
+            "rekomendasi_keringkan_sawah_mt2": katam["mt2"]["panen"],
+            "rekomendasi_tanam_palawija_mt3": katam["mt3"]["tanam"],
             "realisasi_amk_dasarian": round(real_amk, 2),
             "realisasi_amk_label": dasarian_to_short_label(real_amk),
             "realisasi_perbandingan_terhadap_normal": real_kat,
+            "realisasi_sifat_hujan": real_sifat,
             "realisasi_sifat_hujan_mk": real_sifat,
+            "realisasi_pmk_bulan": "Agustus",
             "selisih_dasarian_eval": diff_das,
+            "status_evaluasi_amk": status_eval_amk,
+            "status_evaluasi_sifat": "Tepat" if is_sifat_k_match else "Meleset",
             "katam": katam,
             "cews": cews,
             "chart": chart,
@@ -437,6 +466,7 @@ def generate_archive_season_year(
     # Hitung Metrik Evaluasi Agregat Kabupaten
     n_kec = len(hujan_records)
     akurasi_amh_pct = round((tot_eval_amh_match / n_kec) * 100.0, 1) if n_kec > 0 else 0.0
+    akurasi_amk_pct = round((tot_eval_amk_match / len(kemarau_records)) * 100.0, 1) if kemarau_records else 0.0
     akurasi_sifat_pct = round((tot_eval_sifat_match / n_kec) * 100.0, 1) if n_kec > 0 else 0.0
     rata_selisih = round(float(np.mean(selisih_das_list)), 2) if selisih_das_list else 0.0
 
@@ -447,6 +477,7 @@ def generate_archive_season_year(
         "musim_kemarau": f"{year}",
         "iklim_global": climate_desc,
         "akurasi_kategori_amh_pct": akurasi_amh_pct,
+        "akurasi_kategori_amk_pct": akurasi_amk_pct,
         "akurasi_sifat_hujan_pct": akurasi_sifat_pct,
         "rata_selisih_dasarian": rata_selisih,
         "keterangan_kinerja": f"Ketepatan Awal Musim {akurasi_amh_pct}%, Sifat Hujan {akurasi_sifat_pct}%",
@@ -615,6 +646,7 @@ def generate_archive_season_year(
         "has_evaluation": True,
         "climate_desc": climate_desc,
         "akurasi_amh_pct": akurasi_amh_pct,
+        "akurasi_amk_pct": akurasi_amk_pct,
         "akurasi_sifat_pct": akurasi_sifat_pct,
         "rata_selisih_dasarian": rata_selisih,
         "folder": f"arsip/musim_{year}",
@@ -692,6 +724,7 @@ def main():
         "has_evaluation": False,
         "climate_desc": "El Niño Kuat (ONI +2.16)",
         "akurasi_amh_pct": None,
+        "akurasi_amk_pct": None,
         "akurasi_sifat_pct": None,
         "rata_selisih_dasarian": None,
         "folder": "",  # Root data folder
