@@ -516,7 +516,7 @@ def generate_archive_season_year(
                 temp_amh,
                 dst_amh_png,
                 "YlGnBu_r",
-                f"amh_dasarian_250m_{year}",
+                "amh_250m",
                 "hujan",
                 f"Awal Musim Hujan 250m ({year}/{year+1})",
                 "Dasarian",
@@ -545,7 +545,7 @@ def generate_archive_season_year(
                 temp_amk,
                 dst_amk_png,
                 "YlOrRd",
-                f"amk_dasarian_250m_{year}",
+                "amk_250m",
                 "kemarau",
                 f"Awal Musim Kemarau 250m ({year})",
                 "Dasarian",
@@ -557,6 +557,60 @@ def generate_archive_season_year(
                 temp_amk.unlink()
         except Exception as e_amk:
             print(f"  [WARN] Gagal render overlay AMK {year}: {e_amk}")
+
+        # 3. Downscale Total Curah Hujan MH 250m
+        try:
+            tot_mh_grid, _ = downscale_variable_multimodel(
+                gdf_h, "total_hujan_mh_mm", mesh, f"Total_MH_{year}", apply_mass_conservation=False
+            )
+            temp_tot_mh = season_dir / f"temp_tot_mh_{year}.tif"
+            with rasterio.open(temp_tot_mh, "w", **meta_tif) as dst:
+                dst.write(np.nan_to_num(tot_mh_grid, nan=-9999.0).astype(np.float32), 1)
+
+            dst_tot_mh_png = overlay_dir / "total_hujan_mh_250m.png"
+            tot_mh_meta = render_raster_overlay_png(
+                temp_tot_mh,
+                dst_tot_mh_png,
+                "YlGnBu",
+                "total_hujan_mh",
+                "hujan",
+                f"Total Curah Hujan MH 250m ({year}/{year+1})",
+                "mm",
+                is_dasarian=False,
+            )
+            tot_mh_meta["url"] = f"/data/arsip/musim_{year}/overlays/total_hujan_mh_250m.png"
+            overlays_list.append(tot_mh_meta)
+            if temp_tot_mh.exists():
+                temp_tot_mh.unlink()
+        except Exception as e_tot_mh:
+            print(f"  [WARN] Gagal render overlay Total MH {year}: {e_tot_mh}")
+
+        # 4. Downscale Total Curah Hujan MK 250m
+        try:
+            tot_mk_grid, _ = downscale_variable_multimodel(
+                gdf_k, "total_hujan_mk_mm", mesh, f"Total_MK_{year}", apply_mass_conservation=False
+            )
+            temp_tot_mk = season_dir / f"temp_tot_mk_{year}.tif"
+            with rasterio.open(temp_tot_mk, "w", **meta_tif) as dst:
+                dst.write(np.nan_to_num(tot_mk_grid, nan=-9999.0).astype(np.float32), 1)
+
+            dst_tot_mk_png = overlay_dir / "total_hujan_mk_250m.png"
+            tot_mk_meta = render_raster_overlay_png(
+                temp_tot_mk,
+                dst_tot_mk_png,
+                "YlGn",
+                "total_hujan_mk",
+                "kemarau",
+                f"Total Hujan Kemarau 250m ({year})",
+                "mm",
+                is_dasarian=False,
+            )
+            tot_mk_meta["url"] = f"/data/arsip/musim_{year}/overlays/total_hujan_mk_250m.png"
+            overlays_list.append(tot_mk_meta)
+            if temp_tot_mk.exists():
+                temp_tot_mk.unlink()
+        except Exception as e_tot_mk:
+            print(f"  [WARN] Gagal render overlay Total MK {year}: {e_tot_mk}")
 
     # Susun Payload JSON Kecamatan
     prediksi_musim_payload = {
