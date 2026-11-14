@@ -19,7 +19,7 @@ from shapely import force_2d
 BASE_DIR = Path(r"d:\Github\Projek_Downscale")
 DATA_DIR = BASE_DIR / "prediksi_musim" / "data"
 PLOTS_DIR = BASE_DIR / "prediksi_musim" / "prediksi_musim_kemarau"
-GEOJSON_PATH = BASE_DIR / "33.05_kecamatan.geojson"
+GEOJSON_PATH = BASE_DIR / "kebumen_33.05_batas_kecamatan.geojson"
 
 PLOTS_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -61,6 +61,10 @@ COLOR_PALETTE_KEMARAU = {
 def load_geodata_kemarau():
     """Memuat batas administrasi kecamatan dan menggabungkan dengan hasil prediksi kemarau."""
     gdf = gpd.read_file(GEOJSON_PATH)
+    if 'nm_kecamatan' not in gdf.columns and 'name' in gdf.columns:
+        gdf['nm_kecamatan'] = gdf['name'].astype(str).str.strip()
+    else:
+        gdf['nm_kecamatan'] = gdf['nm_kecamatan'].astype(str).str.strip()
     gdf['geometry'] = force_2d(gdf['geometry'])
     
     norm_file = DATA_DIR / "normal_klimatologi_amk_kebumen.csv"

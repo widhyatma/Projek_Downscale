@@ -8,10 +8,10 @@ Dokumen ini merupakan **Data Contract & Style Guide resmi** untuk menjamin konsi
 ## 1. Matriks Variabel & Metadata yang Ditampilkan
 
 ### A. Dimensi Wilayah Administrasi (Hierarki Ganda)
-| Entitas Wilayah | Jumlah Unit | Sumber Geometri | Identifikasi Unik | Format Ekspor |
-| :--- | :---: | :--- | :--- | :--- |
-| **Kecamatan** | 26 | `kebumen_kecamatan.json` | `kecamatan` (Nama) | GeoJSON Polygon WGS84 |
-| **Desa / Kelurahan** | 460 | `kebumen_desa.json` | `code` (`kd_prop.kd_kab.kd_kec.kd_desa`) | GeoJSON Polygon WGS84 |
+| Entitas Wilayah | Jumlah Unit | Sumber Master Data | Berkas Publik Dashboard | Identifikasi Unik | Format Ekspor |
+| :--- | :---: | :--- | :--- | :--- | :--- |
+| **Kecamatan** | 26 | `kebumen_33.05_batas_kecamatan.geojson` | `kebumen_kecamatan.json` | `kecamatan` / `code` (Nama & Kode Kemendagri `33.05.xx`) | GeoJSON Polygon WGS84 |
+| **Desa / Kelurahan** | 460 | `kebumen_33.05_batas_desa.geojson` | `kebumen_desa.json` | `code` (Standar Kemendagri `33.05.xx.xxxx`) | GeoJSON Polygon WGS84 |
 
 ---
 

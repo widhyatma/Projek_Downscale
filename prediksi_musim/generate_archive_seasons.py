@@ -29,8 +29,8 @@ from sync_to_dashboard import render_raster_overlay_png
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "prediksi_musim" / "data"
-GEOJSON_KEC_PATH = BASE_DIR / "33.05_kecamatan.geojson"
-GEOJSON_DESA_PATH = BASE_DIR / "33.05_kelurahan.geojson"
+GEOJSON_KEC_PATH = BASE_DIR / "kebumen_33.05_batas_kecamatan.geojson"
+GEOJSON_DESA_PATH = BASE_DIR / "kebumen_33.05_batas_desa.geojson"
 DEFAULT_DASHBOARD_DIR = Path(r"D:\Github\Dashboard_Jerukagung-Meteorologi")
 
 # Konteks Klimatologi Global (ENSO & IOD) 2015–2025
@@ -924,24 +924,42 @@ def main():
     gdf_kec = gpd.read_file(GEOJSON_KEC_PATH)
     gdf_desa = gpd.read_file(GEOJSON_DESA_PATH)
 
-    # Standardisasi kode desa
-    gdf_desa["kd_propinsi"] = gdf_desa["kd_propinsi"].astype(str).str.strip()
-    gdf_desa["kd_dati2"] = gdf_desa["kd_dati2"].astype(str).str.strip()
-    gdf_desa["kd_kecamatan"] = gdf_desa["kd_kecamatan"].astype(str).str.strip()
-    gdf_desa["kd_kelurahan"] = gdf_desa["kd_kelurahan"].astype(str).str.strip()
-    gdf_desa["nm_kelurahan"] = gdf_desa["nm_kelurahan"].astype(str).str.strip()
+    # Standardisasi nama kecamatan & kode desa
+    if "nm_kecamatan" not in gdf_kec.columns and "name" in gdf_kec.columns:
+        gdf_kec["nm_kecamatan"] = gdf_kec["name"].astype(str).str.strip()
+    else:
+        gdf_kec["nm_kecamatan"] = gdf_kec["nm_kecamatan"].astype(str).str.strip()
 
-    kec_map = dict(zip(gdf_kec["kd_kecamatan"].astype(str).str.strip(), gdf_kec["nm_kecamatan"].astype(str).str.strip()))
-    gdf_desa["nm_kecamatan"] = gdf_desa["kd_kecamatan"].map(kec_map).fillna("")
-    gdf_desa["code"] = (
-        gdf_desa["kd_propinsi"]
-        + "."
-        + gdf_desa["kd_dati2"]
-        + "."
-        + gdf_desa["kd_kecamatan"]
-        + "."
-        + gdf_desa["kd_kelurahan"]
+    code_col = "code" if "code" in gdf_kec.columns else "kd_kecamatan"
+    kec_map = dict(zip(gdf_kec[code_col].astype(str).str.strip(), gdf_kec["nm_kecamatan"]))
+
+    desa_name = (
+        gdf_desa["name"].astype(str).str.strip()
+        if "name" in gdf_desa.columns
+        else gdf_desa["nm_kelurahan"].astype(str).str.strip()
     )
+    gdf_desa["nm_kelurahan"] = desa_name
+    gdf_desa["desa"] = desa_name
+
+    if "parent_code" in gdf_desa.columns:
+        gdf_desa["parent_code"] = gdf_desa["parent_code"].astype(str).str.strip()
+        gdf_desa["nm_kecamatan"] = gdf_desa["parent_code"].map(kec_map).fillna("")
+        gdf_desa["code"] = gdf_desa["code"].astype(str).str.strip()
+    else:
+        gdf_desa["kd_propinsi"] = gdf_desa["kd_propinsi"].astype(str).str.strip()
+        gdf_desa["kd_dati2"] = gdf_desa["kd_dati2"].astype(str).str.strip()
+        gdf_desa["kd_kecamatan"] = gdf_desa["kd_kecamatan"].astype(str).str.strip()
+        gdf_desa["kd_kelurahan"] = gdf_desa["kd_kelurahan"].astype(str).str.strip()
+        gdf_desa["nm_kecamatan"] = gdf_desa["kd_kecamatan"].map(kec_map).fillna("")
+        gdf_desa["code"] = (
+            gdf_desa["kd_propinsi"]
+            + "."
+            + gdf_desa["kd_dati2"]
+            + "."
+            + gdf_desa["kd_kecamatan"]
+            + "."
+            + gdf_desa["kd_kelurahan"]
+        )
 
     # Memuat tabel LOYO & Dasarian
     print("[2/4] Membaca tabel evaluasi LOYO LSTM dan time series dasarian historis...")

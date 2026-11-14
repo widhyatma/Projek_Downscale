@@ -14,7 +14,7 @@ from shapely import force_2d
 
 BASE_DIR = Path(r"d:\Github\Projek_Downscale")
 DATA_DIR = BASE_DIR / "prediksi_musim" / "data"
-GEOJSON_PATH = BASE_DIR / "33.05_kecamatan.geojson"
+GEOJSON_PATH = BASE_DIR / "kebumen_33.05_batas_kecamatan.geojson"
 
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 

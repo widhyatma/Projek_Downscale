@@ -20,7 +20,7 @@ BASE_DIR = Path(r"d:\Github\Projek_Downscale")
 DATA_DIR = BASE_DIR / "prediksi_musim" / "data"
 PLOTS_DIR = BASE_DIR / "prediksi_musim" / "prediksi_musim_hujan"
 PLOTS_DIR_LEGACY = BASE_DIR / "prediksi_musim" / "plots_16_9"
-GEOJSON_PATH = BASE_DIR / "33.05_kecamatan.geojson"
+GEOJSON_PATH = BASE_DIR / "kebumen_33.05_batas_kecamatan.geojson"
 
 PLOTS_DIR.mkdir(parents=True, exist_ok=True)
 PLOTS_DIR_LEGACY.mkdir(parents=True, exist_ok=True)
@@ -56,7 +56,10 @@ COLOR_PALETTE = {
 def load_geodata():
     """Memuat batas administrasi kecamatan dan menggabungkan dengan hasil prediksi."""
     gdf = gpd.read_file(GEOJSON_PATH)
-    # Konversi 2D untuk keamanan
+    if 'nm_kecamatan' not in gdf.columns and 'name' in gdf.columns:
+        gdf['nm_kecamatan'] = gdf['name'].astype(str).str.strip()
+    else:
+        gdf['nm_kecamatan'] = gdf['nm_kecamatan'].astype(str).str.strip()
     gdf['geometry'] = force_2d(gdf['geometry'])
     
     df_norm = pd.read_csv(DATA_DIR / "normal_klimatologi_amh_kebumen.csv")
@@ -473,6 +476,10 @@ def plot_peta_10_komparasi_klimatologi_multi_sensor():
         return
         
     gdf = gpd.read_file(GEOJSON_PATH)
+    if 'nm_kecamatan' not in gdf.columns and 'name' in gdf.columns:
+        gdf['nm_kecamatan'] = gdf['name'].astype(str).str.strip()
+    else:
+        gdf['nm_kecamatan'] = gdf['nm_kecamatan'].astype(str).str.strip()
     gdf['geometry'] = force_2d(gdf['geometry'])
     df_comp = pd.read_csv(comp_path)
     gdf_comp = gdf.merge(df_comp, left_on='nm_kecamatan', right_on='kecamatan')

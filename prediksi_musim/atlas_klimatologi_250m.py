@@ -22,7 +22,7 @@ BASE_DIR = Path(r"d:\Github\Projek_Downscale")
 DATA_DIR = BASE_DIR / "prediksi_musim" / "data"
 ATLAS_DIR = BASE_DIR / "prediksi_musim" / "atlas_normal_250m"
 DEM_PATH = BASE_DIR / "data" / "DEM_Topografi_Kebumen_30m.tif"
-GEOJSON_PATH = BASE_DIR / "33.05_kecamatan.geojson"
+GEOJSON_PATH = BASE_DIR / "kebumen_33.05_batas_kecamatan.geojson"
 
 ATLAS_DIR.mkdir(parents=True, exist_ok=True)
 PIXEL_SIZE_DEG = 0.00225

@@ -17,7 +17,7 @@ from shapely import force_2d
 
 BASE_DIR = Path(r"d:\Github\Projek_Downscale")
 DATA_DIR = BASE_DIR / "prediksi_musim" / "data"
-GEOJSON_PATH = BASE_DIR / "33.05_kecamatan.geojson"
+GEOJSON_PATH = BASE_DIR / "kebumen_33.05_batas_kecamatan.geojson"
 
 def get_dasarian_label(d_idx):
     d_round = int(round(d_idx))
@@ -35,6 +35,8 @@ def extract_sensor_dasarians(sensor_name, base_folder, file_pattern, multiplier=
     untuk 26 kecamatan di Kebumen selama 2000-2025.
     """
     gdf = gpd.read_file(GEOJSON_PATH)
+    if "nm_kecamatan" not in gdf.columns and "name" in gdf.columns:
+        gdf["nm_kecamatan"] = gdf["name"]
     gdf['geometry'] = force_2d(gdf['geometry'])
     centroids = gdf.geometry.centroid
     cents_x = xr.DataArray(centroids.x.values, dims="kecamatan", coords={"kecamatan": gdf['nm_kecamatan'].values})

@@ -47,7 +47,7 @@
     - **3-Panel Monthly Hyetograph:** Daily rainfall bars, cumulative rainfall line, and Max/Avg/Min temperature envelope.
     - **Hourly Temperature Boxplots:** 24-hour diurnal distribution per day.
     - **Daily Temperature Anomaly Heatmaps:** 31 days x 12 months matrix against DOY climatological baseline.
-    - **Spatial Multi-Variable Maps:** 4-panel grid with vector administrative boundaries (`33.05_kecamatan.geojson`).
+    - **Spatial Multi-Variable Maps:** 4-panel grid with vector administrative boundaries (`kebumen_33.05_batas_kecamatan.geojson`).
   - Automatically organize output figures into hierarchical subfolders per year (e.g. `plots_hyetograph_bulanan/<tahun>/`) with 300 DPI print quality.
 
 ## 7. Memory-Safe Multi-Year Batch Processing Architecture (Anti-OOM)

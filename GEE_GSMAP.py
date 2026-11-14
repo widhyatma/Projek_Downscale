@@ -413,7 +413,7 @@ def main():
     parser.add_argument("--end-month", type=int, default=12, help="Bulan akhir (default: 12)")
     parser.add_argument("--force", action="store_true", help="Paksa unduh ulang meskipun file lokal sudah lengkap")
     parser.add_argument("--output-dir", type=str, default=os.path.join(os.getcwd(), "data", "gsmap"), help="Folder basis output GSMaP")
-    parser.add_argument("--geojson", type=str, default="33.05_kecamatan.geojson", help="Path batas GeoJSON Kebumen")
+    parser.add_argument("--geojson", type=str, default="kebumen_33.05_batas_kecamatan.geojson", help="Path batas GeoJSON Kebumen")
     parser.add_argument("--service-account", type=str, default=None, help="Path file Service Account JSON GEE")
     parser.add_argument("--upload-kaggle", action="store_true", help="Unggah otomatis versi baru ke Kaggle Dataset via kagglehub")
     args = parser.parse_args()

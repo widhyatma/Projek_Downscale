@@ -19,16 +19,20 @@ from shapely import force_2d
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "prediksi_musim" / "data"
-GEOJSON_PATH = BASE_DIR / "33.05_kecamatan.geojson"
+GEOJSON_PATH = BASE_DIR / "kebumen_33.05_batas_kecamatan.geojson"
 CSV_PATH = DATA_DIR / "dasarian_curah_hujan_kebumen_2000_2026.csv"
 
 def get_kecamatan_centroids():
     gdf = gpd.read_file(GEOJSON_PATH)
+    if 'nm_kecamatan' not in gdf.columns and 'name' in gdf.columns:
+        gdf['nm_kecamatan'] = gdf['name'].astype(str).str.strip()
+    else:
+        gdf['nm_kecamatan'] = gdf['nm_kecamatan'].astype(str).str.strip()
     # Rule 12: Hitung centroid dalam koordinat metrik terproyeksi (UTM 49S / EPSG:32749)
     gdf_utm = gdf.to_crs("EPSG:32749")
     cents_utm = gdf_utm.geometry.centroid
     cents_geo = gpd.GeoSeries(cents_utm, crs="EPSG:32749").to_crs("EPSG:4326")
-    kec_names = gdf['nm_kecamatan'].astype(str).str.strip().tolist()
+    kec_names = gdf['nm_kecamatan'].tolist()
     return kec_names, cents_geo.x.values, cents_geo.y.values
 
 def update_dasarian_dataset():

@@ -27,25 +27,48 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "prediksi_musim" / "data"
 RASTER_HUJAN_DIR = BASE_DIR / "prediksi_musim" / "rasters_250m"
 RASTER_KEMARAU_DIR = BASE_DIR / "prediksi_musim" / "rasters_kemarau_250m"
-GEOJSON_KEC_PATH = BASE_DIR / "33.05_kecamatan.geojson"
-GEOJSON_DESA_PATH = BASE_DIR / "33.05_kelurahan.geojson"
+GEOJSON_KEC_PATH = BASE_DIR / "kebumen_33.05_batas_kecamatan.geojson"
+GEOJSON_DESA_PATH = BASE_DIR / "kebumen_33.05_batas_desa.geojson"
 DEFAULT_DASHBOARD_DIR = Path(r"D:\Github\Dashboard_Jerukagung-Meteorologi")
 
 
 def build_simplified_kecamatan_geojson(
-    src_geojson: Path, dst_geojson: Path, tolerance: float = 0.00035
+    src_geojson: Path, dst_geojson: Path, tolerance: float = 0.0002
 ) -> gpd.GeoDataFrame:
     """Memuat batas 26 kecamatan, menyederhanakan geometri, dan mengekspor GeoJSON."""
     gdf = gpd.read_file(src_geojson)
+    kec_name = (
+        gdf["name"].astype(str).str.strip()
+        if "name" in gdf.columns
+        else gdf["nm_kecamatan"].astype(str).str.strip()
+    )
+    gdf["nm_kecamatan"] = kec_name
+    gdf["name"] = kec_name
+    gdf["kecamatan"] = kec_name
+
     gdf_out = gdf.copy()
     gdf_out["geometry"] = force_2d(gdf_out["geometry"]).simplify(
         tolerance=tolerance, preserve_topology=True
     )
-    gdf_out["nm_kecamatan"] = gdf_out["nm_kecamatan"].astype(str).str.strip()
-    gdf_out["name"] = gdf_out["nm_kecamatan"]
-    gdf_out["code"] = gdf_out["nm_kecamatan"]
+    gdf_out["nm_kecamatan"] = kec_name
+    gdf_out["name"] = kec_name
+    gdf_out["kecamatan"] = kec_name
+    gdf_out["code"] = kec_name
+    if "code" in gdf.columns:
+        gdf_out["kemendagri_code"] = gdf["code"].astype(str).str.strip()
 
-    keep_cols = ["kd_propinsi", "kd_dati2", "kd_kecamatan", "nm_kecamatan", "name", "code", "geometry"]
+    keep_cols = [
+        "code",
+        "kemendagri_code",
+        "name",
+        "nm_kecamatan",
+        "kecamatan",
+        "parent_code",
+        "kd_propinsi",
+        "kd_dati2",
+        "kd_kecamatan",
+        "geometry",
+    ]
     gdf_clean = gdf_out[[c for c in keep_cols if c in gdf_out.columns]].copy()
 
     dst_geojson.parent.mkdir(parents=True, exist_ok=True)
@@ -60,26 +83,39 @@ def build_simplified_desa_geojson(
     src_desa_geojson: Path,
     kec_code_to_name: dict[str, str],
     dst_geojson: Path,
-    tolerance: float = 0.0005,
+    tolerance: float = 0.0003,
 ) -> gpd.GeoDataFrame:
     """Memuat batas 460 desa/kelurahan, join nama kecamatan induk, dan menyederhanakan geometri."""
     gdf = gpd.read_file(src_desa_geojson)
-    gdf["kd_propinsi"] = gdf["kd_propinsi"].astype(str).str.strip()
-    gdf["kd_dati2"] = gdf["kd_dati2"].astype(str).str.strip()
-    gdf["kd_kecamatan"] = gdf["kd_kecamatan"].astype(str).str.strip()
-    gdf["kd_kelurahan"] = gdf["kd_kelurahan"].astype(str).str.strip()
-    gdf["nm_kelurahan"] = gdf["nm_kelurahan"].astype(str).str.strip()
-    gdf["nm_kecamatan"] = gdf["kd_kecamatan"].map(kec_code_to_name).fillna("")
-    gdf["name"] = gdf["nm_kelurahan"]
-    gdf["code"] = (
-        gdf["kd_propinsi"]
-        + "."
-        + gdf["kd_dati2"]
-        + "."
-        + gdf["kd_kecamatan"]
-        + "."
-        + gdf["kd_kelurahan"]
+    desa_name = (
+        gdf["name"].astype(str).str.strip()
+        if "name" in gdf.columns
+        else gdf["nm_kelurahan"].astype(str).str.strip()
     )
+    gdf["name"] = desa_name
+    gdf["nm_kelurahan"] = desa_name
+    gdf["desa"] = desa_name
+
+    if "parent_code" in gdf.columns:
+        gdf["parent_code"] = gdf["parent_code"].astype(str).str.strip()
+        gdf["nm_kecamatan"] = gdf["parent_code"].map(kec_code_to_name).fillna("")
+        gdf["code"] = gdf["code"].astype(str).str.strip()
+    else:
+        gdf["kd_propinsi"] = gdf["kd_propinsi"].astype(str).str.strip()
+        gdf["kd_dati2"] = gdf["kd_dati2"].astype(str).str.strip()
+        gdf["kd_kecamatan"] = gdf["kd_kecamatan"].astype(str).str.strip()
+        gdf["kd_kelurahan"] = gdf["kd_kelurahan"].astype(str).str.strip()
+        gdf["nm_kecamatan"] = gdf["kd_kecamatan"].map(kec_code_to_name).fillna("")
+        gdf["code"] = (
+            gdf["kd_propinsi"]
+            + "."
+            + gdf["kd_dati2"]
+            + "."
+            + gdf["kd_kecamatan"]
+            + "."
+            + gdf["kd_kelurahan"]
+        )
+    gdf["kecamatan"] = gdf["nm_kecamatan"]
 
     gdf_out = gdf.copy()
     gdf_out["geometry"] = force_2d(gdf_out["geometry"]).simplify(
@@ -88,13 +124,12 @@ def build_simplified_desa_geojson(
 
     keep_cols = [
         "code",
-        "kd_propinsi",
-        "kd_dati2",
-        "kd_kecamatan",
-        "kd_kelurahan",
-        "nm_kelurahan",
-        "nm_kecamatan",
         "name",
+        "desa",
+        "nm_kelurahan",
+        "kecamatan",
+        "nm_kecamatan",
+        "parent_code",
         "geometry",
     ]
     gdf_clean = gdf_out[[c for c in keep_cols if c in gdf_out.columns]].copy()
@@ -493,9 +528,9 @@ def sync_to_dashboard(dashboard_dir: Path = DEFAULT_DASHBOARD_DIR) -> dict:
     json_desa_out = public_data_dir / "prediksi_musim_desa.json"
 
     gdf_kec = build_simplified_kecamatan_geojson(GEOJSON_KEC_PATH, geojson_kec_out)
-    gdf_kec["kd_kecamatan"] = gdf_kec["kd_kecamatan"].astype(str).str.strip()
     gdf_kec["nm_kecamatan"] = gdf_kec["nm_kecamatan"].astype(str).str.strip()
-    kec_code_to_name = dict(zip(gdf_kec["kd_kecamatan"], gdf_kec["nm_kecamatan"]))
+    code_col = "code" if "code" in gdf_kec.columns else "kd_kecamatan"
+    kec_code_to_name = dict(zip(gdf_kec[code_col].astype(str).str.strip(), gdf_kec["nm_kecamatan"]))
     geo_names = set(gdf_kec["nm_kecamatan"].tolist())
 
     gdf_desa = build_simplified_desa_geojson(GEOJSON_DESA_PATH, kec_code_to_name, geojson_desa_out)
