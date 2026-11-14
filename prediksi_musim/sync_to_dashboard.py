@@ -823,8 +823,36 @@ def main():
         default=str(DEFAULT_DASHBOARD_DIR),
         help="Path root direktori repositori Dashboard_Jerukagung-Meteorologi.",
     )
+    parser.add_argument(
+        "--push-firestore",
+        action="store_true",
+        help="Otomatis unggah hasil sinkronisasi musim aktif ke Cloud Firestore setelah ekspor berkas.",
+    )
     args = parser.parse_args()
     sync_to_dashboard(Path(args.dashboard_dir))
+
+    if args.push_firestore:
+        try:
+            from sync_to_firestore import (
+                DEFAULT_KEY_PATH,
+                init_firestore,
+                sync_catalog,
+                sync_season,
+            )
+        except ImportError:
+            sys.path.insert(0, str(BASE_DIR))
+            from prediksi_musim.sync_to_firestore import (
+                DEFAULT_KEY_PATH,
+                init_firestore,
+                sync_catalog,
+                sync_season,
+            )
+        print("\n[FIRESTORE] Memulai pengunggahan otomatis ke Cloud Firestore...")
+        db = init_firestore(DEFAULT_KEY_PATH)
+        data_dir = Path(args.dashboard_dir) / "public" / "data"
+        sync_catalog(db, data_dir)
+        sync_season(db, "2026_2027", data_dir, is_active=True)
+        print("[SUKSES] Sinkronisasi ganda (Web JSON + Cloud Firestore) selesai 100%!")
 
 
 if __name__ == "__main__":
