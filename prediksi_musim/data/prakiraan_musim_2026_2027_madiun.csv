@@ -1,0 +1,16 @@
+kecamatan,prakiraan_kategori_amh,prakiraan_amh_dasarian,prakiraan_amh_label,normal_amh_dasarian,normal_amh_label,perbandingan_terhadap_normal,selisih_dasarian,probabilitas_maju,probabilitas_sama,probabilitas_mundur,prakiraan_sifat_hujan,prakiraan_puncak_bulan,normal_puncak_bulan,perbandingan_puncak_thd_normal,rekomendasi_tanam_padi_mt1
+Balerejo,Mundur,32.0,Nov II,30.5,Okt III,Mundur,1.5,3.1,7.3,89.6,Bawah Normal,Januari,Januari,Sama dengan Normal,Nov III s.d. Des II
+Dagangan,Mundur,31.8,Nov II,30.0,Okt III,Mundur,1.8,2.0,4.8,93.2,Bawah Normal,Januari,Januari,Sama dengan Normal,Nov III s.d. Des II
+Dolopo,Mundur,33.0,Nov III,30.5,Okt III,Mundur,2.5,1.5,3.5,95.0,Normal,Februari,Februari,Sama dengan Normal,Des I s.d. Des III
+Geger,Mundur,33.1,Nov III,30.0,Okt III,Mundur,3.1,1.5,3.5,95.0,Normal,Januari,Januari,Sama dengan Normal,Des I s.d. Des III
+Gemarang,Mundur,31.6,Nov II,30.0,Okt III,Mundur,1.6,2.6,6.0,91.4,Bawah Normal,Januari,Januari,Sama dengan Normal,Nov III s.d. Des II
+Jiwan,Mundur,33.1,Nov III,30.0,Okt III,Mundur,3.1,1.5,3.5,95.0,Normal,Februari,Februari,Sama dengan Normal,Des I s.d. Des III
+Kare,Mundur,31.6,Nov II,30.0,Okt III,Mundur,1.6,2.6,6.2,91.2,Bawah Normal,Januari,Januari,Sama dengan Normal,Nov III s.d. Des II
+Kebonsari,Mundur,33.1,Nov III,30.0,Okt III,Mundur,3.1,1.5,3.5,95.0,Normal,Januari,Januari,Sama dengan Normal,Des I s.d. Des III
+Madiun,Mundur,33.1,Nov III,30.5,Okt III,Mundur,2.6,1.5,3.5,95.0,Bawah Normal,Januari,Januari,Sama dengan Normal,Des I s.d. Des III
+Mejayan,Mundur,31.8,Nov II,31.0,Nov I,Mundur,0.8,5.0,11.8,83.2,Bawah Normal,Januari,Januari,Sama dengan Normal,Nov III s.d. Des II
+Pilangkenceng,Mundur,31.8,Nov II,30.5,Okt III,Mundur,1.3,3.5,8.3,88.2,Bawah Normal,Februari,Februari,Sama dengan Normal,Nov III s.d. Des II
+Saradan,Mundur,31.8,Nov II,31.0,Nov I,Mundur,0.8,5.0,11.5,83.5,Bawah Normal,Februari,Februari,Sama dengan Normal,Nov III s.d. Des II
+Sawahan,Mundur,33.1,Nov III,30.0,Okt III,Mundur,3.1,1.5,3.5,95.0,Normal,Januari,Januari,Sama dengan Normal,Des I s.d. Des III
+Wonoasri,Mundur,31.9,Nov II,30.5,Okt III,Mundur,1.4,3.4,7.9,88.7,Bawah Normal,Januari,Januari,Sama dengan Normal,Nov III s.d. Des II
+Wungu,Mundur,33.1,Nov III,30.5,Okt III,Mundur,2.6,1.5,3.5,95.0,Bawah Normal,Januari,Januari,Sama dengan Normal,Des I s.d. Des III

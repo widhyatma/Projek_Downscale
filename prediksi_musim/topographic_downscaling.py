@@ -190,7 +190,10 @@ def downscale_variable_multimodel(gdf_pts, val_col, mesh, var_name="Variabel", a
     scale_xy, scale_z = 1000.0, 1000.0
     pts_tps = np.column_stack([pts_x / scale_xy, pts_y / scale_xy, np.array(pt_Z) / scale_z])
     grid_tps = np.column_stack([mesh['grid_utm_x'].flatten() / scale_xy, mesh['grid_utm_y'].flatten() / scale_xy, all_Z / scale_z])
-    rbf = RBFInterpolator(pts_tps, y_target, kernel='thin_plate_spline', smoothing=0.1)
+    if len(pts_tps) >= 4:
+        rbf = RBFInterpolator(pts_tps, y_target, kernel='thin_plate_spline', smoothing=0.1)
+    else:
+        rbf = RBFInterpolator(pts_tps, y_target, kernel='linear', degree=0, smoothing=0.1)
     pred_tps = rbf(grid_tps).reshape(H, W)
     
     # --- MODEL 3: PRISM Topographic-Coastal Facet Model ---

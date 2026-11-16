@@ -35,7 +35,13 @@ DEFAULT_DASHBOARD_DATA = Path(r"D:\Github\Dashboard_Jerukagung-Meteorologi\publi
 def parse_args():
     parser = argparse.ArgumentParser(description="Sinkronisasi Prediksi Musim ke Cloud Firestore")
     parser.add_argument("--key", type=str, default=str(DEFAULT_KEY_PATH), help="Path ke berkas serviceAccountKey.json")
-    parser.add_argument("--kabupaten", type=str, default="kebumen", choices=["kebumen", "purworejo"], help="Pilihan kabupaten target")
+    parser.add_argument(
+        "--kabupaten",
+        type=str,
+        default="kebumen",
+        choices=["kebumen", "purworejo", "wonosobo", "magelang", "kota_magelang", "temanggung", "klaten", "madiun", "kota_madiun"],
+        help="Pilihan kabupaten target"
+    )
     parser.add_argument("--data-dir", type=str, default=None, help="Path ke public/data dashboard")
     parser.add_argument("--dry-run", action="store_true", help="Validasi payload tanpa menulis ke Firestore")
     parser.add_argument("--sync-all-archives", action="store_true", help="Unggah seluruh tahun arsip (default: hanya musim aktif)")

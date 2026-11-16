@@ -1302,47 +1302,124 @@ def generate_active_season_2026(
 
 def main():
     parser = argparse.ArgumentParser(description="Generator Arsip Prediksi Musim & Evaluasi Akurasi 26 Tahun (2000–2025)")
-    parser.add_argument("--kabupaten", type=str, default="kebumen", choices=["kebumen", "purworejo"], help="Pilihan kabupaten")
+    parser.add_argument("--kabupaten", type=str, default="kebumen", 
+                        choices=["kebumen", "purworejo", "wonosobo", "magelang", "kota_magelang", "temanggung", "klaten", "madiun", "kota_madiun"], 
+                        help="Pilihan kabupaten / kota")
     parser.add_argument("--start-year", type=int, default=2000, help="Tahun awal arsip (default: 2000)")
     parser.add_argument("--end-year", type=int, default=2025, help="Tahun akhir arsip (default: 2025)")
     parser.add_argument("--output-dir", type=Path, default=None, help="Direktori output data dashboard")
     args = parser.parse_args()
 
-    is_purworejo = args.kabupaten == "purworejo"
-    kabupaten_name = "Purworejo" if is_purworejo else "Kebumen"
+    REGIONS = {
+        "kebumen": {
+            "code": "33.05", "name": "Kebumen", "title": "Kabupaten Kebumen",
+            "dem": "DEM_Topografi_Kebumen_30m.tif",
+            "loyo_h": "hasil_evaluasi_loyo.csv",
+            "loyo_k": "hasil_evaluasi_loyo_kemarau.csv",
+            "dasarian": "dasarian_curah_hujan_kebumen_2000_2026.csv",
+            "hujan_2026": "prakiraan_musim_2026_2027_kebumen.csv",
+            "kemarau_2026": "prakiraan_musim_kemarau_2026_kebumen.csv",
+        },
+        "purworejo": {
+            "code": "33.06", "name": "Purworejo", "title": "Kabupaten Purworejo",
+            "dem": "DEM_Topografi_Purworejo_30m.tif",
+            "loyo_h": "hasil_evaluasi_loyo_purworejo.csv",
+            "loyo_k": "hasil_evaluasi_loyo_kemarau_purworejo.csv",
+            "dasarian": "dasarian_curah_hujan_purworejo_2000_2026.csv",
+            "hujan_2026": "prakiraan_musim_2026_2027_purworejo.csv",
+            "kemarau_2026": "prakiraan_musim_kemarau_2026_purworejo.csv",
+        },
+        "wonosobo": {
+            "code": "33.07", "name": "Wonosobo", "title": "Kabupaten Wonosobo",
+            "dem": "DEM_Topografi_Wonosobo_30m.tif",
+            "loyo_h": "hasil_evaluasi_loyo_wonosobo.csv",
+            "loyo_k": "hasil_evaluasi_loyo_kemarau_wonosobo.csv",
+            "dasarian": "dasarian_curah_hujan_wonosobo_2000_2026.csv",
+            "hujan_2026": "prakiraan_musim_2026_2027_wonosobo.csv",
+            "kemarau_2026": "prakiraan_musim_kemarau_2026_wonosobo.csv",
+        },
+        "magelang": {
+            "code": "33.08", "name": "Magelang", "title": "Kabupaten Magelang",
+            "dem": "DEM_Topografi_Magelang_30m.tif",
+            "loyo_h": "hasil_evaluasi_loyo_magelang.csv",
+            "loyo_k": "hasil_evaluasi_loyo_kemarau_magelang.csv",
+            "dasarian": "dasarian_curah_hujan_magelang_2000_2026.csv",
+            "hujan_2026": "prakiraan_musim_2026_2027_magelang.csv",
+            "kemarau_2026": "prakiraan_musim_kemarau_2026_magelang.csv",
+        },
+        "kota_magelang": {
+            "code": "33.71", "name": "Kota Magelang", "title": "Kota Magelang",
+            "dem": "DEM_Topografi_Kota_Magelang_30m.tif",
+            "loyo_h": "hasil_evaluasi_loyo_kota_magelang.csv",
+            "loyo_k": "hasil_evaluasi_loyo_kemarau_kota_magelang.csv",
+            "dasarian": "dasarian_curah_hujan_kota_magelang_2000_2026.csv",
+            "hujan_2026": "prakiraan_musim_2026_2027_kota_magelang.csv",
+            "kemarau_2026": "prakiraan_musim_kemarau_2026_kota_magelang.csv",
+        },
+        "temanggung": {
+            "code": "33.23", "name": "Temanggung", "title": "Kabupaten Temanggung",
+            "dem": "DEM_Topografi_Temanggung_30m.tif",
+            "loyo_h": "hasil_evaluasi_loyo_temanggung.csv",
+            "loyo_k": "hasil_evaluasi_loyo_kemarau_temanggung.csv",
+            "dasarian": "dasarian_curah_hujan_temanggung_2000_2026.csv",
+            "hujan_2026": "prakiraan_musim_2026_2027_temanggung.csv",
+            "kemarau_2026": "prakiraan_musim_kemarau_2026_temanggung.csv",
+        },
+        "klaten": {
+            "code": "33.10", "name": "Klaten", "title": "Kabupaten Klaten",
+            "dem": "DEM_Topografi_Klaten_30m.tif",
+            "loyo_h": "hasil_evaluasi_loyo_klaten.csv",
+            "loyo_k": "hasil_evaluasi_loyo_kemarau_klaten.csv",
+            "dasarian": "dasarian_curah_hujan_klaten_2000_2026.csv",
+            "hujan_2026": "prakiraan_musim_2026_2027_klaten.csv",
+            "kemarau_2026": "prakiraan_musim_kemarau_2026_klaten.csv",
+        },
+        "madiun": {
+            "code": "35.19", "name": "Madiun", "title": "Kabupaten Madiun",
+            "dem": "DEM_Topografi_Madiun_30m.tif",
+            "loyo_h": "hasil_evaluasi_loyo_madiun.csv",
+            "loyo_k": "hasil_evaluasi_loyo_kemarau_madiun.csv",
+            "dasarian": "dasarian_curah_hujan_madiun_2000_2026.csv",
+            "hujan_2026": "prakiraan_musim_2026_2027_madiun.csv",
+            "kemarau_2026": "prakiraan_musim_kemarau_2026_madiun.csv",
+        },
+        "kota_madiun": {
+            "code": "35.77", "name": "Kota Madiun", "title": "Kota Madiun",
+            "dem": "DEM_Topografi_Kota_Madiun_30m.tif",
+            "loyo_h": "hasil_evaluasi_loyo_kota_madiun.csv",
+            "loyo_k": "hasil_evaluasi_loyo_kemarau_kota_madiun.csv",
+            "dasarian": "dasarian_curah_hujan_kota_madiun_2000_2026.csv",
+            "hujan_2026": "prakiraan_musim_2026_2027_kota_madiun.csv",
+            "kemarau_2026": "prakiraan_musim_kemarau_2026_kota_madiun.csv",
+        },
+    }
+
+    kab_key = args.kabupaten.lower()
+    reg_info = REGIONS.get(kab_key, REGIONS["kebumen"])
+    kabupaten_name = reg_info["name"]
 
     if args.output_dir is None:
-        args.output_dir = DEFAULT_DASHBOARD_DIR / "public" / "data" / args.kabupaten.lower()
+        args.output_dir = DEFAULT_DASHBOARD_DIR / "public" / "data" / kab_key
 
-    if is_purworejo:
-        geojson_kec_path = BASE_DIR / "purworejo_33.06_batas_kecamatan.geojson"
-        geojson_desa_path = BASE_DIR / "purworejo_33.06_batas_desa.geojson"
-        dem_path = BASE_DIR / "data" / "DEM_Topografi_Purworejo_30m.tif"
-        loyo_hujan_path = DATA_DIR / "hasil_evaluasi_loyo_purworejo.csv"
-        loyo_kemarau_path = DATA_DIR / "hasil_evaluasi_loyo_kemarau_purworejo.csv"
-        dasarian_path = DATA_DIR / "dasarian_curah_hujan_purworejo_2000_2026.csv"
-        hujan_2026_csv = DATA_DIR / "prakiraan_musim_2026_2027_purworejo.csv"
-        kemarau_2026_csv = DATA_DIR / "prakiraan_musim_kemarau_2026_purworejo.csv"
-    else:
-        geojson_kec_path = BASE_DIR / "kebumen_33.05_batas_kecamatan.geojson"
-        geojson_desa_path = BASE_DIR / "kebumen_33.05_batas_desa.geojson"
-        dem_path = BASE_DIR / "data" / "DEM_Topografi_Kebumen_30m.tif"
-        loyo_hujan_path = DATA_DIR / "hasil_evaluasi_loyo.csv"
-        loyo_kemarau_path = DATA_DIR / "hasil_evaluasi_loyo_kemarau.csv"
-        dasarian_path = DATA_DIR / "dasarian_curah_hujan_kebumen_2000_2026.csv"
-        hujan_2026_csv = DATA_DIR / "prakiraan_musim_2026_2027_kebumen.csv"
-        kemarau_2026_csv = DATA_DIR / "prakiraan_musim_kemarau_2026_kebumen.csv"
+    geojson_kec_path = BASE_DIR / f"{kab_key}_{reg_info['code']}_batas_kecamatan.geojson"
+    geojson_desa_path = BASE_DIR / f"{kab_key}_{reg_info['code']}_batas_desa.geojson"
+    dem_path = BASE_DIR / "data" / reg_info["dem"]
+    loyo_hujan_path = DATA_DIR / reg_info["loyo_h"]
+    loyo_kemarau_path = DATA_DIR / reg_info["loyo_k"]
+    dasarian_path = DATA_DIR / reg_info["dasarian"]
+    hujan_2026_csv = DATA_DIR / reg_info["hujan_2026"]
+    kemarau_2026_csv = DATA_DIR / reg_info["kemarau_2026"]
 
     print("=" * 80)
-    print(f"MEMULAI GENERATOR ARSIP & PREDIKSI MUSIM KABUPATEN {kabupaten_name.upper()} (2000–2025)")
+    print(f"MEMULAI GENERATOR ARSIP & PREDIKSI MUSIM {reg_info['title'].upper()} (2000–2025)")
     print(f"Target Tahun: {args.start_year} s.d. {args.end_year} (Span {args.end_year - args.start_year + 1} Tahun)")
     print(f"Output Dashboard: {args.output_dir}")
     print("=" * 80)
 
-    # 1. Ekspor GeoJSON teroptimasi jika belum ada atau untuk kabupaten purworejo
+    # 1. Ekspor GeoJSON teroptimasi
     args.output_dir.mkdir(parents=True, exist_ok=True)
-    geo_kec_name = "purworejo_kecamatan.json" if is_purworejo else "kebumen_kecamatan.json"
-    geo_desa_name = "purworejo_desa.json" if is_purworejo else "kebumen_desa.json"
+    geo_kec_name = f"{kab_key}_kecamatan.json"
+    geo_desa_name = f"{kab_key}_desa.json"
     dst_geo_kec = args.output_dir / geo_kec_name
     dst_geo_desa = args.output_dir / geo_desa_name
 

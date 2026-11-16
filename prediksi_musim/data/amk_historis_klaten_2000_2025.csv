@@ -1,0 +1,677 @@
+tahun,kecamatan,amk_dasarian,amk_label,total_hujan_mk_mm,pmk_dasarian,pmk_label
+2000,Bayat,13,Mei I,178.0,17,Jun II
+2000,Cawas,13,Mei I,168.1,17,Jun II
+2000,Ceper,13,Mei I,194.7,19,Jul I
+2000,Delanggu,13,Mei I,224.7,17,Jun II
+2000,Gantiwarno,13,Mei I,189.9,17,Jun II
+2000,Jatinom,13,Mei I,263.5,17,Jun II
+2000,Jogonalan,13,Mei I,208.5,17,Jun II
+2000,Juwiring,13,Mei I,186.7,19,Jul I
+2000,Kalikotes,13,Mei I,203.5,19,Jul I
+2000,Karanganom,13,Mei I,255.4,17,Jun II
+2000,Karangdowo,13,Mei I,171.5,17,Jun II
+2000,Karangnongko,13,Mei I,238.2,17,Jun II
+2000,Kebonarum,13,Mei I,232.3,17,Jun II
+2000,Kemalang,15,Mei III,324.5,17,Jun II
+2000,Klaten Selatan,13,Mei I,222.7,17,Jun II
+2000,Klaten Tengah,13,Mei I,203.5,19,Jul I
+2000,Klaten Utara,13,Mei I,222.6,19,Jul I
+2000,Manisrenggo,13,Mei I,259.0,17,Jun II
+2000,Ngawen,13,Mei I,222.6,19,Jul I
+2000,Pedan,13,Mei I,186.7,19,Jul I
+2000,Polanharjo,13,Mei I,224.7,17,Jun II
+2000,Prambanan,13,Mei I,208.5,17,Jun II
+2000,Trucuk,13,Mei I,181.4,19,Jul I
+2000,Tulung,13,Mei I,323.7,17,Jun II
+2000,Wedi,13,Mei I,199.6,17,Jun II
+2000,Wonosari,13,Mei I,230.6,19,Jul I
+2001,Bayat,12,Apr III,408.8,19,Jul I
+2001,Cawas,12,Apr III,413.6,19,Jul I
+2001,Ceper,12,Apr III,428.6,19,Jul I
+2001,Delanggu,12,Apr III,431.7,19,Jul I
+2001,Gantiwarno,17,Jun II,425.6,19,Jul I
+2001,Jatinom,17,Jun II,521.4,23,Agu II
+2001,Jogonalan,17,Jun II,436.9,19,Jul I
+2001,Juwiring,12,Apr III,405.3,19,Jul I
+2001,Kalikotes,17,Jun II,459.4,19,Jul I
+2001,Karanganom,17,Jun II,498.7,19,Jul I
+2001,Karangdowo,12,Apr III,421.9,19,Jul I
+2001,Karangnongko,17,Jun II,484.5,19,Jul I
+2001,Kebonarum,17,Jun II,501.3,22,Agu I
+2001,Kemalang,17,Jun II,513.4,19,Jul I
+2001,Klaten Selatan,17,Jun II,477.9,19,Jul I
+2001,Klaten Tengah,17,Jun II,459.4,19,Jul I
+2001,Klaten Utara,17,Jun II,473.4,19,Jul I
+2001,Manisrenggo,17,Jun II,467.8,19,Jul I
+2001,Ngawen,17,Jun II,473.4,19,Jul I
+2001,Pedan,12,Apr III,405.3,19,Jul I
+2001,Polanharjo,12,Apr III,431.7,19,Jul I
+2001,Prambanan,17,Jun II,436.9,19,Jul I
+2001,Trucuk,12,Apr III,436.5,19,Jul I
+2001,Tulung,17,Jun II,521.8,19,Jul I
+2001,Wedi,17,Jun II,437.0,19,Jul I
+2001,Wonosari,12,Apr III,425.0,19,Jul I
+2002,Bayat,10,Apr I,53.4,16,Jun I
+2002,Cawas,12,Apr III,53.0,16,Jun I
+2002,Ceper,10,Apr I,55.9,17,Jun II
+2002,Delanggu,12,Apr III,61.2,17,Jun II
+2002,Gantiwarno,12,Apr III,60.8,17,Jun II
+2002,Jatinom,12,Apr III,84.4,17,Jun II
+2002,Jogonalan,12,Apr III,64.1,17,Jun II
+2002,Juwiring,10,Apr I,56.3,17,Jun II
+2002,Kalikotes,12,Apr III,64.8,17,Jun II
+2002,Karanganom,12,Apr III,73.3,17,Jun II
+2002,Karangdowo,10,Apr I,52.3,17,Jun II
+2002,Karangnongko,12,Apr III,71.0,17,Jun II
+2002,Kebonarum,12,Apr III,71.4,17,Jun II
+2002,Kemalang,12,Apr III,91.7,17,Jun II
+2002,Klaten Selatan,12,Apr III,67.0,17,Jun II
+2002,Klaten Tengah,12,Apr III,64.8,17,Jun II
+2002,Klaten Utara,12,Apr III,63.4,17,Jun II
+2002,Manisrenggo,12,Apr III,77.5,17,Jun II
+2002,Ngawen,12,Apr III,63.4,17,Jun II
+2002,Pedan,10,Apr I,56.3,17,Jun II
+2002,Polanharjo,12,Apr III,61.2,17,Jun II
+2002,Prambanan,12,Apr III,64.1,17,Jun II
+2002,Trucuk,12,Apr III,62.3,17,Jun II
+2002,Tulung,12,Apr III,94.0,17,Jun II
+2002,Wedi,12,Apr III,56.6,17,Jun II
+2002,Wonosari,10,Apr I,60.0,17,Jun II
+2003,Bayat,10,Apr I,123.1,16,Jun I
+2003,Cawas,10,Apr I,119.5,16,Jun I
+2003,Ceper,10,Apr I,108.6,16,Jun I
+2003,Delanggu,10,Apr I,105.7,16,Jun I
+2003,Gantiwarno,10,Apr I,117.8,16,Jun I
+2003,Jatinom,10,Apr I,151.6,16,Jun I
+2003,Jogonalan,10,Apr I,127.7,16,Jun I
+2003,Juwiring,10,Apr I,111.5,16,Jun I
+2003,Kalikotes,10,Apr I,129.5,16,Jun I
+2003,Karanganom,10,Apr I,135.3,16,Jun I
+2003,Karangdowo,10,Apr I,117.8,16,Jun I
+2003,Karangnongko,10,Apr I,135.0,16,Jun I
+2003,Kebonarum,10,Apr I,127.7,16,Jun I
+2003,Kemalang,10,Apr I,170.7,16,Jun I
+2003,Klaten Selatan,10,Apr I,133.4,16,Jun I
+2003,Klaten Tengah,10,Apr I,129.5,16,Jun I
+2003,Klaten Utara,10,Apr I,124.6,16,Jun I
+2003,Manisrenggo,10,Apr I,145.0,16,Jun I
+2003,Ngawen,10,Apr I,124.6,16,Jun I
+2003,Pedan,10,Apr I,111.5,16,Jun I
+2003,Polanharjo,10,Apr I,105.7,16,Jun I
+2003,Prambanan,10,Apr I,127.7,16,Jun I
+2003,Trucuk,10,Apr I,122.9,16,Jun I
+2003,Tulung,10,Apr I,143.2,16,Jun I
+2003,Wedi,10,Apr I,130.0,16,Jun I
+2003,Wonosari,10,Apr I,109.7,16,Jun I
+2004,Bayat,10,Apr I,163.0,17,Jun II
+2004,Cawas,10,Apr I,171.9,17,Jun II
+2004,Ceper,10,Apr I,177.4,17,Jun II
+2004,Delanggu,10,Apr I,190.1,17,Jun II
+2004,Gantiwarno,10,Apr I,177.1,17,Jun II
+2004,Jatinom,11,Apr II,218.4,17,Jun II
+2004,Jogonalan,10,Apr I,172.6,17,Jun II
+2004,Juwiring,10,Apr I,184.1,17,Jun II
+2004,Kalikotes,10,Apr I,175.1,17,Jun II
+2004,Karanganom,10,Apr I,216.5,17,Jun II
+2004,Karangdowo,10,Apr I,171.8,17,Jun II
+2004,Karangnongko,10,Apr I,183.3,17,Jun II
+2004,Kebonarum,10,Apr I,190.1,17,Jun II
+2004,Kemalang,10,Apr I,218.0,17,Jun II
+2004,Klaten Selatan,10,Apr I,182.9,17,Jun II
+2004,Klaten Tengah,10,Apr I,175.1,17,Jun II
+2004,Klaten Utara,10,Apr I,191.5,17,Jun II
+2004,Manisrenggo,10,Apr I,175.5,17,Jun II
+2004,Ngawen,10,Apr I,191.5,17,Jun II
+2004,Pedan,10,Apr I,184.1,17,Jun II
+2004,Polanharjo,10,Apr I,190.1,17,Jun II
+2004,Prambanan,10,Apr I,172.6,17,Jun II
+2004,Trucuk,10,Apr I,167.3,17,Jun II
+2004,Tulung,10,Apr I,219.1,17,Jun II
+2004,Wedi,10,Apr I,176.3,17,Jun II
+2004,Wonosari,10,Apr I,189.2,17,Jun II
+2005,Bayat,11,Apr II,295.0,16,Jun I
+2005,Cawas,11,Apr II,264.5,16,Jun I
+2005,Ceper,11,Apr II,331.8,16,Jun I
+2005,Delanggu,11,Apr II,339.8,16,Jun I
+2005,Gantiwarno,11,Apr II,311.6,25,Sep I
+2005,Jatinom,12,Apr III,433.2,25,Sep I
+2005,Jogonalan,11,Apr II,321.9,16,Jun I
+2005,Juwiring,11,Apr II,300.3,16,Jun I
+2005,Kalikotes,11,Apr II,349.2,16,Jun I
+2005,Karanganom,11,Apr II,388.4,16,Jun I
+2005,Karangdowo,11,Apr II,309.1,16,Jun I
+2005,Karangnongko,12,Apr III,365.0,26,Sep II
+2005,Kebonarum,12,Apr III,376.5,25,Sep I
+2005,Kemalang,12,Apr III,444.5,16,Jun I
+2005,Klaten Selatan,11,Apr II,375.3,16,Jun I
+2005,Klaten Tengah,11,Apr II,349.2,16,Jun I
+2005,Klaten Utara,11,Apr II,356.9,16,Jun I
+2005,Manisrenggo,11,Apr II,365.5,16,Jun I
+2005,Ngawen,11,Apr II,356.9,16,Jun I
+2005,Pedan,11,Apr II,300.3,16,Jun I
+2005,Polanharjo,11,Apr II,339.8,16,Jun I
+2005,Prambanan,11,Apr II,321.9,16,Jun I
+2005,Trucuk,11,Apr II,324.0,16,Jun I
+2005,Tulung,11,Apr II,433.3,16,Jun I
+2005,Wedi,11,Apr II,323.8,16,Jun I
+2005,Wonosari,11,Apr II,316.2,16,Jun I
+2006,Bayat,12,Apr III,231.5,16,Jun I
+2006,Cawas,12,Apr III,235.1,16,Jun I
+2006,Ceper,12,Apr III,216.0,16,Jun I
+2006,Delanggu,12,Apr III,187.8,16,Jun I
+2006,Gantiwarno,12,Apr III,214.5,17,Jun II
+2006,Jatinom,12,Apr III,238.6,16,Jun I
+2006,Jogonalan,12,Apr III,210.1,16,Jun I
+2006,Juwiring,12,Apr III,213.6,16,Jun I
+2006,Kalikotes,12,Apr III,221.8,16,Jun I
+2006,Karanganom,12,Apr III,214.6,16,Jun I
+2006,Karangdowo,12,Apr III,227.5,16,Jun I
+2006,Karangnongko,12,Apr III,220.9,16,Jun I
+2006,Kebonarum,12,Apr III,220.0,16,Jun I
+2006,Kemalang,12,Apr III,259.4,17,Jun II
+2006,Klaten Selatan,12,Apr III,219.5,16,Jun I
+2006,Klaten Tengah,12,Apr III,221.8,16,Jun I
+2006,Klaten Utara,12,Apr III,218.6,16,Jun I
+2006,Manisrenggo,12,Apr III,209.9,16,Jun I
+2006,Ngawen,12,Apr III,218.6,16,Jun I
+2006,Pedan,12,Apr III,213.6,16,Jun I
+2006,Polanharjo,12,Apr III,187.8,16,Jun I
+2006,Prambanan,12,Apr III,210.1,16,Jun I
+2006,Trucuk,12,Apr III,223.6,16,Jun I
+2006,Tulung,12,Apr III,225.4,16,Jun I
+2006,Wedi,12,Apr III,234.3,16,Jun I
+2006,Wonosari,12,Apr III,208.2,16,Jun I
+2007,Bayat,16,Jun I,218.8,17,Jun II
+2007,Cawas,16,Jun I,212.5,17,Jun II
+2007,Ceper,16,Jun I,212.4,17,Jun II
+2007,Delanggu,13,Mei I,204.4,17,Jun II
+2007,Gantiwarno,16,Jun I,239.0,17,Jun II
+2007,Jatinom,16,Jun I,253.3,17,Jun II
+2007,Jogonalan,16,Jun I,217.4,17,Jun II
+2007,Juwiring,13,Mei I,208.4,17,Jun II
+2007,Kalikotes,16,Jun I,232.3,17,Jun II
+2007,Karanganom,13,Mei I,216.4,17,Jun II
+2007,Karangdowo,13,Mei I,213.9,17,Jun II
+2007,Karangnongko,16,Jun I,235.5,17,Jun II
+2007,Kebonarum,16,Jun I,245.2,17,Jun II
+2007,Kemalang,16,Jun I,245.4,17,Jun II
+2007,Klaten Selatan,16,Jun I,254.6,17,Jun II
+2007,Klaten Tengah,16,Jun I,232.3,17,Jun II
+2007,Klaten Utara,16,Jun I,231.4,17,Jun II
+2007,Manisrenggo,16,Jun I,238.5,17,Jun II
+2007,Ngawen,16,Jun I,231.4,17,Jun II
+2007,Pedan,13,Mei I,208.4,17,Jun II
+2007,Polanharjo,13,Mei I,204.4,17,Jun II
+2007,Prambanan,16,Jun I,217.4,17,Jun II
+2007,Trucuk,16,Jun I,220.7,17,Jun II
+2007,Tulung,16,Jun I,235.9,17,Jun II
+2007,Wedi,16,Jun I,232.3,17,Jun II
+2007,Wonosari,13,Mei I,211.5,17,Jun II
+2008,Bayat,10,Apr I,93.6,16,Jun I
+2008,Cawas,14,Mei II,95.2,16,Jun I
+2008,Ceper,10,Apr I,78.8,16,Jun I
+2008,Delanggu,10,Apr I,77.8,16,Jun I
+2008,Gantiwarno,10,Apr I,86.1,16,Jun I
+2008,Jatinom,10,Apr I,95.5,16,Jun I
+2008,Jogonalan,10,Apr I,76.5,16,Jun I
+2008,Juwiring,10,Apr I,89.3,16,Jun I
+2008,Kalikotes,10,Apr I,90.2,16,Jun I
+2008,Karanganom,10,Apr I,82.7,16,Jun I
+2008,Karangdowo,10,Apr I,92.4,16,Jun I
+2008,Karangnongko,11,Apr II,87.7,16,Jun I
+2008,Kebonarum,11,Apr II,86.9,16,Jun I
+2008,Kemalang,14,Mei II,103.9,16,Jun I
+2008,Klaten Selatan,10,Apr I,96.5,16,Jun I
+2008,Klaten Tengah,10,Apr I,90.2,16,Jun I
+2008,Klaten Utara,10,Apr I,84.5,16,Jun I
+2008,Manisrenggo,11,Apr II,84.7,16,Jun I
+2008,Ngawen,10,Apr I,84.5,16,Jun I
+2008,Pedan,10,Apr I,89.3,16,Jun I
+2008,Polanharjo,10,Apr I,77.8,16,Jun I
+2008,Prambanan,10,Apr I,76.5,16,Jun I
+2008,Trucuk,10,Apr I,93.0,16,Jun I
+2008,Tulung,10,Apr I,99.0,16,Jun I
+2008,Wedi,10,Apr I,95.0,16,Jun I
+2008,Wonosari,10,Apr I,82.8,16,Jun I
+2009,Bayat,16,Jun I,229.1,18,Jun III
+2009,Cawas,16,Jun I,257.0,17,Jun II
+2009,Ceper,16,Jun I,252.7,19,Jul I
+2009,Delanggu,16,Jun I,253.9,18,Jun III
+2009,Gantiwarno,16,Jun I,251.4,18,Jun III
+2009,Jatinom,17,Jun II,321.8,19,Jul I
+2009,Jogonalan,16,Jun I,279.5,17,Jun II
+2009,Juwiring,16,Jun I,253.5,18,Jun III
+2009,Kalikotes,16,Jun I,265.9,19,Jul I
+2009,Karanganom,16,Jun I,273.7,19,Jul I
+2009,Karangdowo,16,Jun I,246.8,18,Jun III
+2009,Karangnongko,17,Jun II,324.6,19,Jul I
+2009,Kebonarum,16,Jun I,307.9,19,Jul I
+2009,Kemalang,17,Jun II,377.1,19,Jul I
+2009,Klaten Selatan,16,Jun I,294.1,19,Jul I
+2009,Klaten Tengah,16,Jun I,265.9,19,Jul I
+2009,Klaten Utara,16,Jun I,278.5,19,Jul I
+2009,Manisrenggo,17,Jun II,332.7,18,Jun III
+2009,Ngawen,16,Jun I,278.5,19,Jul I
+2009,Pedan,16,Jun I,253.5,18,Jun III
+2009,Polanharjo,16,Jun I,253.9,18,Jun III
+2009,Prambanan,16,Jun I,279.5,17,Jun II
+2009,Trucuk,16,Jun I,241.4,19,Jul I
+2009,Tulung,16,Jun I,302.8,19,Jul I
+2009,Wedi,16,Jun I,256.7,20,Jul II
+2009,Wonosari,16,Jun I,257.5,17,Jun II
+2010,Bayat,17,Jun II,875.9,22,Agu I
+2010,Cawas,17,Jun II,876.9,22,Agu I
+2010,Ceper,17,Jun II,876.4,23,Agu II
+2010,Delanggu,17,Jun II,868.2,18,Jun III
+2010,Gantiwarno,17,Jun II,901.4,22,Agu I
+2010,Jatinom,17,Jun II,992.7,22,Agu I
+2010,Jogonalan,17,Jun II,877.8,20,Jul II
+2010,Juwiring,17,Jun II,888.4,23,Agu II
+2010,Kalikotes,17,Jun II,886.9,18,Jun III
+2010,Karanganom,17,Jun II,938.3,18,Jun III
+2010,Karangdowo,17,Jun II,885.2,22,Agu I
+2010,Karangnongko,17,Jun II,943.8,22,Agu I
+2010,Kebonarum,17,Jun II,934.6,20,Jul II
+2010,Kemalang,17,Jun II,1050.6,22,Agu I
+2010,Klaten Selatan,17,Jun II,944.8,22,Agu I
+2010,Klaten Tengah,17,Jun II,886.9,18,Jun III
+2010,Klaten Utara,17,Jun II,925.1,18,Jun III
+2010,Manisrenggo,17,Jun II,951.1,22,Agu I
+2010,Ngawen,17,Jun II,925.1,18,Jun III
+2010,Pedan,17,Jun II,888.4,23,Agu II
+2010,Polanharjo,17,Jun II,868.2,18,Jun III
+2010,Prambanan,17,Jun II,877.8,20,Jul II
+2010,Trucuk,17,Jun II,869.2,22,Agu I
+2010,Tulung,17,Jun II,999.0,18,Jun III
+2010,Wedi,17,Jun II,921.1,22,Agu I
+2010,Wonosari,17,Jun II,885.2,18,Jun III
+2011,Bayat,15,Mei III,201.4,17,Jun II
+2011,Cawas,14,Mei II,198.2,17,Jun II
+2011,Ceper,15,Mei III,206.2,17,Jun II
+2011,Delanggu,15,Mei III,200.6,17,Jun II
+2011,Gantiwarno,14,Mei II,202.6,17,Jun II
+2011,Jatinom,15,Mei III,262.4,17,Jun II
+2011,Jogonalan,15,Mei III,207.0,17,Jun II
+2011,Juwiring,15,Mei III,193.4,17,Jun II
+2011,Kalikotes,15,Mei III,209.3,17,Jun II
+2011,Karanganom,15,Mei III,229.6,17,Jun II
+2011,Karangdowo,15,Mei III,204.6,17,Jun II
+2011,Karangnongko,15,Mei III,221.8,17,Jun II
+2011,Kebonarum,15,Mei III,223.9,17,Jun II
+2011,Kemalang,15,Mei III,277.8,17,Jun II
+2011,Klaten Selatan,15,Mei III,216.5,17,Jun II
+2011,Klaten Tengah,15,Mei III,209.3,17,Jun II
+2011,Klaten Utara,15,Mei III,209.5,17,Jun II
+2011,Manisrenggo,15,Mei III,221.6,17,Jun II
+2011,Ngawen,15,Mei III,209.5,17,Jun II
+2011,Pedan,15,Mei III,193.4,17,Jun II
+2011,Polanharjo,15,Mei III,200.6,17,Jun II
+2011,Prambanan,15,Mei III,207.0,17,Jun II
+2011,Trucuk,15,Mei III,204.3,17,Jun II
+2011,Tulung,15,Mei III,263.8,17,Jun II
+2011,Wedi,15,Mei III,200.3,17,Jun II
+2011,Wonosari,15,Mei III,214.7,17,Jun II
+2012,Bayat,14,Mei II,150.0,18,Jun III
+2012,Cawas,14,Mei II,143.5,18,Jun III
+2012,Ceper,14,Mei II,134.3,18,Jun III
+2012,Delanggu,13,Mei I,131.9,18,Jun III
+2012,Gantiwarno,14,Mei II,153.0,18,Jun III
+2012,Jatinom,14,Mei II,172.6,26,Sep II
+2012,Jogonalan,14,Mei II,148.4,18,Jun III
+2012,Juwiring,13,Mei I,125.7,18,Jun III
+2012,Kalikotes,14,Mei II,153.6,26,Sep II
+2012,Karanganom,14,Mei II,155.4,26,Sep II
+2012,Karangdowo,14,Mei II,145.2,25,Sep I
+2012,Karangnongko,14,Mei II,168.1,25,Sep I
+2012,Kebonarum,14,Mei II,165.7,25,Sep I
+2012,Kemalang,14,Mei II,187.5,27,Sep III
+2012,Klaten Selatan,14,Mei II,163.5,26,Sep II
+2012,Klaten Tengah,14,Mei II,153.6,26,Sep II
+2012,Klaten Utara,14,Mei II,154.8,19,Jul I
+2012,Manisrenggo,14,Mei II,167.0,18,Jun III
+2012,Ngawen,14,Mei II,154.8,19,Jul I
+2012,Pedan,13,Mei I,125.7,18,Jun III
+2012,Polanharjo,13,Mei I,131.9,18,Jun III
+2012,Prambanan,14,Mei II,148.4,18,Jun III
+2012,Trucuk,14,Mei II,143.3,25,Sep I
+2012,Tulung,14,Mei II,173.2,27,Sep III
+2012,Wedi,14,Mei II,156.0,26,Sep II
+2012,Wonosari,13,Mei I,128.1,18,Jun III
+2013,Bayat,12,Apr III,700.6,26,Sep II
+2013,Cawas,12,Apr III,650.6,26,Sep II
+2013,Ceper,12,Apr III,617.4,25,Sep I
+2013,Delanggu,12,Apr III,571.3,25,Sep I
+2013,Gantiwarno,12,Apr III,674.0,26,Sep II
+2013,Jatinom,12,Apr III,693.4,26,Sep II
+2013,Jogonalan,12,Apr III,626.4,25,Sep I
+2013,Juwiring,12,Apr III,594.8,25,Sep I
+2013,Kalikotes,12,Apr III,688.6,26,Sep II
+2013,Karanganom,12,Apr III,644.6,26,Sep II
+2013,Karangdowo,12,Apr III,636.9,25,Sep I
+2013,Karangnongko,12,Apr III,678.6,25,Sep I
+2013,Kebonarum,12,Apr III,672.9,25,Sep I
+2013,Kemalang,12,Apr III,712.6,26,Sep II
+2013,Klaten Selatan,12,Apr III,678.7,26,Sep II
+2013,Klaten Tengah,12,Apr III,688.6,26,Sep II
+2013,Klaten Utara,12,Apr III,659.9,26,Sep II
+2013,Manisrenggo,12,Apr III,666.7,26,Sep II
+2013,Ngawen,12,Apr III,659.9,26,Sep II
+2013,Pedan,12,Apr III,594.8,25,Sep I
+2013,Polanharjo,12,Apr III,571.3,25,Sep I
+2013,Prambanan,12,Apr III,626.4,25,Sep I
+2013,Trucuk,12,Apr III,659.9,25,Sep I
+2013,Tulung,12,Apr III,679.1,26,Sep II
+2013,Wedi,12,Apr III,689.7,26,Sep II
+2013,Wonosari,12,Apr III,590.2,25,Sep I
+2014,Bayat,13,Mei I,277.7,16,Jun I
+2014,Cawas,13,Mei I,247.6,16,Jun I
+2014,Ceper,13,Mei I,268.7,16,Jun I
+2014,Delanggu,13,Mei I,259.1,16,Jun I
+2014,Gantiwarno,13,Mei I,265.9,16,Jun I
+2014,Jatinom,13,Mei I,328.9,19,Jul I
+2014,Jogonalan,13,Mei I,289.3,16,Jun I
+2014,Juwiring,13,Mei I,256.2,16,Jun I
+2014,Kalikotes,13,Mei I,281.2,16,Jun I
+2014,Karanganom,13,Mei I,290.1,16,Jun I
+2014,Karangdowo,13,Mei I,252.7,16,Jun I
+2014,Karangnongko,13,Mei I,330.6,16,Jun I
+2014,Kebonarum,13,Mei I,311.9,16,Jun I
+2014,Kemalang,15,Mei III,381.0,19,Jul I
+2014,Klaten Selatan,13,Mei I,311.4,16,Jun I
+2014,Klaten Tengah,13,Mei I,281.2,16,Jun I
+2014,Klaten Utara,13,Mei I,299.8,16,Jun I
+2014,Manisrenggo,13,Mei I,320.2,16,Jun I
+2014,Ngawen,13,Mei I,299.8,16,Jun I
+2014,Pedan,13,Mei I,256.2,16,Jun I
+2014,Polanharjo,13,Mei I,259.1,16,Jun I
+2014,Prambanan,13,Mei I,289.3,16,Jun I
+2014,Trucuk,13,Mei I,263.4,16,Jun I
+2014,Tulung,13,Mei I,345.2,19,Jul I
+2014,Wedi,13,Mei I,275.7,16,Jun I
+2014,Wonosari,13,Mei I,232.9,16,Jun I
+2015,Bayat,14,Mei II,180.3,17,Jun II
+2015,Cawas,14,Mei II,180.6,17,Jun II
+2015,Ceper,14,Mei II,160.1,17,Jun II
+2015,Delanggu,14,Mei II,136.6,17,Jun II
+2015,Gantiwarno,14,Mei II,174.6,17,Jun II
+2015,Jatinom,14,Mei II,173.6,17,Jun II
+2015,Jogonalan,10,Apr I,152.4,17,Jun II
+2015,Juwiring,14,Mei II,146.2,17,Jun II
+2015,Kalikotes,14,Mei II,174.2,17,Jun II
+2015,Karanganom,14,Mei II,157.3,17,Jun II
+2015,Karangdowo,14,Mei II,170.7,17,Jun II
+2015,Karangnongko,14,Mei II,160.0,17,Jun II
+2015,Kebonarum,14,Mei II,174.0,17,Jun II
+2015,Kemalang,14,Mei II,178.2,17,Jun II
+2015,Klaten Selatan,14,Mei II,166.9,17,Jun II
+2015,Klaten Tengah,14,Mei II,174.2,17,Jun II
+2015,Klaten Utara,14,Mei II,174.5,17,Jun II
+2015,Manisrenggo,10,Apr I,147.3,17,Jun II
+2015,Ngawen,14,Mei II,174.5,17,Jun II
+2015,Pedan,14,Mei II,146.2,17,Jun II
+2015,Polanharjo,14,Mei II,136.6,17,Jun II
+2015,Prambanan,10,Apr I,152.4,17,Jun II
+2015,Trucuk,14,Mei II,177.9,17,Jun II
+2015,Tulung,14,Mei II,160.2,17,Jun II
+2015,Wedi,14,Mei II,172.3,17,Jun II
+2015,Wonosari,14,Mei II,133.9,17,Jun II
+2016,Bayat,12,Apr III,891.1,23,Agu II
+2016,Cawas,12,Apr III,900.7,23,Agu II
+2016,Ceper,12,Apr III,898.5,23,Agu II
+2016,Delanggu,12,Apr III,878.3,23,Agu II
+2016,Gantiwarno,19,Jul I,906.5,23,Agu II
+2016,Jatinom,19,Jul I,988.2,21,Jul III
+2016,Jogonalan,19,Jul I,907.1,23,Agu II
+2016,Juwiring,12,Apr III,870.1,23,Agu II
+2016,Kalikotes,19,Jul I,928.1,23,Agu II
+2016,Karanganom,19,Jul I,974.7,21,Jul III
+2016,Karangdowo,12,Apr III,876.1,23,Agu II
+2016,Karangnongko,19,Jul I,918.2,21,Jul III
+2016,Kebonarum,19,Jul I,902.0,21,Jul III
+2016,Kemalang,19,Jul I,1078.0,21,Jul III
+2016,Klaten Selatan,19,Jul I,982.6,23,Agu II
+2016,Klaten Tengah,19,Jul I,928.1,23,Agu II
+2016,Klaten Utara,12,Apr III,946.5,19,Jul I
+2016,Manisrenggo,19,Jul I,992.7,21,Jul III
+2016,Ngawen,12,Apr III,946.5,19,Jul I
+2016,Pedan,12,Apr III,870.1,23,Agu II
+2016,Polanharjo,12,Apr III,878.3,23,Agu II
+2016,Prambanan,19,Jul I,907.1,23,Agu II
+2016,Trucuk,12,Apr III,894.7,23,Agu II
+2016,Tulung,12,Apr III,982.9,21,Jul III
+2016,Wedi,19,Jul I,923.3,23,Agu II
+2016,Wonosari,12,Apr III,835.7,23,Agu II
+2017,Bayat,11,Apr II,232.9,19,Jul I
+2017,Cawas,13,Mei I,236.4,16,Jun I
+2017,Ceper,11,Apr II,246.0,25,Sep I
+2017,Delanggu,11,Apr II,246.8,19,Jul I
+2017,Gantiwarno,11,Apr II,228.2,19,Jul I
+2017,Jatinom,11,Apr II,322.1,26,Sep II
+2017,Jogonalan,11,Apr II,234.8,25,Sep I
+2017,Juwiring,11,Apr II,235.7,19,Jul I
+2017,Kalikotes,11,Apr II,278.3,26,Sep II
+2017,Karanganom,13,Mei I,281.4,26,Sep II
+2017,Karangdowo,11,Apr II,240.2,25,Sep I
+2017,Karangnongko,11,Apr II,281.8,25,Sep I
+2017,Kebonarum,11,Apr II,280.1,19,Jul I
+2017,Kemalang,14,Mei II,325.1,26,Sep II
+2017,Klaten Selatan,11,Apr II,254.3,26,Sep II
+2017,Klaten Tengah,11,Apr II,278.3,26,Sep II
+2017,Klaten Utara,11,Apr II,281.3,26,Sep II
+2017,Manisrenggo,11,Apr II,273.9,26,Sep II
+2017,Ngawen,11,Apr II,281.3,26,Sep II
+2017,Pedan,11,Apr II,235.7,19,Jul I
+2017,Polanharjo,11,Apr II,246.8,19,Jul I
+2017,Prambanan,11,Apr II,234.8,25,Sep I
+2017,Trucuk,11,Apr II,251.6,25,Sep I
+2017,Tulung,13,Mei I,316.5,26,Sep II
+2017,Wedi,11,Apr II,248.4,19,Jul I
+2017,Wonosari,13,Mei I,235.0,25,Sep I
+2018,Bayat,11,Apr II,101.2,16,Jun I
+2018,Cawas,11,Apr II,100.5,16,Jun I
+2018,Ceper,12,Apr III,107.7,16,Jun I
+2018,Delanggu,12,Apr III,103.6,16,Jun I
+2018,Gantiwarno,11,Apr II,104.3,16,Jun I
+2018,Jatinom,12,Apr III,124.5,16,Jun I
+2018,Jogonalan,11,Apr II,106.6,16,Jun I
+2018,Juwiring,12,Apr III,100.0,16,Jun I
+2018,Kalikotes,12,Apr III,110.7,16,Jun I
+2018,Karanganom,12,Apr III,120.4,16,Jun I
+2018,Karangdowo,12,Apr III,100.4,16,Jun I
+2018,Karangnongko,12,Apr III,111.3,16,Jun I
+2018,Kebonarum,12,Apr III,112.7,16,Jun I
+2018,Kemalang,12,Apr III,140.5,16,Jun I
+2018,Klaten Selatan,11,Apr II,118.9,16,Jun I
+2018,Klaten Tengah,12,Apr III,110.7,16,Jun I
+2018,Klaten Utara,12,Apr III,113.4,16,Jun I
+2018,Manisrenggo,11,Apr II,117.2,16,Jun I
+2018,Ngawen,12,Apr III,113.4,16,Jun I
+2018,Pedan,12,Apr III,100.0,16,Jun I
+2018,Polanharjo,12,Apr III,103.6,16,Jun I
+2018,Prambanan,11,Apr II,106.6,16,Jun I
+2018,Trucuk,12,Apr III,104.2,16,Jun I
+2018,Tulung,12,Apr III,126.9,16,Jun I
+2018,Wedi,11,Apr II,101.1,16,Jun I
+2018,Wonosari,12,Apr III,107.0,16,Jun I
+2019,Bayat,12,Apr III,50.4,17,Jun II
+2019,Cawas,12,Apr III,56.4,17,Jun II
+2019,Ceper,13,Mei I,79.8,17,Jun II
+2019,Delanggu,13,Mei I,85.6,17,Jun II
+2019,Gantiwarno,12,Apr III,62.2,17,Jun II
+2019,Jatinom,13,Mei I,112.6,17,Jun II
+2019,Jogonalan,12,Apr III,67.0,17,Jun II
+2019,Juwiring,12,Apr III,74.5,17,Jun II
+2019,Kalikotes,13,Mei I,68.4,17,Jun II
+2019,Karanganom,14,Mei II,111.9,17,Jun II
+2019,Karangdowo,12,Apr III,63.0,17,Jun II
+2019,Karangnongko,13,Mei I,82.9,17,Jun II
+2019,Kebonarum,13,Mei I,76.4,17,Jun II
+2019,Kemalang,13,Mei I,111.5,17,Jun II
+2019,Klaten Selatan,12,Apr III,68.5,17,Jun II
+2019,Klaten Tengah,13,Mei I,68.4,17,Jun II
+2019,Klaten Utara,13,Mei I,86.3,17,Jun II
+2019,Manisrenggo,13,Mei I,84.7,17,Jun II
+2019,Ngawen,13,Mei I,86.3,17,Jun II
+2019,Pedan,12,Apr III,74.5,17,Jun II
+2019,Polanharjo,13,Mei I,85.6,17,Jun II
+2019,Prambanan,12,Apr III,67.0,17,Jun II
+2019,Trucuk,13,Mei I,73.0,17,Jun II
+2019,Tulung,14,Mei II,126.8,17,Jun II
+2019,Wedi,12,Apr III,57.3,17,Jun II
+2019,Wonosari,12,Apr III,79.4,17,Jun II
+2020,Bayat,16,Jun I,335.0,20,Jul II
+2020,Cawas,12,Apr III,327.7,20,Jul II
+2020,Ceper,12,Apr III,362.2,20,Jul II
+2020,Delanggu,12,Apr III,347.7,26,Sep II
+2020,Gantiwarno,12,Apr III,343.0,20,Jul II
+2020,Jatinom,16,Jun I,421.6,26,Sep II
+2020,Jogonalan,12,Apr III,359.2,20,Jul II
+2020,Juwiring,16,Jun I,332.9,20,Jul II
+2020,Kalikotes,16,Jun I,383.9,20,Jul II
+2020,Karanganom,16,Jun I,396.4,26,Sep II
+2020,Karangdowo,16,Jun I,329.7,20,Jul II
+2020,Karangnongko,12,Apr III,368.5,26,Sep II
+2020,Kebonarum,12,Apr III,383.5,20,Jul II
+2020,Kemalang,16,Jun I,431.1,26,Sep II
+2020,Klaten Selatan,12,Apr III,363.1,20,Jul II
+2020,Klaten Tengah,16,Jun I,383.9,20,Jul II
+2020,Klaten Utara,16,Jun I,391.2,20,Jul II
+2020,Manisrenggo,16,Jun I,368.6,26,Sep II
+2020,Ngawen,16,Jun I,391.2,20,Jul II
+2020,Pedan,16,Jun I,332.9,20,Jul II
+2020,Polanharjo,12,Apr III,347.7,26,Sep II
+2020,Prambanan,12,Apr III,359.2,20,Jul II
+2020,Trucuk,16,Jun I,375.9,20,Jul II
+2020,Tulung,16,Jun I,420.2,26,Sep II
+2020,Wedi,16,Jun I,339.0,20,Jul II
+2020,Wonosari,12,Apr III,329.2,20,Jul II
+2021,Bayat,12,Apr III,446.7,21,Jul III
+2021,Cawas,12,Apr III,453.5,21,Jul III
+2021,Ceper,12,Apr III,471.9,21,Jul III
+2021,Delanggu,12,Apr III,447.9,21,Jul III
+2021,Gantiwarno,12,Apr III,435.2,16,Jun I
+2021,Jatinom,12,Apr III,563.6,21,Jul III
+2021,Jogonalan,12,Apr III,473.2,21,Jul III
+2021,Juwiring,12,Apr III,452.2,21,Jul III
+2021,Kalikotes,12,Apr III,484.2,21,Jul III
+2021,Karanganom,12,Apr III,519.7,21,Jul III
+2021,Karangdowo,12,Apr III,443.5,21,Jul III
+2021,Karangnongko,12,Apr III,509.1,21,Jul III
+2021,Kebonarum,12,Apr III,500.8,21,Jul III
+2021,Kemalang,12,Apr III,558.9,21,Jul III
+2021,Klaten Selatan,12,Apr III,482.8,21,Jul III
+2021,Klaten Tengah,12,Apr III,484.2,21,Jul III
+2021,Klaten Utara,12,Apr III,519.4,21,Jul III
+2021,Manisrenggo,12,Apr III,517.5,21,Jul III
+2021,Ngawen,12,Apr III,519.4,21,Jul III
+2021,Pedan,12,Apr III,452.2,21,Jul III
+2021,Polanharjo,12,Apr III,447.9,21,Jul III
+2021,Prambanan,12,Apr III,473.2,21,Jul III
+2021,Trucuk,12,Apr III,468.5,21,Jul III
+2021,Tulung,12,Apr III,573.6,21,Jul III
+2021,Wedi,12,Apr III,442.7,16,Jun I
+2021,Wonosari,12,Apr III,456.1,21,Jul III
+2022,Bayat,18,Jun III,569.4,21,Jul III
+2022,Cawas,11,Apr II,557.5,21,Jul III
+2022,Ceper,18,Jun III,590.6,22,Agu I
+2022,Delanggu,18,Jun III,599.9,22,Agu I
+2022,Gantiwarno,18,Jun III,569.3,21,Jul III
+2022,Jatinom,19,Jul I,749.1,21,Jul III
+2022,Jogonalan,18,Jun III,607.3,21,Jul III
+2022,Juwiring,11,Apr II,549.6,21,Jul III
+2022,Kalikotes,18,Jun III,625.4,21,Jul III
+2022,Karanganom,19,Jul I,692.8,21,Jul III
+2022,Karangdowo,18,Jun III,558.8,21,Jul III
+2022,Karangnongko,18,Jun III,652.8,26,Sep II
+2022,Kebonarum,18,Jun III,661.6,26,Sep II
+2022,Kemalang,19,Jul I,746.2,21,Jul III
+2022,Klaten Selatan,18,Jun III,639.0,21,Jul III
+2022,Klaten Tengah,18,Jun III,625.4,21,Jul III
+2022,Klaten Utara,18,Jun III,661.3,22,Agu I
+2022,Manisrenggo,18,Jun III,661.1,21,Jul III
+2022,Ngawen,18,Jun III,661.3,22,Agu I
+2022,Pedan,11,Apr II,549.6,21,Jul III
+2022,Polanharjo,18,Jun III,599.9,22,Agu I
+2022,Prambanan,18,Jun III,607.3,21,Jul III
+2022,Trucuk,11,Apr II,591.7,21,Jul III
+2022,Tulung,19,Jul I,754.1,21,Jul III
+2022,Wedi,18,Jun III,568.6,21,Jul III
+2022,Wonosari,11,Apr II,557.3,26,Sep II
+2023,Bayat,14,Mei II,155.7,18,Jun III
+2023,Cawas,14,Mei II,157.7,18,Jun III
+2023,Ceper,14,Mei II,168.7,20,Jul II
+2023,Delanggu,14,Mei II,155.5,18,Jun III
+2023,Gantiwarno,14,Mei II,153.7,18,Jun III
+2023,Jatinom,14,Mei II,216.8,26,Sep II
+2023,Jogonalan,14,Mei II,177.9,18,Jun III
+2023,Juwiring,14,Mei II,143.8,18,Jun III
+2023,Kalikotes,14,Mei II,176.9,26,Sep II
+2023,Karanganom,14,Mei II,196.0,26,Sep II
+2023,Karangdowo,14,Mei II,148.3,18,Jun III
+2023,Karangnongko,14,Mei II,212.6,25,Sep I
+2023,Kebonarum,14,Mei II,210.9,25,Sep I
+2023,Kemalang,14,Mei II,240.8,26,Sep II
+2023,Klaten Selatan,14,Mei II,192.9,26,Sep II
+2023,Klaten Tengah,14,Mei II,176.9,26,Sep II
+2023,Klaten Utara,14,Mei II,194.1,26,Sep II
+2023,Manisrenggo,14,Mei II,197.3,18,Jun III
+2023,Ngawen,14,Mei II,194.1,26,Sep II
+2023,Pedan,14,Mei II,143.8,18,Jun III
+2023,Polanharjo,14,Mei II,155.5,18,Jun III
+2023,Prambanan,14,Mei II,177.9,18,Jun III
+2023,Trucuk,14,Mei II,156.9,20,Jul II
+2023,Tulung,14,Mei II,218.8,26,Sep II
+2023,Wedi,14,Mei II,161.3,26,Sep II
+2023,Wonosari,14,Mei II,147.6,18,Jun III
+2024,Bayat,13,Mei I,119.0,20,Jul II
+2024,Cawas,13,Mei I,120.2,20,Jul II
+2024,Ceper,13,Mei I,149.7,20,Jul II
+2024,Delanggu,13,Mei I,164.6,20,Jul II
+2024,Gantiwarno,13,Mei I,112.8,20,Jul II
+2024,Jatinom,13,Mei I,176.6,20,Jul II
+2024,Jogonalan,13,Mei I,129.9,20,Jul II
+2024,Juwiring,13,Mei I,135.9,20,Jul II
+2024,Kalikotes,13,Mei I,147.7,20,Jul II
+2024,Karanganom,13,Mei I,174.1,20,Jul II
+2024,Karangdowo,13,Mei I,127.5,20,Jul II
+2024,Karangnongko,13,Mei I,154.7,20,Jul II
+2024,Kebonarum,13,Mei I,153.0,20,Jul II
+2024,Kemalang,13,Mei I,184.1,26,Sep II
+2024,Klaten Selatan,13,Mei I,147.3,20,Jul II
+2024,Klaten Tengah,13,Mei I,147.7,20,Jul II
+2024,Klaten Utara,13,Mei I,167.3,20,Jul II
+2024,Manisrenggo,13,Mei I,150.7,20,Jul II
+2024,Ngawen,13,Mei I,167.3,20,Jul II
+2024,Pedan,13,Mei I,135.9,20,Jul II
+2024,Polanharjo,13,Mei I,164.6,20,Jul II
+2024,Prambanan,13,Mei I,129.9,20,Jul II
+2024,Trucuk,13,Mei I,139.8,20,Jul II
+2024,Tulung,13,Mei I,180.5,26,Sep II
+2024,Wedi,13,Mei I,122.7,20,Jul II
+2024,Wonosari,13,Mei I,151.8,20,Jul II
+2025,Bayat,11,Apr II,627.2,20,Jul II
+2025,Cawas,11,Apr II,641.2,20,Jul II
+2025,Ceper,11,Apr II,666.8,20,Jul II
+2025,Delanggu,11,Apr II,680.0,20,Jul II
+2025,Gantiwarno,11,Apr II,646.5,20,Jul II
+2025,Jatinom,11,Apr II,813.2,20,Jul II
+2025,Jogonalan,11,Apr II,659.9,20,Jul II
+2025,Juwiring,11,Apr II,642.8,20,Jul II
+2025,Kalikotes,11,Apr II,656.6,20,Jul II
+2025,Karanganom,11,Apr II,776.1,20,Jul II
+2025,Karangdowo,11,Apr II,638.5,20,Jul II
+2025,Karangnongko,11,Apr II,696.0,20,Jul II
+2025,Kebonarum,11,Apr II,689.9,20,Jul II
+2025,Kemalang,11,Apr II,890.0,16,Jun I
+2025,Klaten Selatan,11,Apr II,669.5,20,Jul II
+2025,Klaten Tengah,11,Apr II,656.6,20,Jul II
+2025,Klaten Utara,11,Apr II,720.7,20,Jul II
+2025,Manisrenggo,11,Apr II,744.5,16,Jun I
+2025,Ngawen,11,Apr II,720.7,20,Jul II
+2025,Pedan,11,Apr II,642.8,20,Jul II
+2025,Polanharjo,11,Apr II,680.0,20,Jul II
+2025,Prambanan,11,Apr II,659.9,20,Jul II
+2025,Trucuk,11,Apr II,646.8,20,Jul II
+2025,Tulung,11,Apr II,821.9,20,Jul II
+2025,Wedi,11,Apr II,654.1,20,Jul II
+2025,Wonosari,11,Apr II,644.8,20,Jul II
