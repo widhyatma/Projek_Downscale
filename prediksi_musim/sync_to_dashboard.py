@@ -507,7 +507,7 @@ def render_raster_overlay_png(
         "minLabel": min_label,
         "maxLabel": max_label,
         "gradientColors": gradient_colors,
-        "url": f"/data/overlays/{dst_png.name}",
+        "url": f"/data/kebumen/overlays/{dst_png.name}",
         "bounds": [[south, west], [north, east]],
     }
 
@@ -517,7 +517,7 @@ def sync_to_dashboard(dashboard_dir: Path = DEFAULT_DASHBOARD_DIR) -> dict:
     if not dashboard_dir.exists():
         raise FileNotFoundError(f"Direktori dashboard tujuan tidak ditemukan: {dashboard_dir}")
 
-    public_data_dir = dashboard_dir / "public" / "data"
+    public_data_dir = dashboard_dir / "public" / "data" / "kebumen"
     overlays_dir = public_data_dir / "overlays"
     public_data_dir.mkdir(parents=True, exist_ok=True)
     overlays_dir.mkdir(parents=True, exist_ok=True)
@@ -884,7 +884,7 @@ def main():
             )
         print("\n[FIRESTORE] Memulai pengunggahan otomatis ke Cloud Firestore...")
         db = init_firestore(DEFAULT_KEY_PATH)
-        data_dir = Path(args.dashboard_dir) / "public" / "data"
+        data_dir = Path(args.dashboard_dir) / "public" / "data" / "kebumen"
         sync_catalog(db, data_dir)
         sync_season(db, "2026_2027", data_dir, is_active=True)
         print("[SUKSES] Sinkronisasi ganda (Web JSON + Cloud Firestore) selesai 100%!")

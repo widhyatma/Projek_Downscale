@@ -657,7 +657,7 @@ def generate_archive_season_year(
                 "Dasarian",
                 is_dasarian=True,
             )
-            sub_path = "purworejo/" if "purworejo" in kabupaten_name.lower() else ""
+            sub_path = f"{kabupaten_name.lower()}/"
             amh_meta["url"] = f"/data/{sub_path}arsip/musim_{year}/overlays/amh_dasarian_250m.png"
             overlays_list.append(amh_meta)
             desa_amh_das = compute_zonal_means(gdf_desa, temp_amh)
@@ -1118,7 +1118,7 @@ def generate_active_season_2026(
             "compress": "lzw",
         }
 
-        url_prefix = f"/data/{'purworejo/' if 'purworejo' in kabupaten_name.lower() else ''}overlays"
+        url_prefix = f"/data/{kabupaten_name.lower()}/overlays"
 
         # Downscale AMH 250m
         df_h_sub = pd.DataFrame(hujan_records)
@@ -1312,7 +1312,7 @@ def main():
     kabupaten_name = "Purworejo" if is_purworejo else "Kebumen"
 
     if args.output_dir is None:
-        args.output_dir = DEFAULT_DASHBOARD_DIR / "public" / "data" / ("purworejo" if is_purworejo else "")
+        args.output_dir = DEFAULT_DASHBOARD_DIR / "public" / "data" / args.kabupaten.lower()
 
     if is_purworejo:
         geojson_kec_path = BASE_DIR / "purworejo_33.06_batas_kecamatan.geojson"

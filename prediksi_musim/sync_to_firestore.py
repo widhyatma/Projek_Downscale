@@ -193,9 +193,8 @@ def main():
     if args.data_dir:
         data_dir = Path(args.data_dir)
     else:
-        if args.kabupaten == "purworejo":
-            data_dir = DEFAULT_DASHBOARD_DATA / "purworejo"
-        else:
+        data_dir = DEFAULT_DASHBOARD_DATA / args.kabupaten.lower()
+        if not data_dir.exists() and args.kabupaten == "kebumen":
             data_dir = DEFAULT_DASHBOARD_DATA
 
     logger.info("=" * 70)
