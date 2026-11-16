@@ -33,8 +33,23 @@ GEOJSON_KEC_PATH = BASE_DIR / "kebumen_33.05_batas_kecamatan.geojson"
 GEOJSON_DESA_PATH = BASE_DIR / "kebumen_33.05_batas_desa.geojson"
 DEFAULT_DASHBOARD_DIR = Path(r"D:\Github\Dashboard_Jerukagung-Meteorologi")
 
-# Konteks Klimatologi Global (ENSO & IOD) 2015–2025
+# Konteks Klimatologi Global (ENSO & IOD) 2000–2025
 CLIMATE_CONTEXT = {
+    2000: "La Niña Lemah",
+    2001: "Netral",
+    2002: "El Niño Moderat",
+    2003: "Netral",
+    2004: "El Niño Lemah",
+    2005: "Netral",
+    2006: "El Niño Lemah / IOD+",
+    2007: "La Niña Kuat",
+    2008: "La Niña Moderat",
+    2009: "El Niño Moderat",
+    2010: "La Niña Kuat (Tahun Basah Ekstrem)",
+    2011: "La Niña Moderat",
+    2012: "Netral / El Niño Lemah",
+    2013: "Netral",
+    2014: "Transisi Netral",
     2015: "Super El Niño",
     2016: "La Niña Lemah",
     2017: "Netral",
@@ -45,7 +60,7 @@ CLIMATE_CONTEXT = {
     2022: "La Niña Lemah",
     2023: "Super El Niño",
     2024: "Transisi Netral",
-    2025: "Netral"
+    2025: "Netral",
 }
 
 BULAN_NAMES = [
@@ -902,8 +917,8 @@ def generate_archive_season_year(
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Generator Arsip Prediksi Musim & Evaluasi Akurasi 10 Tahun (2015–2025)")
-    parser.add_argument("--start-year", type=int, default=2015, help="Tahun awal arsip (default: 2015)")
+    parser = argparse.ArgumentParser(description="Generator Arsip Prediksi Musim & Evaluasi Akurasi 26 Tahun (2000–2025)")
+    parser.add_argument("--start-year", type=int, default=2000, help="Tahun awal arsip (default: 2000)")
     parser.add_argument("--end-year", type=int, default=2025, help="Tahun akhir arsip (default: 2025)")
     parser.add_argument(
         "--output-dir",
@@ -914,7 +929,7 @@ def main():
     args = parser.parse_args()
 
     print("=" * 80)
-    print("MEMULAI GENERATOR ARSIP PREDIKSI MUSIM & EVALUASI AKURASI HISTORIS (2015–2025)")
+    print("MEMULAI GENERATOR ARSIP PREDIKSI MUSIM & EVALUASI AKURASI HISTORIS (2000–2025)")
     print(f"Target Tahun: {args.start_year} s.d. {args.end_year} (Span {args.end_year - args.start_year + 1} Tahun)")
     print(f"Output Dashboard: {args.output_dir}")
     print("=" * 80)
