@@ -32,6 +32,7 @@ import pandas as pd
 from shapely.validation import make_valid
 from shapely.ops import transform, unary_union
 from google.oauth2.service_account import Credentials
+from gee_kabupaten_config import resolve_kabupaten_paths
 
 def init_earth_engine(sa_path=None, project_id='staklimjerukagung'):
     """Inisialisasi GEE otomatis (Lokal SA JSON, Kaggle Secrets, atau OAuth)."""
@@ -434,34 +435,41 @@ def upload_ke_kaggle(dataset_handle, upload_root, subfolder_data, nama_dataset):
 
 def main():
     parser = argparse.ArgumentParser(description="GEE ERA5-Land Hourly Downloader CLI with Pre-Flight Guardrails")
+    parser.add_argument("--kabupaten", type=str, default="kebumen", help="Nama kabupaten target (default: kebumen)")
     parser.add_argument("--start-year", type=int, default=2000, help="Tahun awal pengunduhan (default: 2000)")
     parser.add_argument("--end-year", type=int, default=2026, help="Tahun akhir pengunduhan (default: 2026)")
     parser.add_argument("--start-month", type=int, default=1, help="Bulan awal (default: 1)")
     parser.add_argument("--end-month", type=int, default=12, help="Bulan akhir (default: 12)")
     parser.add_argument("--force", action="store_true", help="Paksa unduh ulang meskipun file lokal sudah lengkap")
-    parser.add_argument("--output-dir", type=str, default=os.path.join(os.getcwd(), "data", "era5_land"), help="Folder basis output ERA5-Land")
-    parser.add_argument("--geojson", type=str, default="kebumen_33.05_batas_kecamatan.geojson", help="Path batas GeoJSON Kebumen")
+    parser.add_argument("--output-dir", type=str, default=None, help="Folder basis output (default otomatis hierarkis per kabupaten)")
+    parser.add_argument("--geojson", type=str, default=None, help="Path batas GeoJSON (default otomatis sesuai --kabupaten)")
     parser.add_argument("--service-account", type=str, default=None, help="Path file Service Account JSON GEE")
     parser.add_argument("--upload-kaggle", action="store_true", help="Unggah otomatis versi baru ke Kaggle Dataset via kagglehub")
     args = parser.parse_args()
 
+    geojson_path, output_dir, kab_cfg = resolve_kabupaten_paths(
+        "era5_land", kabupaten_name=args.kabupaten, custom_geojson=args.geojson, custom_output_dir=args.output_dir
+    )
+
     print("=" * 75)
     print("GEE ERA5-LAND HOURLY (PER JAM) MULTI-VARIABEL DOWNLOADER")
+    print(f"Wilayah: {kab_cfg['name']} ({args.kabupaten.upper()})")
     print(f"Periode: {args.start_year} s.d. {args.end_year}")
-    print(f"Output : {args.output_dir}")
+    print(f"GeoJSON: {geojson_path}")
+    print(f"Output : {output_dir}")
     print(f"Force  : {args.force}")
     print("=" * 75)
 
     init_earth_engine(sa_path=args.service_account)
-    batas_ee, ee_bbox, bounds = prepare_geometry(args.geojson)
-    print(f"[Geometri] Extent Kebumen: Lon [{bounds[0]:.4f}, {bounds[2]:.4f}], Lat [{bounds[1]:.4f}, {bounds[3]:.4f}]\n")
+    batas_ee, ee_bbox, bounds = prepare_geometry(geojson_path)
+    print(f"[Geometri] Extent {kab_cfg['name']}: Lon [{bounds[0]:.4f}, {bounds[2]:.4f}], Lat [{bounds[1]:.4f}, {bounds[3]:.4f}]\n")
 
     for tahun in range(args.start_year, args.end_year + 1):
         m_start = args.start_month if tahun == args.start_year else 1
         m_end = args.end_month if tahun == args.end_year else 12
 
         for bulan in range(m_start, m_end + 1):
-            unduh_era5_land_bulanan(tahun, bulan, batas_ee, ee_bbox, args.output_dir, force=args.force)
+            unduh_era5_land_bulanan(tahun, bulan, batas_ee, ee_bbox, output_dir, force=args.force)
 
     print("=" * 75)
     print("SELESAI PIPELINE UNDUH ERA5-LAND HOURLY")

@@ -777,7 +777,7 @@ def generate_archive_season_year(
                 "Skor",
                 is_dasarian=False,
             )
-            dr_meta["url"] = f"/data/arsip/musim_{year}/overlays/kerawanan_kekeringan_250m.png"
+            dr_meta["url"] = f"/data/{sub_path}arsip/musim_{year}/overlays/kerawanan_kekeringan_250m.png"
             overlays_list.append(dr_meta)
 
             kec_dr_score = compute_zonal_means(gdf_kec, temp_dr)
@@ -1103,7 +1103,7 @@ def generate_active_season_2026(
 
     # 3. Downscale 250m & Render Overlays
     overlays_list = []
-    desa_amh_das, desa_amk_das, desa_tot_mh, desa_tot_mk = None, None, None, None
+    desa_amh_das, desa_amk_das, desa_tot_mh, desa_tot_mk, desa_dr_score = None, None, None, None, None
 
     if mesh is not None:
         meta_tif = {
@@ -1128,7 +1128,7 @@ def generate_active_season_2026(
         with rasterio.open(temp_amh, "w", **meta_tif) as dst:
             dst.write(np.nan_to_num(amh_grid, nan=-9999.0).astype(np.float32), 1)
         dst_amh_png = overlay_dir / "amh_dasarian_250m.png"
-        amh_meta = render_raster_overlay_png(temp_amh, dst_amh_png, "YlGnBu_r", "amh_dasarian_250m", "hujan", "Awal Musim Hujan 2026/2027 (Dasarian)", "dasarian", is_dasarian=True)
+        amh_meta = render_raster_overlay_png(temp_amh, dst_amh_png, "YlGnBu_r", "amh_250m", "hujan", "Awal Musim Hujan 2026/2027 (Dasarian)", "dasarian", is_dasarian=True)
         amh_meta["url"] = f"{url_prefix}/amh_dasarian_250m.png"
         overlays_list.append(amh_meta)
         desa_amh_das = compute_zonal_means(gdf_desa, temp_amh)
@@ -1140,7 +1140,7 @@ def generate_active_season_2026(
         with rasterio.open(temp_mh, "w", **meta_tif) as dst:
             dst.write(np.nan_to_num(mh_grid, nan=-9999.0).astype(np.float32), 1)
         dst_mh_png = overlay_dir / "total_hujan_mh_250m.png"
-        mh_meta = render_raster_overlay_png(temp_mh, dst_mh_png, "Blues", "total_hujan_mh_250m", "hujan", "Total Curah Hujan MH 2026/2027 (mm)", "mm")
+        mh_meta = render_raster_overlay_png(temp_mh, dst_mh_png, "Blues", "total_hujan_mh", "hujan", "Total Curah Hujan MH 2026/2027 (mm)", "mm")
         mh_meta["url"] = f"{url_prefix}/total_hujan_mh_250m.png"
         overlays_list.append(mh_meta)
         desa_tot_mh = compute_zonal_means(gdf_desa, temp_mh)
@@ -1154,7 +1154,7 @@ def generate_active_season_2026(
         with rasterio.open(temp_amk, "w", **meta_tif) as dst:
             dst.write(np.nan_to_num(amk_grid, nan=-9999.0).astype(np.float32), 1)
         dst_amk_png = overlay_dir / "amk_dasarian_250m.png"
-        amk_meta = render_raster_overlay_png(temp_amk, dst_amk_png, "YlOrBr", "amk_dasarian_250m", "kemarau", "Awal Musim Kemarau 2026 (Dasarian)", "dasarian", is_dasarian=True)
+        amk_meta = render_raster_overlay_png(temp_amk, dst_amk_png, "YlOrBr", "amk_250m", "kemarau", "Awal Musim Kemarau 2026 (Dasarian)", "dasarian", is_dasarian=True)
         amk_meta["url"] = f"{url_prefix}/amk_dasarian_250m.png"
         overlays_list.append(amk_meta)
         desa_amk_das = compute_zonal_means(gdf_desa, temp_amk)
@@ -1166,11 +1166,49 @@ def generate_active_season_2026(
         with rasterio.open(temp_mk, "w", **meta_tif) as dst:
             dst.write(np.nan_to_num(mk_grid, nan=-9999.0).astype(np.float32), 1)
         dst_mk_png = overlay_dir / "total_hujan_mk_250m.png"
-        mk_meta = render_raster_overlay_png(temp_mk, dst_mk_png, "YlGnBu", "total_hujan_mk_250m", "kemarau", "Total Curah Hujan MK 2026 (mm)", "mm")
+        mk_meta = render_raster_overlay_png(temp_mk, dst_mk_png, "YlGnBu", "total_hujan_mk", "kemarau", "Total Curah Hujan MK 2026 (mm)", "mm")
         mk_meta["url"] = f"{url_prefix}/total_hujan_mk_250m.png"
         overlays_list.append(mk_meta)
         desa_tot_mk = compute_zonal_means(gdf_desa, temp_mk)
         if temp_mk.exists(): temp_mk.unlink()
+
+        # Downscale & Render Indeks Kerawanan Kekeringan 250m
+        defisit_score = np.clip((600.0 - mk_grid) / 600.0 * 60.0, 0.0, 60.0)
+        pantai_score = np.clip((30.0 - mesh["dist_coast"]) / 30.0 * 25.0, 0.0, 25.0)
+        lereng_score = np.clip(mesh["slope"] / 40.0 * 15.0, 0.0, 15.0)
+        dr_grid = defisit_score + pantai_score + lereng_score
+        dr_grid[~mesh["mask"]] = np.nan
+
+        temp_dr = out_dir / "temp_dr_2026.tif"
+        with rasterio.open(temp_dr, "w", **meta_tif) as dst:
+            dst.write(np.nan_to_num(dr_grid, nan=-9999.0).astype(np.float32), 1)
+        dst_dr_png = overlay_dir / "kerawanan_kekeringan_250m.png"
+        dr_meta = render_raster_overlay_png(
+            temp_dr,
+            dst_dr_png,
+            "YlOrRd",
+            "kekeringan_250m",
+            "kemarau",
+            "Kerawanan Kekeringan 250m (2026)",
+            "Skor",
+            is_dasarian=False,
+        )
+        dr_meta["url"] = f"{url_prefix}/kerawanan_kekeringan_250m.png"
+        overlays_list.append(dr_meta)
+        kec_dr_score = compute_zonal_means(gdf_kec, temp_dr)
+        desa_dr_score = compute_zonal_means(gdf_desa, temp_dr)
+
+        kec_dr_map = {
+            str(nm).strip(): round(float(score), 1)
+            for nm, score in zip(gdf_kec["nm_kecamatan"], kec_dr_score)
+        }
+        for r in kemarau_records:
+            k_name = r["kecamatan"]
+            if k_name in kec_dr_map:
+                val = kec_dr_map[k_name]
+                r["kekeringan_skor"] = val
+                r["kelas_kekeringan"] = classify_kekeringan(val)
+        if temp_dr.exists(): temp_dr.unlink()
 
     # 4. Save Kecamatan JSON
     prediksi_payload = {
@@ -1235,6 +1273,7 @@ def generate_active_season_2026(
         })
         desa_hujan_records.append(d_h_rec)
 
+        dr_val = round(float(desa_dr_score[idx_d]), 1) if desa_dr_score else parent_k.get("kekeringan_skor", 60.0)
         d_k_rec = dict(parent_k)
         d_k_rec.update({
             "code": code,
@@ -1244,8 +1283,8 @@ def generate_active_season_2026(
             "kelas_hujan_mk": classify_hujan_mk(tot_mk_val),
             "amk_dasarian_250m": amk_val,
             "amk_label_250m": dasarian_to_short_label(amk_val),
-            "kekeringan_skor": 62.0,
-            "kelas_kekeringan": "Waspada",
+            "kekeringan_skor": dr_val,
+            "kelas_kekeringan": classify_kekeringan(dr_val),
         })
         desa_kemarau_records.append(d_k_rec)
 

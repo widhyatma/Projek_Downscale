@@ -1,17 +1,17 @@
 kecamatan,normal_amh_dasarian,normal_amh_label,prakiraan_amh_dasarian,prakiraan_amh_label,perbandingan_terhadap_normal,probabilitas_maju_pct,probabilitas_sama_pct,probabilitas_mundur_pct,prakiraan_sifat_hujan,prakiraan_puncak_bulan,normal_puncak_bulan,perbandingan_puncak_thd_normal,prakiraan_puncak_dasarian,prakiraan_puncak_label,rekomendasi_olah_tanah,rekomendasi_tanam_padi_mt1
-Bagelen,30.0,Okt III,32.1,Nov II,Mundur,1.5,3.5,95.0,Bawah Normal,Juni,Februari,Bergeser,17.0,Jun II,Nov I,Nov III
-Banyuurip,30.0,Okt III,32.1,Nov II,Mundur,1.5,3.5,95.0,Bawah Normal,Juni,Juni,Sama,17.2,Jun II,Nov I,Nov III
-Bayan,30.0,Okt III,32.1,Nov II,Mundur,1.5,3.5,95.0,Bawah Normal,Juli,Juni,Bergeser,19.4,Jul I,Nov I,Nov III
-Bener,29.5,Okt III,31.7,Nov II,Mundur,1.5,3.5,95.0,Bawah Normal,Agustus,Februari,Bergeser,22.4,Agu I,Nov I,Nov III
-Bruno,29.5,Okt III,31.7,Nov II,Mundur,1.5,3.5,95.0,Bawah Normal,Agustus,November,Bergeser,24.4,Agu III,Nov I,Nov III
-Butuh,29.5,Okt III,32.1,Nov II,Mundur,1.5,3.5,95.0,Bawah Normal,Agustus,November,Bergeser,21.8,Agu I,Nov I,Nov III
-Gebang,29.5,Okt III,31.7,Nov II,Mundur,1.5,3.5,95.0,Bawah Normal,Agustus,November,Bergeser,22.4,Agu I,Nov I,Nov III
-Grabag,30.0,Okt III,32.1,Nov II,Mundur,1.5,3.5,95.0,Bawah Normal,Juni,November,Bergeser,17.0,Jun II,Nov I,Nov III
-Kaligesing,30.0,Okt III,31.7,Nov II,Mundur,2.4,5.6,92.0,Bawah Normal,Juli,November,Bergeser,20.2,Jul II,Nov I,Nov III
-Kemiri,29.5,Okt III,31.7,Nov II,Mundur,1.5,3.5,95.0,Bawah Normal,Agustus,November,Bergeser,22.4,Agu I,Nov I,Nov III
-Kutoarjo,30.0,Okt III,32.1,Nov II,Mundur,1.5,3.5,95.0,Bawah Normal,Juli,Juni,Bergeser,19.4,Jul I,Nov I,Nov III
-Loano,30.0,Okt III,31.7,Nov II,Mundur,2.4,5.6,92.0,Bawah Normal,Juli,November,Bergeser,20.0,Jul II,Nov I,Nov III
-Ngombol,30.0,Okt III,32.1,Nov II,Mundur,1.5,3.5,95.0,Bawah Normal,Juni,Februari,Bergeser,16.9,Jun II,Nov I,Nov III
-Pituruh,29.5,Okt III,31.7,Nov II,Mundur,1.5,3.5,95.0,Bawah Normal,Agustus,November,Bergeser,24.4,Agu III,Nov I,Nov III
-Purwodadi,30.0,Okt III,32.1,Nov II,Mundur,1.5,3.5,95.0,Bawah Normal,Juni,Juni,Sama,17.0,Jun II,Nov I,Nov III
-Purworejo,30.0,Okt III,32.1,Nov II,Mundur,1.5,3.5,95.0,Bawah Normal,Juli,Februari,Bergeser,19.5,Jul II,Nov I,Nov III
+Bagelen,30.0,Okt III,32.1,Nov II,Mundur,1.5,3.5,95.0,Bawah Normal,Januari 2027,Januari,Sama,34.0,Januari 2027,Nov I,Nov III
+Banyuurip,30.0,Okt III,32.1,Nov II,Mundur,1.5,3.5,95.0,Bawah Normal,Januari 2027,Januari,Sama,34.0,Januari 2027,Nov I,Nov III
+Bayan,30.0,Okt III,32.1,Nov II,Mundur,1.5,3.5,95.0,Bawah Normal,Januari 2027,Januari,Sama,34.0,Januari 2027,Nov I,Nov III
+Bener,29.5,Okt III,31.7,Nov II,Mundur,1.5,3.5,95.0,Bawah Normal,Januari 2027,Januari,Sama,34.0,Januari 2027,Nov I,Nov III
+Bruno,29.5,Okt III,31.7,Nov II,Mundur,1.5,3.5,95.0,Bawah Normal,Januari 2027,Januari,Sama,34.0,Januari 2027,Nov I,Nov III
+Butuh,29.5,Okt III,32.1,Nov II,Mundur,1.5,3.5,95.0,Bawah Normal,Januari 2027,Januari,Sama,34.0,Januari 2027,Nov I,Nov III
+Gebang,29.5,Okt III,31.7,Nov II,Mundur,1.5,3.5,95.0,Bawah Normal,Januari 2027,Januari,Sama,34.0,Januari 2027,Nov I,Nov III
+Grabag,30.0,Okt III,32.1,Nov II,Mundur,1.5,3.5,95.0,Bawah Normal,Januari 2027,Januari,Sama,34.0,Januari 2027,Nov I,Nov III
+Kaligesing,30.0,Okt III,31.7,Nov II,Mundur,2.4,5.6,92.0,Bawah Normal,Januari 2027,Januari,Sama,34.0,Januari 2027,Nov I,Nov III
+Kemiri,29.5,Okt III,31.7,Nov II,Mundur,1.5,3.5,95.0,Bawah Normal,Januari 2027,Januari,Sama,34.0,Januari 2027,Nov I,Nov III
+Kutoarjo,30.0,Okt III,32.1,Nov II,Mundur,1.5,3.5,95.0,Bawah Normal,Januari 2027,Januari,Sama,34.0,Januari 2027,Nov I,Nov III
+Loano,30.0,Okt III,31.7,Nov II,Mundur,2.4,5.6,92.0,Bawah Normal,Januari 2027,Januari,Sama,34.0,Januari 2027,Nov I,Nov III
+Ngombol,30.0,Okt III,32.1,Nov II,Mundur,1.5,3.5,95.0,Bawah Normal,Januari 2027,Januari,Sama,34.0,Januari 2027,Nov I,Nov III
+Pituruh,29.5,Okt III,31.7,Nov II,Mundur,1.5,3.5,95.0,Bawah Normal,Januari 2027,Januari,Sama,34.0,Januari 2027,Nov I,Nov III
+Purwodadi,30.0,Okt III,32.1,Nov II,Mundur,1.5,3.5,95.0,Bawah Normal,Januari 2027,Januari,Sama,34.0,Januari 2027,Nov I,Nov III
+Purworejo,30.0,Okt III,32.1,Nov II,Mundur,1.5,3.5,95.0,Bawah Normal,Januari 2027,Januari,Sama,34.0,Januari 2027,Nov I,Nov III

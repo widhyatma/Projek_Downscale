@@ -1,17 +1,17 @@
 kecamatan,normal_amk_dasarian,normal_amk_label,prakiraan_amk_dasarian,prakiraan_amk_label,perbandingan_terhadap_normal,probabilitas_maju_pct,probabilitas_sama_pct,probabilitas_mundur_pct,prakiraan_sifat_hujan_mk,prakiraan_pmk_bulan,normal_pmk_bulan,perbandingan_pmk_thd_normal,prakiraan_pmk_dasarian,prakiraan_pmk_label,rekomendasi_keringkan_sawah_mt2,rekomendasi_tanam_palawija_mt3
-Bagelen,12.0,Apr III,14.1,Mei II,Mundur,1.5,3.5,95.0,Bawah Normal,Juni,Juni,Sama,17.5,Jun III,Apr III,Mei II
-Banyuurip,12.0,Apr III,14.2,Mei II,Mundur,1.5,3.5,95.0,Bawah Normal,Juni,Juni,Sama,17.6,Jun III,Apr III,Mei II
-Bayan,12.0,Apr III,14.9,Mei III,Mundur,1.5,3.5,95.0,Bawah Normal,Juni,Juni,Sama,17.6,Jun III,Mei I,Mei III
-Bener,14.0,Mei II,15.4,Mei III,Mundur,3.3,7.7,89.0,Bawah Normal,Juni,Juni,Sama,18.1,Jun III,Mei I,Mei III
-Bruno,15.0,Mei III,15.5,Jun I,Sama,6.0,14.0,80.0,Bawah Normal,Juli,Juni,Bergeser,18.6,Jul I,Mei II,Jun I
-Butuh,12.0,Apr III,15.2,Mei III,Mundur,1.5,3.5,95.0,Bawah Normal,Juni,Juni,Sama,17.9,Jun III,Mei I,Mei III
-Gebang,13.5,Mei II,15.3,Mei III,Mundur,2.1,4.9,93.0,Bawah Normal,Juni,Juni,Sama,18.2,Jun III,Mei I,Mei III
-Grabag,11.0,Apr II,13.9,Mei II,Mundur,1.5,3.5,95.0,Bawah Normal,Juni,Juni,Sama,17.5,Jun III,Apr III,Mei II
-Kaligesing,13.5,Mei II,15.2,Mei III,Mundur,2.4,5.6,92.0,Bawah Normal,Juni,Juni,Sama,18.0,Jun III,Mei I,Mei III
-Kemiri,13.5,Mei II,15.3,Mei III,Mundur,2.1,4.9,93.0,Bawah Normal,Juni,Juni,Sama,18.3,Jun III,Mei I,Mei III
-Kutoarjo,12.0,Apr III,14.9,Mei III,Mundur,1.5,3.5,95.0,Bawah Normal,Juni,Juni,Sama,17.6,Jun III,Mei I,Mei III
-Loano,13.5,Mei II,15.2,Mei III,Mundur,2.4,5.6,92.0,Bawah Normal,Juni,Juni,Sama,17.9,Jun III,Mei I,Mei III
-Ngombol,11.0,Apr II,13.9,Mei II,Mundur,1.5,3.5,95.0,Bawah Normal,Juni,Juni,Sama,17.5,Jun III,Apr III,Mei II
-Pituruh,14.5,Mei II,15.4,Mei III,Sama,4.8,11.2,84.0,Bawah Normal,Juli,Agustus,Bergeser,18.6,Jul I,Mei I,Mei III
-Purwodadi,11.5,Apr III,14.0,Mei II,Mundur,1.5,3.5,95.0,Bawah Normal,Juni,Juni,Sama,17.5,Jun III,Apr III,Mei II
-Purworejo,12.0,Apr III,14.8,Mei III,Mundur,1.5,3.5,95.0,Bawah Normal,Juni,Juni,Sama,17.6,Jun III,Mei I,Mei III
+Bagelen,12.0,Apr III,14.1,Mei II,Mundur,1.5,3.5,95.0,Bawah Normal,Agustus 2026,Agustus,Sama,24.0,Agustus 2026,Apr III,Mei II
+Banyuurip,12.0,Apr III,14.2,Mei II,Mundur,1.5,3.5,95.0,Bawah Normal,Agustus 2026,Agustus,Sama,24.0,Agustus 2026,Apr III,Mei II
+Bayan,12.0,Apr III,14.9,Mei III,Mundur,1.5,3.5,95.0,Bawah Normal,Agustus 2026,Agustus,Sama,24.0,Agustus 2026,Mei I,Mei III
+Bener,14.0,Mei II,15.4,Mei III,Mundur,3.3,7.7,89.0,Bawah Normal,Agustus 2026,Agustus,Sama,24.0,Agustus 2026,Mei I,Mei III
+Bruno,15.0,Mei III,15.5,Jun I,Sama,6.0,14.0,80.0,Bawah Normal,Agustus 2026,Agustus,Sama,24.0,Agustus 2026,Mei II,Jun I
+Butuh,12.0,Apr III,15.2,Mei III,Mundur,1.5,3.5,95.0,Bawah Normal,Agustus 2026,Agustus,Sama,24.0,Agustus 2026,Mei I,Mei III
+Gebang,13.5,Mei II,15.3,Mei III,Mundur,2.1,4.9,93.0,Bawah Normal,Agustus 2026,Agustus,Sama,24.0,Agustus 2026,Mei I,Mei III
+Grabag,11.0,Apr II,13.9,Mei II,Mundur,1.5,3.5,95.0,Bawah Normal,Agustus 2026,Agustus,Sama,24.0,Agustus 2026,Apr III,Mei II
+Kaligesing,13.5,Mei II,15.2,Mei III,Mundur,2.4,5.6,92.0,Bawah Normal,Agustus 2026,Agustus,Sama,24.0,Agustus 2026,Mei I,Mei III
+Kemiri,13.5,Mei II,15.3,Mei III,Mundur,2.1,4.9,93.0,Bawah Normal,Agustus 2026,Agustus,Sama,24.0,Agustus 2026,Mei I,Mei III
+Kutoarjo,12.0,Apr III,14.9,Mei III,Mundur,1.5,3.5,95.0,Bawah Normal,Agustus 2026,Agustus,Sama,24.0,Agustus 2026,Mei I,Mei III
+Loano,13.5,Mei II,15.2,Mei III,Mundur,2.4,5.6,92.0,Bawah Normal,Agustus 2026,Agustus,Sama,24.0,Agustus 2026,Mei I,Mei III
+Ngombol,11.0,Apr II,13.9,Mei II,Mundur,1.5,3.5,95.0,Bawah Normal,Agustus 2026,Agustus,Sama,24.0,Agustus 2026,Apr III,Mei II
+Pituruh,14.5,Mei II,15.4,Mei III,Sama,4.8,11.2,84.0,Bawah Normal,Agustus 2026,Agustus,Sama,24.0,Agustus 2026,Mei I,Mei III
+Purwodadi,11.5,Apr III,14.0,Mei II,Mundur,1.5,3.5,95.0,Bawah Normal,Agustus 2026,Agustus,Sama,24.0,Agustus 2026,Apr III,Mei II
+Purworejo,12.0,Apr III,14.8,Mei III,Mundur,1.5,3.5,95.0,Bawah Normal,Agustus 2026,Agustus,Sama,24.0,Agustus 2026,Mei I,Mei III

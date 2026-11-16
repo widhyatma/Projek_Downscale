@@ -21,10 +21,12 @@
   - Always compute multi-year climatological monthly averages as an overarching reference plot.
   - Calculate zonal statistics (mean, median, min, max, std) per administrative sub-district for downstream statistical downscaling.
 
-## 3. Multi-Dataset Hierarchical Data Architecture
-- All GEE and spatial satellite datasets must follow a standardized 4-tier nested folder structure:
-  - `data/<jenis_data>/<tahun>/<tahun_bulan>/<file_harian_atau_per_jam>.nc` (e.g. `data/chirps/2000/2000_01/chirps_2000_01_01.nc`).
-  - Supports modular scalability across multiple GEE products: `chirps`, `gsmap`, `era5_land`, `modis_ndvi`, etc.
+## 3. Multi-Dataset Hierarchical Data Architecture (Multi-Kabupaten Standard)
+- All GEE and spatial satellite datasets must follow a standardized 5-tier nested folder structure:
+  - `data/<jenis_data>/<kabupaten>/<tahun>/<tahun_bulan>/<file_harian_atau_per_jam>.nc` (e.g. `data/chirps/purworejo/chirps_sat/2026/2026_01/chirps_sat_2026_01_01.nc`).
+  - Supports modular scalability across multiple GEE products: `chirps`, `gsmap`, `era5_land`, `imerg`, `modis_ndvi`, etc.
+  - Standardized via `gee_kabupaten_config.py` resolving `--kabupaten {kebumen, purworejo, ...}` CLI arguments across all GEE downloaders (`GEE_CHIRPS.py`, `GEE_GSMAP.py`, `GEE_ERA5_Land.py`, `GEE_IMERG.py`) and extraction modules (`prediksi_musim/ekstraksi_dasarian.py`).
+  - Backward compatibility: If `--kabupaten kebumen` is requested and historical data resides directly in `data/<jenis_data>/2000/`, it is automatically detected and preserved without redundant re-downloads.
   - Use GEE monthly multi-band stacking (`toBands()`) during retrieval to optimize API throughput 30x faster.
 
 ## 4. Modular Notebook Isolation

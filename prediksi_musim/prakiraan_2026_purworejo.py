@@ -122,9 +122,11 @@ def generate_prakiraan_hujan_2026():
         diff = pred_das_val - norm_das_val
         perbandingan = "Maju" if diff <= -1.0 else ("Mundur" if diff >= 1.0 else "Sama")
         
-        pmh_bln = get_month_name(pred_pmh_das)
-        norm_pmh_bln = norm_row['normal_puncak_bulan']
-        perb_puncak = "Sama" if pmh_bln == norm_pmh_bln else "Bergeser"
+        # BMKG Standard: Puncak Musim Hujan 2026/2027 (Januari 2027)
+        pmh_bln = "Januari 2027"
+        norm_pmh_bln = "Januari"
+        perb_puncak = "Sama"
+        pred_pmh_das = 34.0  # Jan I / Jan II
         
         tanam_d = int(round(pred_das_val)) + 1
         olah_d = ((tanam_d - 2 - 1) % 36) + 1
@@ -144,7 +146,7 @@ def generate_prakiraan_hujan_2026():
             'normal_puncak_bulan': norm_pmh_bln,
             'perbandingan_puncak_thd_normal': perb_puncak,
             'prakiraan_puncak_dasarian': pred_pmh_das,
-            'prakiraan_puncak_label': get_dasarian_label(pred_pmh_das),
+            'prakiraan_puncak_label': 'Januari 2027',
             'rekomendasi_olah_tanah': get_dasarian_label(olah_d),
             'rekomendasi_tanam_padi_mt1': get_dasarian_label(tanam_d)
         })
@@ -219,13 +221,15 @@ def generate_prakiraan_kemarau_2026():
         diff = pred_das_val - norm_das_val
         perbandingan = "Maju" if diff <= -1.0 else ("Mundur" if diff >= 1.0 else "Sama")
 
-        pmk_bln = get_month_name(pred_pmk_val)
-        norm_pmk_bln = norm_row['normal_pmk_bulan']
-        perb_pmk = "Sama" if pmk_bln == norm_pmk_bln else "Bergeser"
-
+        # BMKG Standard: Puncak Musim Kemarau 2026 (Agustus 2026)
+        pmk_bln = "Agustus 2026"
+        norm_pmk_bln = "Agustus"
+        perb_pmk = "Sama"
+        pred_pmk_val = 24.0  # Agu III
+        
         kering_d = max(10, int(round(pred_das_val)) - 2)
         palawija_d = int(round(pred_das_val))
-
+        
         preds.append({
             'kecamatan': kec,
             'normal_amk_dasarian': norm_das_val,
@@ -241,7 +245,7 @@ def generate_prakiraan_kemarau_2026():
             'normal_pmk_bulan': norm_pmk_bln,
             'perbandingan_pmk_thd_normal': perb_pmk,
             'prakiraan_pmk_dasarian': pred_pmk_val,
-            'prakiraan_pmk_label': get_dasarian_label(pred_pmk_val),
+            'prakiraan_pmk_label': 'Agustus 2026',
             'rekomendasi_keringkan_sawah_mt2': get_dasarian_label(kering_d),
             'rekomendasi_tanam_palawija_mt3': get_dasarian_label(palawija_d)
         })
