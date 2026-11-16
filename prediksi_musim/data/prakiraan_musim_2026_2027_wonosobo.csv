@@ -1,5 +1,5 @@
 kecamatan,prakiraan_kategori_amh,prakiraan_amh_dasarian,prakiraan_amh_label,normal_amh_dasarian,normal_amh_label,perbandingan_terhadap_normal,selisih_dasarian,probabilitas_maju,probabilitas_sama,probabilitas_mundur,prakiraan_sifat_hujan,prakiraan_puncak_bulan,normal_puncak_bulan,perbandingan_puncak_thd_normal,rekomendasi_tanam_padi_mt1
-Garung,Mundur,29.8,Okt III,29.5,Okt III,Mundur,0.3,6.5,15.2,78.3,Bawah Normal,Juni,Juni,Sama dengan Normal,Nov I s.d. Nov III
+Garung,Mundur,29.8,Okt III,29.5,Okt III,Mundur,0.3,6.5,15.2,78.3,Bawah Normal,Januari,Januari,Sama dengan Normal,Nov I s.d. Nov III
 Kalibawang,Mundur,29.8,Okt III,29.5,Okt III,Mundur,0.3,6.5,15.2,78.3,Bawah Normal,Desember,Desember,Sama dengan Normal,Nov I s.d. Nov III
 Kalikajar,Mundur,29.8,Okt III,29.5,Okt III,Mundur,0.3,6.5,15.2,78.3,Bawah Normal,Desember,Desember,Sama dengan Normal,Nov I s.d. Nov III
 Kaliwiro,Mundur,29.5,Okt III,29.0,Okt II,Mundur,0.5,6.0,13.9,80.1,Bawah Normal,Desember,Desember,Sama dengan Normal,Nov I s.d. Nov III
@@ -7,7 +7,7 @@ Kejajar,Mundur,29.9,Okt III,29.5,Okt III,Mundur,0.4,6.3,14.7,79.0,Bawah Normal,F
 Kepil,Mundur,29.9,Okt III,29.5,Okt III,Mundur,0.4,6.4,15.0,78.6,Bawah Normal,Desember,Desember,Sama dengan Normal,Nov I s.d. Nov III
 Kertek,Mundur,29.8,Okt III,29.5,Okt III,Mundur,0.3,6.6,15.3,78.1,Bawah Normal,November,November,Sama dengan Normal,Nov I s.d. Nov III
 Leksono,Mundur,29.5,Okt III,28.5,Okt I,Mundur,1.0,4.4,10.4,85.2,Bawah Normal,Desember,Desember,Sama dengan Normal,Nov I s.d. Nov III
-Mojotengah,Mundur,29.5,Okt II,28.5,Okt I,Mundur,1.0,4.5,10.6,84.9,Bawah Normal,Juni,Juni,Sama dengan Normal,Okt III s.d. Nov II
+Mojotengah,Mundur,29.5,Okt II,28.5,Okt I,Mundur,1.0,4.5,10.6,84.9,Bawah Normal,Januari,Januari,Sama dengan Normal,Okt III s.d. Nov II
 Sapuran,Mundur,29.8,Okt III,29.5,Okt III,Mundur,0.3,6.5,15.2,78.3,Bawah Normal,Desember,Desember,Sama dengan Normal,Nov I s.d. Nov III
 Selomerto,Mundur,29.8,Okt III,29.5,Okt III,Mundur,0.3,6.5,15.2,78.3,Bawah Normal,Desember,Desember,Sama dengan Normal,Nov I s.d. Nov III
 Sukoharjo,Mundur,29.5,Okt II,28.5,Okt I,Mundur,1.0,4.5,10.6,84.9,Bawah Normal,November,November,Sama dengan Normal,Okt III s.d. Nov II

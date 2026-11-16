@@ -452,6 +452,7 @@ def generate_archive_season_year(
         chart = chart_map.get(kec, {})
         p_maju, p_sama, p_mundur = compute_prediction_probabilities(pred_amh, norm_amh, pred_kat)
 
+        puncak_year = year + 1 if puncak_das <= 18 else year
         rec = {
             "kecamatan": kec,
             "code": kec,
@@ -464,7 +465,7 @@ def generate_archive_season_year(
             "probabilitas_sama_pct": p_sama,
             "probabilitas_mundur_pct": p_mundur,
             "prakiraan_sifat_hujan": pred_sifat,
-            "prakiraan_puncak_bulan": f"{dasarian_to_month_name(puncak_das)} {year + 1}",
+            "prakiraan_puncak_bulan": f"{dasarian_to_month_name(puncak_das)} {puncak_year}",
             "normal_puncak_bulan": "Januari",
             "perbandingan_puncak_thd_normal": "Sesuai",
             "prakiraan_puncak_dasarian": round(puncak_das, 1),
