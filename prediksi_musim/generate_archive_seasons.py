@@ -25,12 +25,14 @@ from shapely import force_2d
 
 sys.path.append(str(Path(__file__).resolve().parent))
 from topographic_downscaling import prepare_250m_topographic_mesh, downscale_variable_multimodel
-from sync_to_dashboard import render_raster_overlay_png
+from sync_to_dashboard import (
+    render_raster_overlay_png,
+    build_simplified_kecamatan_geojson,
+    build_simplified_desa_geojson,
+)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "prediksi_musim" / "data"
-GEOJSON_KEC_PATH = BASE_DIR / "kebumen_33.05_batas_kecamatan.geojson"
-GEOJSON_DESA_PATH = BASE_DIR / "kebumen_33.05_batas_desa.geojson"
 DEFAULT_DASHBOARD_DIR = Path(r"D:\Github\Dashboard_Jerukagung-Meteorologi")
 
 # Konteks Klimatologi Global (ENSO & IOD) 2000–2025
@@ -385,6 +387,7 @@ def generate_archive_season_year(
     gdf_desa: gpd.GeoDataFrame,
     out_dir: Path,
     mesh: dict = None,
+    kabupaten_name: str = "Kebumen",
 ) -> dict:
     """Menghasilkan berkas prediksi_musim.json dan prediksi_musim_desa.json untuk satu tahun arsip."""
     year_str = str(year)
@@ -654,7 +657,8 @@ def generate_archive_season_year(
                 "Dasarian",
                 is_dasarian=True,
             )
-            amh_meta["url"] = f"/data/arsip/musim_{year}/overlays/amh_dasarian_250m.png"
+            sub_path = "purworejo/" if "purworejo" in kabupaten_name.lower() else ""
+            amh_meta["url"] = f"/data/{sub_path}arsip/musim_{year}/overlays/amh_dasarian_250m.png"
             overlays_list.append(amh_meta)
             desa_amh_das = compute_zonal_means(gdf_desa, temp_amh)
             if temp_amh.exists():
@@ -684,7 +688,7 @@ def generate_archive_season_year(
                 "Dasarian",
                 is_dasarian=True,
             )
-            amk_meta["url"] = f"/data/arsip/musim_{year}/overlays/amk_dasarian_250m.png"
+            amk_meta["url"] = f"/data/{sub_path}arsip/musim_{year}/overlays/amk_dasarian_250m.png"
             overlays_list.append(amk_meta)
             desa_amk_das = compute_zonal_means(gdf_desa, temp_amk)
             if temp_amk.exists():
@@ -712,7 +716,7 @@ def generate_archive_season_year(
                 "mm",
                 is_dasarian=False,
             )
-            tot_mh_meta["url"] = f"/data/arsip/musim_{year}/overlays/total_hujan_mh_250m.png"
+            tot_mh_meta["url"] = f"/data/{sub_path}arsip/musim_{year}/overlays/total_hujan_mh_250m.png"
             overlays_list.append(tot_mh_meta)
             desa_tot_mh = compute_zonal_means(gdf_desa, temp_tot_mh)
             if temp_tot_mh.exists():
@@ -740,7 +744,7 @@ def generate_archive_season_year(
                 "mm",
                 is_dasarian=False,
             )
-            tot_mk_meta["url"] = f"/data/arsip/musim_{year}/overlays/total_hujan_mk_250m.png"
+            tot_mk_meta["url"] = f"/data/{sub_path}arsip/musim_{year}/overlays/total_hujan_mk_250m.png"
             overlays_list.append(tot_mk_meta)
             desa_tot_mk = compute_zonal_means(gdf_desa, temp_tot_mk)
             if temp_tot_mk.exists():
@@ -802,9 +806,9 @@ def generate_archive_season_year(
             "is_archive": True,
             "season_id": season_id,
             "year": year,
-            "title": f"Arsip Musim Hujan {year}/{year + 1} & Musim Kemarau {year}",
+            "title": f"Arsip Musim Hujan {year}/{year + 1} & Musim Kemarau {year} ({kabupaten_name})",
             "generated_at": datetime.now(timezone(timedelta(hours=7))).isoformat(),
-            "kabupaten": "Kabupaten Kebumen",
+            "kabupaten": f"Kabupaten {kabupaten_name}",
             "total_kecamatan": len(hujan_records),
             "evaluasi": evaluasi_agregat,
             "seasons": {
@@ -916,78 +920,418 @@ def generate_archive_season_year(
     }
 
 
+def generate_active_season_2026(
+    df_hujan: pd.DataFrame,
+    df_kemarau: pd.DataFrame,
+    df_dasarian_all: pd.DataFrame,
+    gdf_kec: gpd.GeoDataFrame,
+    gdf_desa: gpd.GeoDataFrame,
+    out_dir: Path,
+    mesh: dict = None,
+    kabupaten_name: str = "Purworejo",
+) -> dict:
+    """Menghasilkan berkas prediksi_musim.json dan prediksi_musim_desa.json untuk musim aktif 2026/2027 di folder utama."""
+    season_id = "2026_2027"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    overlay_dir = out_dir / "overlays"
+    overlay_dir.mkdir(parents=True, exist_ok=True)
+
+    df_das_2026 = df_dasarian_all[df_dasarian_all["tahun"] == 2026]
+    cews_map, chart_map = compute_cews_for_year(df_das_2026, df_dasarian_all)
+
+    # Climatological normal total rainfall per kecamatan for MH and MK
+    mh_dasarians = list(range(28, 37)) + list(range(1, 13))
+    norm_tot_mh_map = (
+        df_dasarian_all[df_dasarian_all["dasarian"].isin(mh_dasarians) & (df_dasarian_all["tahun"] <= 2025)]
+        .groupby(["kecamatan", "tahun"])["curah_hujan"]
+        .sum()
+        .groupby("kecamatan")
+        .mean()
+        .to_dict()
+    )
+    mk_dasarians = list(range(13, 28))
+    norm_tot_mk_map = (
+        df_dasarian_all[df_dasarian_all["dasarian"].isin(mk_dasarians) & (df_dasarian_all["tahun"] <= 2025)]
+        .groupby(["kecamatan", "tahun"])["curah_hujan"]
+        .sum()
+        .groupby("kecamatan")
+        .mean()
+        .to_dict()
+    )
+
+    # 1. Hujan Records
+    hujan_records = []
+    for _, row in df_hujan.iterrows():
+        kec = str(row["kecamatan"]).strip()
+        norm_amh = float(row.get("normal_amh_dasarian", 28.0))
+        pred_amh = float(row.get("prakiraan_amh_dasarian", 28.0))
+        pred_kat = str(row.get("perbandingan_terhadap_normal", "Sama"))
+        pred_sifat = str(row.get("prakiraan_sifat_hujan", "Normal"))
+        pmh_bln = str(row.get("prakiraan_puncak_bulan", "Januari"))
+        norm_pmh_bln = str(row.get("normal_puncak_bulan", "Januari"))
+        perb_pmh = str(row.get("perbandingan_puncak_thd_normal", "Sama"))
+        pred_pmh_das = float(row.get("prakiraan_puncak_dasarian", 1.0))
+
+        katam = build_katam_profile(dasarian_to_short_label(pred_amh), pred_sifat)
+        cews = cews_map.get(kec, {})
+        chart = chart_map.get(kec, {})
+        p_maju = float(row.get("probabilitas_maju_pct", 10.0))
+        p_sama = float(row.get("probabilitas_sama_pct", 80.0))
+        p_mundur = float(row.get("probabilitas_mundur_pct", 10.0))
+
+        if "total_hujan_mh_mm" in row and pd.notna(row["total_hujan_mh_mm"]):
+            tot_hujan = float(row["total_hujan_mh_mm"])
+        else:
+            base_norm = norm_tot_mh_map.get(kec, 2200.0)
+            sifat_factor = 1.15 if pred_sifat == "Atas Normal" else (0.85 if pred_sifat == "Bawah Normal" else 1.0)
+            tot_hujan = base_norm * sifat_factor
+
+        rec = {
+            "kecamatan": kec,
+            "code": kec,
+            "normal_amh_dasarian": norm_amh,
+            "normal_amh_label": dasarian_to_short_label(norm_amh),
+            "prakiraan_amh_dasarian": round(pred_amh, 2),
+            "prakiraan_amh_label": dasarian_to_short_label(pred_amh),
+            "perbandingan_terhadap_normal": pred_kat,
+            "probabilitas_maju_pct": p_maju,
+            "probabilitas_sama_pct": p_sama,
+            "probabilitas_mundur_pct": p_mundur,
+            "prakiraan_sifat_hujan": pred_sifat,
+            "prakiraan_puncak_bulan": pmh_bln,
+            "normal_puncak_bulan": norm_pmh_bln,
+            "perbandingan_puncak_thd_normal": perb_pmh,
+            "prakiraan_puncak_dasarian": round(pred_pmh_das, 1),
+            "prakiraan_puncak_label": dasarian_to_short_label(pred_pmh_das),
+            "total_hujan_mh_mm": round(tot_hujan, 1),
+            "kelas_hujan_mh": classify_hujan_mh(tot_hujan),
+            "rekomendasi_olah_tanah": katam["mt1"]["olah_tanah"],
+            "rekomendasi_tanam_padi_mt1": katam["mt1"]["tanam"],
+            "hth_hari": cews.get("hth_hari", 1),
+            "hth_kategori": cews.get("hth_kategori", "Masih Ada Hujan"),
+            "spi_1_bulan": cews.get("spi_1_bulan", 0.0),
+            "spi_1_kategori": cews.get("spi_1_kategori", "Normal"),
+            "spi_3_bulan": cews.get("spi_3_bulan", 0.0),
+            "spi_3_kategori": cews.get("spi_3_kategori", "Normal"),
+            "realisasi_amh_dasarian": None,
+            "realisasi_amh_label": None,
+            "realisasi_perbandingan_terhadap_normal": None,
+            "realisasi_sifat_hujan": None,
+            "realisasi_puncak_bulan": None,
+            "selisih_dasarian_eval": None,
+            "status_evaluasi_amh": None,
+            "status_evaluasi_sifat": None,
+            "katam": katam,
+            "cews": cews,
+            "chart": chart,
+        }
+        hujan_records.append(rec)
+
+    # 2. Kemarau Records
+    hujan_by_kec_map = {r["kecamatan"]: r for r in hujan_records}
+    kemarau_records = []
+    for _, row in df_kemarau.iterrows():
+        kec = str(row["kecamatan"]).strip()
+        norm_amk = float(row.get("normal_amk_dasarian", 12.0))
+        pred_amk = float(row.get("prakiraan_amk_dasarian", 12.0))
+        pred_kat = str(row.get("perbandingan_terhadap_normal", "Sama"))
+        pred_sifat = str(row.get("prakiraan_sifat_hujan_mk", "Normal"))
+        pmk_bln = str(row.get("prakiraan_pmk_bulan", "Juni"))
+        norm_pmk_bln = str(row.get("normal_pmk_bulan", "Juni"))
+        perb_pmk = str(row.get("perbandingan_pmk_thd_normal", "Sama"))
+        pred_pmk_das = float(row.get("prakiraan_pmk_dasarian", 18.0))
+
+        katam = hujan_by_kec_map.get(kec, {}).get("katam") or build_katam_profile(dasarian_to_short_label(norm_amk), pred_sifat)
+        cews = cews_map.get(kec, {})
+        chart = chart_map.get(kec, {})
+        pk_maju = float(row.get("probabilitas_maju_pct", 10.0))
+        pk_sama = float(row.get("probabilitas_sama_pct", 80.0))
+        pk_mundur = float(row.get("probabilitas_mundur_pct", 10.0))
+
+        if "total_hujan_mk_mm" in row and pd.notna(row["total_hujan_mk_mm"]):
+            tot_mk = float(row["total_hujan_mk_mm"])
+        else:
+            base_norm_mk = norm_tot_mk_map.get(kec, 600.0)
+            sifat_factor_mk = 1.15 if pred_sifat == "Atas Normal" else (0.85 if pred_sifat == "Bawah Normal" else 1.0)
+            tot_mk = base_norm_mk * sifat_factor_mk
+        keringkan_das = max(10, int(round(pred_amk)) - 1)
+        tanam_palawija_das = int(round(pred_amk))
+
+        rec = {
+            "kecamatan": kec,
+            "code": kec,
+            "normal_amk_dasarian": norm_amk,
+            "normal_amk_label": dasarian_to_short_label(norm_amk),
+            "prakiraan_amk_dasarian": round(pred_amk, 2),
+            "prakiraan_amk_label": dasarian_to_short_label(pred_amk),
+            "perbandingan_terhadap_normal": pred_kat,
+            "probabilitas_maju_pct": pk_maju,
+            "probabilitas_sama_pct": pk_sama,
+            "probabilitas_mundur_pct": pk_mundur,
+            "prakiraan_sifat_hujan_mk": pred_sifat,
+            "prakiraan_pmk_bulan": pmk_bln,
+            "normal_pmk_bulan": norm_pmk_bln,
+            "perbandingan_pmk_thd_normal": perb_pmk,
+            "prakiraan_pmk_dasarian": round(pred_pmk_das, 1),
+            "prakiraan_pmk_label": dasarian_to_short_label(pred_pmk_das),
+            "total_hujan_mk_mm": round(tot_mk, 1),
+            "kelas_hujan_mk": classify_hujan_mk(tot_mk),
+            "kekeringan_skor": 62.0,
+            "kelas_kekeringan": "Waspada",
+            "rekomendasi_keringkan_sawah_mt2": dasarian_to_short_label(keringkan_das),
+            "rekomendasi_tanam_palawija_mt3": dasarian_to_short_label(tanam_palawija_das),
+            "hth_hari": cews.get("hth_hari", 1),
+            "hth_kategori": cews.get("hth_kategori", "Masih Ada Hujan"),
+            "spi_1_bulan": cews.get("spi_1_bulan", 0.0),
+            "spi_1_kategori": cews.get("spi_1_kategori", "Normal"),
+            "spi_3_bulan": cews.get("spi_3_bulan", 0.0),
+            "spi_3_kategori": cews.get("spi_3_kategori", "Normal"),
+            "realisasi_amk_dasarian": None,
+            "realisasi_amk_label": None,
+            "realisasi_perbandingan_terhadap_normal": None,
+            "realisasi_sifat_hujan": None,
+            "realisasi_sifat_hujan_mk": None,
+            "realisasi_pmk_bulan": None,
+            "selisih_dasarian_eval": None,
+            "status_evaluasi_amk": None,
+            "status_evaluasi_sifat": None,
+            "katam": katam,
+            "cews": cews,
+            "chart": chart,
+        }
+        kemarau_records.append(rec)
+
+    # 3. Downscale 250m & Render Overlays
+    overlays_list = []
+    desa_amh_das, desa_amk_das, desa_tot_mh, desa_tot_mk = None, None, None, None
+
+    if mesh is not None:
+        meta_tif = {
+            "driver": "GTiff",
+            "dtype": "float32",
+            "nodata": -9999.0,
+            "width": mesh["width"],
+            "height": mesh["height"],
+            "count": 1,
+            "crs": "EPSG:4326",
+            "transform": mesh["transform"],
+            "compress": "lzw",
+        }
+
+        url_prefix = f"/data/{'purworejo/' if 'purworejo' in kabupaten_name.lower() else ''}overlays"
+
+        # Downscale AMH 250m
+        df_h_sub = pd.DataFrame(hujan_records)
+        gdf_h = gdf_kec.merge(df_h_sub, left_on="nm_kecamatan", right_on="kecamatan")
+        amh_grid, _ = downscale_variable_multimodel(gdf_h, "prakiraan_amh_dasarian", mesh, "AMH_2026", apply_mass_conservation=False)
+        temp_amh = out_dir / "temp_amh_2026.tif"
+        with rasterio.open(temp_amh, "w", **meta_tif) as dst:
+            dst.write(np.nan_to_num(amh_grid, nan=-9999.0).astype(np.float32), 1)
+        dst_amh_png = overlay_dir / "amh_dasarian_250m.png"
+        amh_meta = render_raster_overlay_png(temp_amh, dst_amh_png, "YlGnBu_r", "amh_dasarian_250m", "hujan", "Awal Musim Hujan 2026/2027 (Dasarian)", "dasarian", is_dasarian=True)
+        amh_meta["url"] = f"{url_prefix}/amh_dasarian_250m.png"
+        overlays_list.append(amh_meta)
+        desa_amh_das = compute_zonal_means(gdf_desa, temp_amh)
+        if temp_amh.exists(): temp_amh.unlink()
+
+        # Downscale Total Hujan MH 250m
+        mh_grid, _ = downscale_variable_multimodel(gdf_h, "total_hujan_mh_mm", mesh, "TotalMH_2026", apply_mass_conservation=True)
+        temp_mh = out_dir / "temp_mh_2026.tif"
+        with rasterio.open(temp_mh, "w", **meta_tif) as dst:
+            dst.write(np.nan_to_num(mh_grid, nan=-9999.0).astype(np.float32), 1)
+        dst_mh_png = overlay_dir / "total_hujan_mh_250m.png"
+        mh_meta = render_raster_overlay_png(temp_mh, dst_mh_png, "Blues", "total_hujan_mh_250m", "hujan", "Total Curah Hujan MH 2026/2027 (mm)", "mm")
+        mh_meta["url"] = f"{url_prefix}/total_hujan_mh_250m.png"
+        overlays_list.append(mh_meta)
+        desa_tot_mh = compute_zonal_means(gdf_desa, temp_mh)
+        if temp_mh.exists(): temp_mh.unlink()
+
+        # Downscale AMK 250m
+        df_k_sub = pd.DataFrame(kemarau_records)
+        gdf_k = gdf_kec.merge(df_k_sub, left_on="nm_kecamatan", right_on="kecamatan")
+        amk_grid, _ = downscale_variable_multimodel(gdf_k, "prakiraan_amk_dasarian", mesh, "AMK_2026", apply_mass_conservation=False)
+        temp_amk = out_dir / "temp_amk_2026.tif"
+        with rasterio.open(temp_amk, "w", **meta_tif) as dst:
+            dst.write(np.nan_to_num(amk_grid, nan=-9999.0).astype(np.float32), 1)
+        dst_amk_png = overlay_dir / "amk_dasarian_250m.png"
+        amk_meta = render_raster_overlay_png(temp_amk, dst_amk_png, "YlOrBr", "amk_dasarian_250m", "kemarau", "Awal Musim Kemarau 2026 (Dasarian)", "dasarian", is_dasarian=True)
+        amk_meta["url"] = f"{url_prefix}/amk_dasarian_250m.png"
+        overlays_list.append(amk_meta)
+        desa_amk_das = compute_zonal_means(gdf_desa, temp_amk)
+        if temp_amk.exists(): temp_amk.unlink()
+
+        # Downscale Total Hujan MK 250m
+        mk_grid, _ = downscale_variable_multimodel(gdf_k, "total_hujan_mk_mm", mesh, "TotalMK_2026", apply_mass_conservation=True)
+        temp_mk = out_dir / "temp_mk_2026.tif"
+        with rasterio.open(temp_mk, "w", **meta_tif) as dst:
+            dst.write(np.nan_to_num(mk_grid, nan=-9999.0).astype(np.float32), 1)
+        dst_mk_png = overlay_dir / "total_hujan_mk_250m.png"
+        mk_meta = render_raster_overlay_png(temp_mk, dst_mk_png, "YlGnBu", "total_hujan_mk_250m", "kemarau", "Total Curah Hujan MK 2026 (mm)", "mm")
+        mk_meta["url"] = f"{url_prefix}/total_hujan_mk_250m.png"
+        overlays_list.append(mk_meta)
+        desa_tot_mk = compute_zonal_means(gdf_desa, temp_mk)
+        if temp_mk.exists(): temp_mk.unlink()
+
+    # 4. Save Kecamatan JSON
+    prediksi_payload = {
+        "metadata": {
+            "is_archive": False,
+            "season_id": season_id,
+            "year": 2026,
+            "title": f"Prakiraan Musim Hujan 2026/2027 & Musim Kemarau 2026 ({kabupaten_name})",
+            "generated_at": datetime.now(timezone(timedelta(hours=7))).isoformat(),
+            "kabupaten": f"Kabupaten {kabupaten_name}",
+            "total_kecamatan": len(hujan_records),
+            "seasons": {
+                "hujan": {
+                    "id": "hujan",
+                    "title": "Musim Hujan 2026/2027",
+                    "enso_context": "El Niño Kuat",
+                    "normal_period": "Normal 2000–2025",
+                },
+                "kemarau": {
+                    "id": "kemarau",
+                    "title": "Musim Kemarau 2026",
+                    "enso_context": "El Niño Kuat",
+                    "normal_period": "Normal 2000–2025",
+                },
+            },
+        },
+        "overlays": overlays_list,
+        "hujan": hujan_records,
+        "kemarau": kemarau_records,
+    }
+    with open(out_dir / "prediksi_musim.json", "w", encoding="utf-8") as f:
+        json.dump(prediksi_payload, f, ensure_ascii=False, indent=2)
+
+    # 5. Save Desa JSON
+    hujan_by_kec = {r["kecamatan"]: r for r in hujan_records}
+    kemarau_by_kec = {r["kecamatan"]: r for r in kemarau_records}
+    desa_hujan_records = []
+    desa_kemarau_records = []
+
+    for idx_d, (_, row) in enumerate(gdf_desa.iterrows()):
+        kec_name = str(row["nm_kecamatan"]).strip()
+        desa_name = str(row["nm_kelurahan"]).strip()
+        code = str(row["code"]).strip()
+
+        parent_h = hujan_by_kec.get(kec_name, hujan_records[0])
+        parent_k = kemarau_by_kec.get(kec_name, kemarau_records[0])
+
+        amh_val = round(float(desa_amh_das[idx_d]), 2) if desa_amh_das else round(parent_h["prakiraan_amh_dasarian"], 2)
+        tot_mh_val = round(float(desa_tot_mh[idx_d]), 1) if desa_tot_mh else round(parent_h["total_hujan_mh_mm"], 1)
+        amk_val = round(float(desa_amk_das[idx_d]), 2) if desa_amk_das else round(parent_k["prakiraan_amk_dasarian"], 2)
+        tot_mk_val = round(float(desa_tot_mk[idx_d]), 1) if desa_tot_mk else round(parent_k["total_hujan_mk_mm"], 1)
+
+        d_h_rec = dict(parent_h)
+        d_h_rec.update({
+            "code": code,
+            "desa": desa_name,
+            "kecamatan": kec_name,
+            "total_hujan_mh_mm": tot_mh_val,
+            "kelas_hujan_mh": classify_hujan_mh(tot_mh_val),
+            "amh_dasarian_250m": amh_val,
+            "amh_label_250m": dasarian_to_short_label(amh_val),
+        })
+        desa_hujan_records.append(d_h_rec)
+
+        d_k_rec = dict(parent_k)
+        d_k_rec.update({
+            "code": code,
+            "desa": desa_name,
+            "kecamatan": kec_name,
+            "total_hujan_mk_mm": tot_mk_val,
+            "kelas_hujan_mk": classify_hujan_mk(tot_mk_val),
+            "amk_dasarian_250m": amk_val,
+            "amk_label_250m": dasarian_to_short_label(amk_val),
+            "kekeringan_skor": 62.0,
+            "kelas_kekeringan": "Waspada",
+        })
+        desa_kemarau_records.append(d_k_rec)
+
+    desa_payload = {
+        "metadata": prediksi_payload["metadata"],
+        "hujan": desa_hujan_records,
+        "kemarau": desa_kemarau_records,
+    }
+    with open(out_dir / "prediksi_musim_desa.json", "w", encoding="utf-8") as f:
+        json.dump(desa_payload, f, ensure_ascii=False, separators=(",", ":"))
+
+    print(f"[SUKSES] Active Season 2026/2027 tersimpan di: {out_dir}")
+    return prediksi_payload
+
+
 def main():
     parser = argparse.ArgumentParser(description="Generator Arsip Prediksi Musim & Evaluasi Akurasi 26 Tahun (2000–2025)")
+    parser.add_argument("--kabupaten", type=str, default="kebumen", choices=["kebumen", "purworejo"], help="Pilihan kabupaten")
     parser.add_argument("--start-year", type=int, default=2000, help="Tahun awal arsip (default: 2000)")
     parser.add_argument("--end-year", type=int, default=2025, help="Tahun akhir arsip (default: 2025)")
-    parser.add_argument(
-        "--output-dir",
-        type=Path,
-        default=DEFAULT_DASHBOARD_DIR / "public" / "data",
-        help="Direktori output data dashboard",
-    )
+    parser.add_argument("--output-dir", type=Path, default=None, help="Direktori output data dashboard")
     args = parser.parse_args()
 
+    is_purworejo = args.kabupaten == "purworejo"
+    kabupaten_name = "Purworejo" if is_purworejo else "Kebumen"
+
+    if args.output_dir is None:
+        args.output_dir = DEFAULT_DASHBOARD_DIR / "public" / "data" / ("purworejo" if is_purworejo else "")
+
+    if is_purworejo:
+        geojson_kec_path = BASE_DIR / "purworejo_33.06_batas_kecamatan.geojson"
+        geojson_desa_path = BASE_DIR / "purworejo_33.06_batas_desa.geojson"
+        dem_path = BASE_DIR / "data" / "DEM_Topografi_Purworejo_30m.tif"
+        loyo_hujan_path = DATA_DIR / "hasil_evaluasi_loyo_purworejo.csv"
+        loyo_kemarau_path = DATA_DIR / "hasil_evaluasi_loyo_kemarau_purworejo.csv"
+        dasarian_path = DATA_DIR / "dasarian_curah_hujan_purworejo_2000_2026.csv"
+        hujan_2026_csv = DATA_DIR / "prakiraan_musim_2026_2027_purworejo.csv"
+        kemarau_2026_csv = DATA_DIR / "prakiraan_musim_kemarau_2026_purworejo.csv"
+    else:
+        geojson_kec_path = BASE_DIR / "kebumen_33.05_batas_kecamatan.geojson"
+        geojson_desa_path = BASE_DIR / "kebumen_33.05_batas_desa.geojson"
+        dem_path = BASE_DIR / "data" / "DEM_Topografi_Kebumen_30m.tif"
+        loyo_hujan_path = DATA_DIR / "hasil_evaluasi_loyo.csv"
+        loyo_kemarau_path = DATA_DIR / "hasil_evaluasi_loyo_kemarau.csv"
+        dasarian_path = DATA_DIR / "dasarian_curah_hujan_kebumen_2000_2026.csv"
+        hujan_2026_csv = DATA_DIR / "prakiraan_musim_2026_2027_kebumen.csv"
+        kemarau_2026_csv = DATA_DIR / "prakiraan_musim_kemarau_2026_kebumen.csv"
+
     print("=" * 80)
-    print("MEMULAI GENERATOR ARSIP PREDIKSI MUSIM & EVALUASI AKURASI HISTORIS (2000–2025)")
+    print(f"MEMULAI GENERATOR ARSIP & PREDIKSI MUSIM KABUPATEN {kabupaten_name.upper()} (2000–2025)")
     print(f"Target Tahun: {args.start_year} s.d. {args.end_year} (Span {args.end_year - args.start_year + 1} Tahun)")
     print(f"Output Dashboard: {args.output_dir}")
     print("=" * 80)
 
-    # Memuat GeoJSON
-    print("\n[1/4] Membaca GeoJSON batas administrasi Kebumen...")
-    gdf_kec = gpd.read_file(GEOJSON_KEC_PATH)
-    gdf_desa = gpd.read_file(GEOJSON_DESA_PATH)
+    # 1. Ekspor GeoJSON teroptimasi jika belum ada atau untuk kabupaten purworejo
+    args.output_dir.mkdir(parents=True, exist_ok=True)
+    geo_kec_name = "purworejo_kecamatan.json" if is_purworejo else "kebumen_kecamatan.json"
+    geo_desa_name = "purworejo_desa.json" if is_purworejo else "kebumen_desa.json"
+    dst_geo_kec = args.output_dir / geo_kec_name
+    dst_geo_desa = args.output_dir / geo_desa_name
 
-    # Standardisasi nama kecamatan & kode desa
-    if "nm_kecamatan" not in gdf_kec.columns and "name" in gdf_kec.columns:
-        gdf_kec["nm_kecamatan"] = gdf_kec["name"].astype(str).str.strip()
-    else:
-        gdf_kec["nm_kecamatan"] = gdf_kec["nm_kecamatan"].astype(str).str.strip()
-
+    print(f"\n[1/4] Menyiapkan batas administrasi {kabupaten_name}...")
+    gdf_kec = build_simplified_kecamatan_geojson(geojson_kec_path, dst_geo_kec)
+    gdf_kec["nm_kecamatan"] = gdf_kec["nm_kecamatan"].astype(str).str.strip()
     code_col = "code" if "code" in gdf_kec.columns else "kd_kecamatan"
     kec_map = dict(zip(gdf_kec[code_col].astype(str).str.strip(), gdf_kec["nm_kecamatan"]))
 
-    desa_name = (
-        gdf_desa["name"].astype(str).str.strip()
-        if "name" in gdf_desa.columns
-        else gdf_desa["nm_kelurahan"].astype(str).str.strip()
-    )
-    gdf_desa["nm_kelurahan"] = desa_name
-    gdf_desa["desa"] = desa_name
+    gdf_desa = build_simplified_desa_geojson(geojson_desa_path, kec_map, dst_geo_desa)
 
-    if "parent_code" in gdf_desa.columns:
-        gdf_desa["parent_code"] = gdf_desa["parent_code"].astype(str).str.strip()
-        gdf_desa["nm_kecamatan"] = gdf_desa["parent_code"].map(kec_map).fillna("")
-        gdf_desa["code"] = gdf_desa["code"].astype(str).str.strip()
-    else:
-        gdf_desa["kd_propinsi"] = gdf_desa["kd_propinsi"].astype(str).str.strip()
-        gdf_desa["kd_dati2"] = gdf_desa["kd_dati2"].astype(str).str.strip()
-        gdf_desa["kd_kecamatan"] = gdf_desa["kd_kecamatan"].astype(str).str.strip()
-        gdf_desa["kd_kelurahan"] = gdf_desa["kd_kelurahan"].astype(str).str.strip()
-        gdf_desa["nm_kecamatan"] = gdf_desa["kd_kecamatan"].map(kec_map).fillna("")
-        gdf_desa["code"] = (
-            gdf_desa["kd_propinsi"]
-            + "."
-            + gdf_desa["kd_dati2"]
-            + "."
-            + gdf_desa["kd_kecamatan"]
-            + "."
-            + gdf_desa["kd_kelurahan"]
-        )
-
-    # Memuat tabel LOYO & Dasarian
+    # 2. Memuat tabel LOYO & Dasarian
     print("[2/4] Membaca tabel evaluasi LOYO LSTM dan time series dasarian historis...")
-    loyo_hujan_path = DATA_DIR / "hasil_evaluasi_loyo.csv"
-    loyo_kemarau_path = DATA_DIR / "hasil_evaluasi_loyo_kemarau.csv"
-    dasarian_path = DATA_DIR / "dasarian_curah_hujan_kebumen_2000_2026.csv"
-
     df_loyo_h = pd.read_csv(loyo_hujan_path)
     df_loyo_k = pd.read_csv(loyo_kemarau_path)
     df_dasarian = pd.read_csv(dasarian_path)
 
     print("\n[2.5/4] Menginisialisasi mesh topografi DEM 250m untuk rendering raster overlay...")
-    mesh = prepare_250m_topographic_mesh()
+    mesh = prepare_250m_topographic_mesh(dem_path=dem_path, geojson_path=geojson_kec_path)
+
+    # 3. Active Season 2026/2027
+    print(f"\n[2.8/4] Memproses Musim Aktif 2026/2027 untuk {kabupaten_name}...")
+    if hujan_2026_csv.exists() and kemarau_2026_csv.exists():
+        df_h_2026 = pd.read_csv(hujan_2026_csv)
+        df_k_2026 = pd.read_csv(kemarau_2026_csv)
+        generate_active_season_2026(
+            df_h_2026, df_k_2026, df_dasarian, gdf_kec, gdf_desa, args.output_dir, mesh=mesh, kabupaten_name=kabupaten_name
+        )
 
     arsip_dir = args.output_dir / "arsip"
     arsip_dir.mkdir(parents=True, exist_ok=True)
@@ -1011,21 +1355,22 @@ def main():
         "folder": "",  # Root data folder
     })
 
-    print("\n[3/4] Mengekstrak data arsip musim, downscaling 250m & menghitung evaluasi...")
+    print(f"\n[3/4] Mengekstrak data arsip musim {kabupaten_name}, downscaling 250m & menghitung evaluasi...")
     for yr in range(args.end_year, args.start_year - 1, -1):
         print(f"Memproses Arsip Tahun {yr} (Data + Raster 250m)...")
         entry = generate_archive_season_year(
-            yr, df_loyo_h, df_loyo_k, df_dasarian, gdf_kec, gdf_desa, arsip_dir, mesh=mesh
+            yr, df_loyo_h, df_loyo_k, df_dasarian, gdf_kec, gdf_desa, arsip_dir, mesh=mesh, kabupaten_name=kabupaten_name
         )
         if entry:
             catalog_entries.append(entry)
 
-    # 7. Ekspor Master Katalog Musim
-    print("\n[4/4] Mengekspor berkas katalog master musim: musim_catalog.json...")
+    # 4. Ekspor Master Katalog Musim
+    print(f"\n[4/4] Mengekspor berkas katalog master musim: {args.output_dir / 'musim_catalog.json'}...")
     catalog_payload = {
         "generated_at": datetime.now(timezone(timedelta(hours=7))).isoformat(),
         "total_seasons": len(catalog_entries),
         "active_season_id": "2026_2027",
+        "kabupaten": kabupaten_name,
         "seasons": catalog_entries,
     }
 
@@ -1035,7 +1380,7 @@ def main():
 
     print(f"  -> Katalog tersimpan di: {catalog_path}")
     print("\n" + "=" * 80)
-    print("ARSIP PREDIKSI MUSIM 2015–2025 & KATALOG SELESAI DIEKSPOR SECARA LENGKAP!")
+    print(f"ARSIP PREDIKSI MUSIM {kabupaten_name.upper()} 2000–2025 & KATALOG SELESAI DIEKSPOR SECARA LENGKAP!")
     print("=" * 80)
 
 

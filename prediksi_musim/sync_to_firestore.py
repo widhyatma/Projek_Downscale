@@ -33,11 +33,12 @@ DEFAULT_DASHBOARD_DATA = Path(r"D:\Github\Dashboard_Jerukagung-Meteorologi\publi
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Sinkronisasi Prediksi Musim Kebumen ke Cloud Firestore")
+    parser = argparse.ArgumentParser(description="Sinkronisasi Prediksi Musim ke Cloud Firestore")
     parser.add_argument("--key", type=str, default=str(DEFAULT_KEY_PATH), help="Path ke berkas serviceAccountKey.json")
-    parser.add_argument("--data-dir", type=str, default=str(DEFAULT_DASHBOARD_DATA), help="Path ke public/data dashboard")
+    parser.add_argument("--kabupaten", type=str, default="kebumen", choices=["kebumen", "purworejo"], help="Pilihan kabupaten target")
+    parser.add_argument("--data-dir", type=str, default=None, help="Path ke public/data dashboard")
     parser.add_argument("--dry-run", action="store_true", help="Validasi payload tanpa menulis ke Firestore")
-    parser.add_argument("--sync-all-archives", action="store_true", help="Unggah seluruh 11 tahun arsip (default: hanya musim aktif)")
+    parser.add_argument("--sync-all-archives", action="store_true", help="Unggah seluruh tahun arsip (default: hanya musim aktif)")
     parser.add_argument("--season-id", type=str, default=None, help="Spesifik season_id untuk disinkronkan (misal: 2026_2027)")
     return parser.parse_args()
 
@@ -82,9 +83,9 @@ def build_kecamatan_chunk(kec_hujan_rec: dict, kec_kemarau_rec: dict, desa_hujan
     }
 
 
-def sync_season(db, season_id: str, season_folder: Path, is_active: bool, dry_run: bool = False):
-    """Menyinkronkan satu musim (overview + 26 kecamatan) ke Firestore."""
-    logger.info(f"==> Memproses Season ID: {season_id} (Folder: {season_folder.name or 'root'})")
+def sync_season(db, season_id: str, season_folder: Path, is_active: bool, collection_name: str = "musim_kebumen", dry_run: bool = False):
+    """Menyinkronkan satu musim (overview + kecamatan) ke Firestore."""
+    logger.info(f"==> Memproses Season ID: {season_id} (Folder: {season_folder.name or 'root'}) -> Collection: {collection_name}")
 
     kec_file = season_folder / "prediksi_musim.json"
     desa_file = season_folder / "prediksi_musim_desa.json"
@@ -118,7 +119,7 @@ def sync_season(db, season_id: str, season_folder: Path, is_active: bool, dry_ru
             if k:
                 desa_kemarau_by_kec.setdefault(k, []).append(dk)
 
-    # 3. Bentuk Payload 26 Kecamatan
+    # 3. Bentuk Payload Kecamatan
     kec_hujan_map = {r["kecamatan"]: r for r in data_kec.get("hujan", []) if "kecamatan" in r}
     kec_kemarau_map = {r["kecamatan"]: r for r in data_kec.get("kemarau", []) if "kecamatan" in r}
 
@@ -127,7 +128,7 @@ def sync_season(db, season_id: str, season_folder: Path, is_active: bool, dry_ru
 
     if dry_run:
         logger.info(f"[DRY-RUN] Overview payload valid: {overview_payload['metadata'].get('kabupaten')}")
-        logger.info(f"[DRY-RUN] Akan menulis 1 overview doc + {len(all_kec_names)} kecamatan docs.")
+        logger.info(f"[DRY-RUN] Akan menulis 1 overview doc + {len(all_kec_names)} kecamatan docs ke '{collection_name}'.")
         for k in all_kec_names[:3]:
             chunk = build_kecamatan_chunk(
                 kec_hujan_map.get(k, {}),
@@ -139,12 +140,12 @@ def sync_season(db, season_id: str, season_folder: Path, is_active: bool, dry_ru
         return True
 
     # 4. Tulis ke Cloud Firestore
-    season_col = db.collection("musim_kebumen").document(season_id)
+    season_col = db.collection(collection_name).document(season_id)
 
     # Tulis Overview
     season_col.set(overview_payload)
 
-    # Batch Commit untuk 26 Kecamatan
+    # Batch Commit untuk seluruh Kecamatan
     batch = db.batch()
     kec_col = season_col.collection("kecamatan")
 
@@ -161,11 +162,11 @@ def sync_season(db, season_id: str, season_folder: Path, is_active: bool, dry_ru
         batch.set(doc_ref, chunk)
 
     batch.commit()
-    logger.info(f"[SUKSES] Berhasil menyimpan overview dan {len(all_kec_names)} dokumen kecamatan untuk {season_id}!")
+    logger.info(f"[SUKSES] Berhasil menyimpan overview dan {len(all_kec_names)} dokumen kecamatan untuk {season_id} di '{collection_name}'!")
     return True
 
 
-def sync_catalog(db, data_dir: Path, dry_run: bool = False):
+def sync_catalog(db, data_dir: Path, collection_name: str = "musim_kebumen", dry_run: bool = False):
     """Menyinkronkan master katalog musim (musim_catalog.json)."""
     catalog_file = data_dir / "musim_catalog.json"
     catalog_data = load_json(catalog_file)
@@ -175,22 +176,31 @@ def sync_catalog(db, data_dir: Path, dry_run: bool = False):
         return False
 
     if dry_run:
-        logger.info(f"[DRY-RUN] Master katalog valid dengan {catalog_data.get('total_seasons')} musim.")
+        logger.info(f"[DRY-RUN] Master katalog valid dengan {catalog_data.get('total_seasons')} musim ke '{collection_name}/catalog'.")
         return True
 
-    doc_ref = db.collection("musim_kebumen").document("catalog")
+    doc_ref = db.collection(collection_name).document("catalog")
     doc_ref.set(catalog_data)
-    logger.info(f"[SUKSES] Master katalog ({catalog_data.get('total_seasons')} musim) tersimpan di 'musim_kebumen/catalog'!")
+    logger.info(f"[SUKSES] Master katalog ({catalog_data.get('total_seasons')} musim) tersimpan di '{collection_name}/catalog'!")
     return True
 
 
 def main():
     args = parse_args()
     key_path = Path(args.key)
-    data_dir = Path(args.data_dir)
+    collection_name = f"musim_{args.kabupaten}"
+    
+    if args.data_dir:
+        data_dir = Path(args.data_dir)
+    else:
+        if args.kabupaten == "purworejo":
+            data_dir = DEFAULT_DASHBOARD_DATA / "purworejo"
+        else:
+            data_dir = DEFAULT_DASHBOARD_DATA
 
     logger.info("=" * 70)
     logger.info("MEMULAI SINKRONISASI PREDIKSI MUSIM KE CLOUD FIRESTORE")
+    logger.info(f"Target Kabupaten: {args.kabupaten.upper()} (Collection: {collection_name})")
     logger.info(f"Target Data Dir : {data_dir}")
     logger.info(f"Dry Run Mode    : {args.dry_run}")
     logger.info("=" * 70)
@@ -205,21 +215,18 @@ def main():
             sys.exit(1)
 
     # 1. Sinkronisasi Katalog Master
-    sync_catalog(db, data_dir, dry_run=args.dry_run)
+    sync_catalog(db, data_dir, collection_name=collection_name, dry_run=args.dry_run)
 
-    # 2. Sinkronisasi Musim Aktif (2026/2027)
+    # 2. Sinkronisasi Musim Aktif / Arsip
     catalog_file = data_dir / "musim_catalog.json"
     catalog_data = load_json(catalog_file) or {}
     seasons = catalog_data.get("seasons", [])
 
     if args.season_id:
-        # Spesifik 1 musim
         target_seasons = [s for s in seasons if s.get("season_id") == args.season_id]
     elif args.sync_all_archives:
-        # Seluruh musim
         target_seasons = seasons
     else:
-        # Default: hanya musim aktif
         target_seasons = [s for s in seasons if s.get("is_active", False)]
 
     logger.info(f"Total musim yang akan disinkronkan: {len(target_seasons)}")
@@ -230,7 +237,7 @@ def main():
         s_folder = data_dir / folder_rel if folder_rel else data_dir
         is_active = s.get("is_active", False)
 
-        sync_season(db, s_id, s_folder, is_active=is_active, dry_run=args.dry_run)
+        sync_season(db, s_id, s_folder, is_active=is_active, collection_name=collection_name, dry_run=args.dry_run)
 
     logger.info("=" * 70)
     logger.info("SINKRONISASI FIRESTORE SELESAI DENGAN SUKSES!")

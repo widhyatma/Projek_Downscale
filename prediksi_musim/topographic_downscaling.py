@@ -33,7 +33,7 @@ RASTER_DIR.mkdir(parents=True, exist_ok=True)
 # Parameter Grid Target 250m (~0.00225 derajat / piksel)
 PIXEL_SIZE_DEG = 0.00225 
 
-def prepare_250m_topographic_mesh():
+def prepare_250m_topographic_mesh(dem_path=None, geojson_path=None):
     """
     Mengekstrak dan me-resample 5 kovariat topografi ke grid 250m:
     1. Elevasi Topografi (Z, mdpl)
@@ -42,8 +42,11 @@ def prepare_250m_topographic_mesh():
     4. Jarak ke Garis Pantai Selatan (D_coast, km)
     5. Topographic Position Index (TPI, mdpl)
     """
-    print(f"Membaca DEM referensi: {DEM_PATH}...")
-    with rasterio.open(DEM_PATH) as src:
+    dem_file = Path(dem_path) if dem_path else DEM_PATH
+    geojson_file = Path(geojson_path) if geojson_path else GEOJSON_PATH
+
+    print(f"Membaca DEM referensi: {dem_file}...")
+    with rasterio.open(dem_file) as src:
         bounds = src.bounds # left, bottom, right, top
         dem_raw = src.read(1).astype(np.float32)
         dem_raw[dem_raw < -100] = 0.0 # koreksi no-data laut
@@ -76,28 +79,28 @@ def prepare_250m_topographic_mesh():
     cos_aspect = np.cos(aspect_rad)
     
     # Jarak ke Garis Pantai Selatan (D_coast, km)
-    # Garis pantai Kebumen berada di sekitar latitude selatan (south ~ -7.80 s/d -7.78)
     lats = np.linspace(north, south, height)
     lons = np.linspace(west, east, width)
     lon_mesh, lat_mesh = np.meshgrid(lons, lats)
     
-    # Aproksimasi jarak pantai (garis pantai selatan lat ~ -7.78)
-    dist_coast_km = np.maximum(0.0, (lat_mesh - (-7.82)) * 111.0)
+    # Aproksimasi jarak pantai (garis pantai selatan di batas bawah daerah pesisir)
+    coast_lat = south + 0.02
+    dist_coast_km = np.maximum(0.0, (lat_mesh - coast_lat) * 111.0)
     
     # Topographic Position Index (TPI 250m): Z - mean_neighborhood
     mean_local = uniform_filter(dem_250m, size=5)
     tpi_250m = dem_250m - mean_local
     
-    # Masking dengan poligon batas administrasi Kebumen
-    gdf = gpd.read_file(GEOJSON_PATH)
+    # Masking dengan poligon batas administrasi
+    gdf = gpd.read_file(geojson_file)
     gdf['geometry'] = force_2d(gdf['geometry'])
-    mask_kebumen = geometry_mask(gdf.geometry, transform=transform_250m, invert=True, out_shape=(height, width))
+    mask_domain = geometry_mask(gdf.geometry, transform=transform_250m, invert=True, out_shape=(height, width))
     
     # Koordinat Proyeksi Metrik UTM 49S (EPSG:32749, Rule 12)
     transformer = pyproj.Transformer.from_crs("EPSG:4326", "EPSG:32749", always_xy=True)
     grid_utm_x, grid_utm_y = transformer.transform(lon_mesh, lat_mesh)
     
-    print(f"Grid 250m terkonstruksi: {width} x {height} piksel ({np.sum(mask_kebumen)} piksel daratan Kebumen).")
+    print(f"Grid 250m terkonstruksi: {width} x {height} piksel ({np.sum(mask_domain)} piksel daratan).")
     
     mesh_dict = {
         'dem': dem_250m,
@@ -106,7 +109,7 @@ def prepare_250m_topographic_mesh():
         'cos_aspect': cos_aspect,
         'dist_coast': dist_coast_km,
         'tpi': tpi_250m,
-        'mask': mask_kebumen,
+        'mask': mask_domain,
         'transform': transform_250m,
         'width': width,
         'height': height,
@@ -167,9 +170,20 @@ def downscale_variable_multimodel(gdf_pts, val_col, mesh, var_name="Variabel", a
     trend_pts = rf.predict(X_pts)
     res_pts = y_target - trend_pts
     
-    ok = OrdinaryKriging(pts_x, pts_y, res_pts, variogram_model='gaussian', verbose=False, enable_plotting=False)
-    kriged_res, _ = ok.execute('points', mesh['grid_utm_x'].flatten(), mesh['grid_utm_y'].flatten())
-    kriged_res = kriged_res.reshape(H, W)
+    if np.var(res_pts) < 1e-4:
+        kriged_res = np.zeros((H, W), dtype=np.float32)
+    else:
+        try:
+            ok = OrdinaryKriging(pts_x, pts_y, res_pts, variogram_model='gaussian', verbose=False, enable_plotting=False)
+            kriged_res, _ = ok.execute('points', mesh['grid_utm_x'].flatten(), mesh['grid_utm_y'].flatten())
+            kriged_res = kriged_res.reshape(H, W)
+        except Exception:
+            try:
+                ok = OrdinaryKriging(pts_x, pts_y, res_pts, variogram_model='linear', verbose=False, enable_plotting=False)
+                kriged_res, _ = ok.execute('points', mesh['grid_utm_x'].flatten(), mesh['grid_utm_y'].flatten())
+                kriged_res = kriged_res.reshape(H, W)
+            except Exception:
+                kriged_res = np.zeros((H, W), dtype=np.float32)
     pred_rfk = rf.predict(X_all).reshape(H, W) + kriged_res
     
     # --- MODEL 2: ANUSPLIN / Thin-Plate Spline (TPS) ---

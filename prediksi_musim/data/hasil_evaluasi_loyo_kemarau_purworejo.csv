@@ -1,0 +1,417 @@
+tahun,kecamatan,kategori_amk,amk_dasarian,sifat_hujan_mk,pmk_dasarian,normal_amk_dasarian,normal_total_hujan_mk_mm,pred_kat_lstm,pred_amk_das_lstm,pred_sifat_lstm,pred_pmk_das_lstm
+2000,Bagelen,Mundur,14,Bawah Normal,17,12.0,356.33076923076925,Sama,11.3,Bawah Normal,17.1
+2000,Banyuurip,Mundur,14,Bawah Normal,17,12.0,367.2192307692308,Sama,11.4,Bawah Normal,17.2
+2000,Bayan,Mundur,15,Normal,19,12.0,398.6192307692308,Sama,12.1,Bawah Normal,17.3
+2000,Bener,Mundur,17,Normal,17,14.0,456.09615384615387,Mundur,12.9,Bawah Normal,18.7
+2000,Bruno,Mundur,17,Normal,19,15.0,608.0692307692308,Sama,13.7,Bawah Normal,19.1
+2000,Butuh,Mundur,15,Normal,19,12.0,423.54615384615386,Sama,12.2,Bawah Normal,17.5
+2000,Gebang,Mundur,15,Normal,19,13.5,459.7307692307692,Mundur,12.8,Bawah Normal,18.8
+2000,Grabag,Mundur,14,Bawah Normal,18,11.0,332.58076923076925,Sama,11.3,Bawah Normal,17.2
+2000,Kaligesing,Mundur,15,Normal,17,13.5,435.9153846153846,Mundur,12.6,Bawah Normal,18.7
+2000,Kemiri,Mundur,15,Normal,19,13.5,478.75,Mundur,12.9,Bawah Normal,18.8
+2000,Kutoarjo,Mundur,15,Normal,19,12.0,398.6192307692308,Sama,12.1,Bawah Normal,17.3
+2000,Loano,Mundur,15,Normal,17,13.5,429.06538461538463,Mundur,12.6,Bawah Normal,18.4
+2000,Ngombol,Mundur,14,Bawah Normal,18,11.0,331.5,Sama,11.3,Bawah Normal,17.2
+2000,Pituruh,Sama,15,Normal,19,14.5,559.3423076923077,Sama,13.5,Bawah Normal,19.1
+2000,Purwodadi,Mundur,14,Bawah Normal,17,11.5,341.81538461538463,Sama,11.3,Bawah Normal,17.2
+2000,Purworejo,Mundur,15,Normal,17,12.0,396.0,Sama,12.2,Bawah Normal,17.3
+2001,Bagelen,Sama,12,Atas Normal,18,12.0,356.33076923076925,Maju,11.0,Bawah Normal,17.5
+2001,Banyuurip,Sama,12,Atas Normal,26,12.0,367.2192307692308,Maju,11.1,Bawah Normal,17.6
+2001,Bayan,Sama,12,Atas Normal,26,12.0,398.6192307692308,Maju,11.8,Bawah Normal,17.9
+2001,Bener,Mundur,17,Atas Normal,26,14.0,456.09615384615387,Maju,12.9,Bawah Normal,21.7
+2001,Bruno,Mundur,17,Atas Normal,26,15.0,608.0692307692308,Maju,14.1,Bawah Normal,22.1
+2001,Butuh,Mundur,17,Atas Normal,26,12.0,423.54615384615386,Maju,11.8,Bawah Normal,19.8
+2001,Gebang,Mundur,17,Atas Normal,26,13.5,459.7307692307692,Maju,12.8,Bawah Normal,21.8
+2001,Grabag,Mundur,12,Atas Normal,26,11.0,332.58076923076925,Maju,11.0,Bawah Normal,17.5
+2001,Kaligesing,Mundur,17,Atas Normal,26,13.5,435.9153846153846,Maju,12.6,Bawah Normal,21.2
+2001,Kemiri,Mundur,17,Atas Normal,26,13.5,478.75,Maju,12.8,Bawah Normal,21.8
+2001,Kutoarjo,Sama,12,Atas Normal,26,12.0,398.6192307692308,Maju,11.8,Bawah Normal,17.9
+2001,Loano,Mundur,17,Atas Normal,26,13.5,429.06538461538463,Maju,12.6,Bawah Normal,20.2
+2001,Ngombol,Mundur,12,Atas Normal,26,11.0,331.5,Maju,11.0,Bawah Normal,17.5
+2001,Pituruh,Mundur,17,Atas Normal,26,14.5,559.3423076923077,Maju,13.2,Bawah Normal,22.2
+2001,Purwodadi,Sama,12,Atas Normal,26,11.5,341.81538461538463,Maju,11.0,Bawah Normal,17.5
+2001,Purworejo,Mundur,17,Atas Normal,26,12.0,396.0,Maju,11.4,Bawah Normal,17.9
+2002,Bagelen,Maju,10,Bawah Normal,16,12.0,356.33076923076925,Maju,11.3,Bawah Normal,20.2
+2002,Banyuurip,Sama,12,Bawah Normal,16,12.0,367.2192307692308,Maju,11.3,Bawah Normal,20.4
+2002,Bayan,Sama,12,Bawah Normal,17,12.0,398.6192307692308,Maju,12.6,Bawah Normal,21.0
+2002,Bener,Maju,13,Bawah Normal,17,14.0,456.09615384615387,Maju,13.3,Bawah Normal,21.2
+2002,Bruno,Maju,13,Bawah Normal,17,15.0,608.0692307692308,Maju,13.7,Bawah Normal,21.7
+2002,Butuh,Sama,12,Bawah Normal,17,12.0,423.54615384615386,Maju,12.8,Bawah Normal,21.2
+2002,Gebang,Sama,13,Bawah Normal,16,13.5,459.7307692307692,Maju,13.3,Bawah Normal,21.3
+2002,Grabag,Maju,10,Bawah Normal,16,11.0,332.58076923076925,Maju,11.3,Bawah Normal,20.0
+2002,Kaligesing,Maju,12,Bawah Normal,17,13.5,435.9153846153846,Maju,13.2,Bawah Normal,21.2
+2002,Kemiri,Sama,13,Bawah Normal,17,13.5,478.75,Maju,13.3,Bawah Normal,21.4
+2002,Kutoarjo,Sama,12,Bawah Normal,17,12.0,398.6192307692308,Maju,12.6,Bawah Normal,21.0
+2002,Loano,Sama,13,Bawah Normal,17,13.5,429.06538461538463,Maju,13.1,Bawah Normal,21.2
+2002,Ngombol,Maju,10,Bawah Normal,16,11.0,331.5,Maju,11.3,Bawah Normal,20.1
+2002,Pituruh,Maju,13,Bawah Normal,17,14.5,559.3423076923077,Maju,13.6,Bawah Normal,21.8
+2002,Purwodadi,Maju,10,Bawah Normal,16,11.5,341.81538461538463,Maju,11.2,Bawah Normal,20.1
+2002,Purworejo,Sama,12,Bawah Normal,16,12.0,396.0,Maju,12.5,Bawah Normal,20.8
+2003,Bagelen,Maju,10,Bawah Normal,16,12.0,356.33076923076925,Mundur,14.4,Bawah Normal,18.1
+2003,Banyuurip,Maju,10,Bawah Normal,16,12.0,367.2192307692308,Mundur,14.5,Bawah Normal,18.2
+2003,Bayan,Maju,10,Bawah Normal,16,12.0,398.6192307692308,Mundur,15.8,Bawah Normal,18.7
+2003,Bener,Maju,10,Bawah Normal,16,14.0,456.09615384615387,Mundur,16.3,Bawah Normal,21.7
+2003,Bruno,Maju,10,Bawah Normal,16,15.0,608.0692307692308,Mundur,16.6,Bawah Normal,22.7
+2003,Butuh,Maju,10,Bawah Normal,16,12.0,423.54615384615386,Mundur,15.9,Bawah Normal,19.8
+2003,Gebang,Maju,10,Bawah Normal,16,13.5,459.7307692307692,Mundur,16.1,Bawah Normal,22.4
+2003,Grabag,Maju,10,Bawah Normal,16,11.0,332.58076923076925,Mundur,14.9,Bawah Normal,17.9
+2003,Kaligesing,Maju,10,Bawah Normal,16,13.5,435.9153846153846,Mundur,16.1,Bawah Normal,21.4
+2003,Kemiri,Maju,10,Bawah Normal,16,13.5,478.75,Mundur,16.1,Bawah Normal,22.6
+2003,Kutoarjo,Maju,10,Bawah Normal,16,12.0,398.6192307692308,Mundur,15.8,Bawah Normal,18.7
+2003,Loano,Maju,10,Bawah Normal,16,13.5,429.06538461538463,Mundur,16.0,Bawah Normal,20.8
+2003,Ngombol,Maju,10,Bawah Normal,16,11.0,331.5,Mundur,14.9,Bawah Normal,17.9
+2003,Pituruh,Maju,10,Bawah Normal,16,14.5,559.3423076923077,Mundur,16.5,Bawah Normal,22.7
+2003,Purwodadi,Maju,10,Bawah Normal,16,11.5,341.81538461538463,Mundur,14.4,Bawah Normal,18.0
+2003,Purworejo,Maju,10,Bawah Normal,16,12.0,396.0,Mundur,15.6,Bawah Normal,18.3
+2004,Bagelen,Maju,10,Bawah Normal,17,12.0,356.33076923076925,Maju,12.7,Bawah Normal,17.4
+2004,Banyuurip,Maju,10,Bawah Normal,17,12.0,367.2192307692308,Mundur,13.0,Bawah Normal,17.5
+2004,Bayan,Maju,10,Bawah Normal,18,12.0,398.6192307692308,Mundur,15.1,Bawah Normal,17.7
+2004,Bener,Maju,10,Bawah Normal,17,14.0,456.09615384615387,Mundur,16.6,Bawah Normal,17.8
+2004,Bruno,Maju,13,Bawah Normal,17,15.0,608.0692307692308,Mundur,17.1,Bawah Normal,17.9
+2004,Butuh,Maju,10,Bawah Normal,26,12.0,423.54615384615386,Mundur,15.9,Bawah Normal,17.8
+2004,Gebang,Maju,10,Bawah Normal,17,13.5,459.7307692307692,Mundur,16.5,Bawah Normal,17.9
+2004,Grabag,Maju,10,Normal,18,11.0,332.58076923076925,Maju,12.2,Bawah Normal,17.4
+2004,Kaligesing,Maju,10,Bawah Normal,17,13.5,435.9153846153846,Mundur,16.4,Bawah Normal,17.8
+2004,Kemiri,Maju,10,Bawah Normal,17,13.5,478.75,Mundur,16.6,Bawah Normal,17.9
+2004,Kutoarjo,Maju,10,Bawah Normal,18,12.0,398.6192307692308,Mundur,15.1,Bawah Normal,17.7
+2004,Loano,Maju,10,Bawah Normal,17,13.5,429.06538461538463,Mundur,16.4,Bawah Normal,17.8
+2004,Ngombol,Maju,10,Bawah Normal,18,11.0,331.5,Maju,12.2,Bawah Normal,17.4
+2004,Pituruh,Maju,10,Bawah Normal,26,14.5,559.3423076923077,Mundur,16.8,Bawah Normal,17.9
+2004,Purwodadi,Maju,10,Bawah Normal,17,11.5,341.81538461538463,Maju,12.2,Bawah Normal,17.4
+2004,Purworejo,Maju,10,Bawah Normal,17,12.0,396.0,Mundur,15.0,Bawah Normal,17.7
+2005,Bagelen,Maju,10,Normal,16,12.0,356.33076923076925,Sama,15.8,Atas Normal,21.6
+2005,Banyuurip,Maju,10,Normal,16,12.0,367.2192307692308,Sama,15.9,Atas Normal,21.8
+2005,Bayan,Maju,11,Normal,16,12.0,398.6192307692308,Sama,16.3,Atas Normal,23.3
+2005,Bener,Maju,12,Normal,16,14.0,456.09615384615387,Mundur,18.6,Atas Normal,24.1
+2005,Bruno,Maju,12,Normal,16,15.0,608.0692307692308,Mundur,19.3,Atas Normal,24.1
+2005,Butuh,Maju,11,Normal,16,12.0,423.54615384615386,Sama,16.8,Atas Normal,23.4
+2005,Gebang,Maju,12,Normal,16,13.5,459.7307692307692,Mundur,18.6,Atas Normal,24.1
+2005,Grabag,Maju,10,Normal,16,11.0,332.58076923076925,Maju,15.3,Atas Normal,21.5
+2005,Kaligesing,Maju,12,Normal,16,13.5,435.9153846153846,Mundur,18.4,Atas Normal,24.1
+2005,Kemiri,Maju,12,Normal,16,13.5,478.75,Mundur,18.8,Atas Normal,24.1
+2005,Kutoarjo,Maju,11,Normal,16,12.0,398.6192307692308,Sama,16.3,Atas Normal,23.3
+2005,Loano,Maju,12,Normal,16,13.5,429.06538461538463,Mundur,18.2,Atas Normal,24.0
+2005,Ngombol,Maju,10,Normal,16,11.0,331.5,Maju,15.3,Atas Normal,21.3
+2005,Pituruh,Maju,12,Normal,16,14.5,559.3423076923077,Mundur,19.2,Atas Normal,24.1
+2005,Purwodadi,Maju,10,Normal,16,11.5,341.81538461538463,Maju,15.3,Atas Normal,21.5
+2005,Purworejo,Sama,12,Normal,16,12.0,396.0,Sama,16.2,Atas Normal,22.6
+2006,Bagelen,Maju,11,Bawah Normal,17,12.0,356.33076923076925,Maju,13.9,Bawah Normal,18.5
+2006,Banyuurip,Maju,11,Bawah Normal,17,12.0,367.2192307692308,Maju,14.0,Bawah Normal,19.0
+2006,Bayan,Maju,11,Bawah Normal,17,12.0,398.6192307692308,Maju,14.9,Bawah Normal,19.2
+2006,Bener,Maju,12,Bawah Normal,17,14.0,456.09615384615387,Mundur,15.7,Atas Normal,19.6
+2006,Bruno,Mundur,16,Bawah Normal,17,15.0,608.0692307692308,Maju,16.9,Atas Normal,20.4
+2006,Butuh,Maju,11,Bawah Normal,17,12.0,423.54615384615386,Maju,15.4,Bawah Normal,19.4
+2006,Gebang,Maju,12,Bawah Normal,17,13.5,459.7307692307692,Mundur,15.5,Atas Normal,19.6
+2006,Grabag,Sama,11,Bawah Normal,17,11.0,332.58076923076925,Maju,11.7,Bawah Normal,19.1
+2006,Kaligesing,Maju,11,Bawah Normal,17,13.5,435.9153846153846,Mundur,15.5,Atas Normal,19.5
+2006,Kemiri,Maju,12,Bawah Normal,17,13.5,478.75,Mundur,16.3,Atas Normal,19.9
+2006,Kutoarjo,Maju,11,Bawah Normal,17,12.0,398.6192307692308,Maju,14.9,Bawah Normal,19.2
+2006,Loano,Maju,12,Bawah Normal,17,13.5,429.06538461538463,Mundur,15.4,Atas Normal,19.5
+2006,Ngombol,Sama,11,Bawah Normal,17,11.0,331.5,Maju,11.7,Bawah Normal,19.1
+2006,Pituruh,Maju,12,Bawah Normal,17,14.5,559.3423076923077,Maju,16.7,Atas Normal,20.4
+2006,Purwodadi,Sama,11,Bawah Normal,17,11.5,341.81538461538463,Maju,11.7,Atas Normal,19.1
+2006,Purworejo,Maju,11,Bawah Normal,17,12.0,396.0,Maju,14.9,Bawah Normal,19.1
+2007,Bagelen,Mundur,13,Bawah Normal,17,12.0,356.33076923076925,Mundur,14.6,Bawah Normal,20.0
+2007,Banyuurip,Mundur,13,Bawah Normal,17,12.0,367.2192307692308,Mundur,14.5,Bawah Normal,20.0
+2007,Bayan,Mundur,16,Bawah Normal,17,12.0,398.6192307692308,Mundur,15.1,Bawah Normal,20.1
+2007,Bener,Mundur,16,Bawah Normal,17,14.0,456.09615384615387,Mundur,15.2,Bawah Normal,20.2
+2007,Bruno,Mundur,17,Bawah Normal,17,15.0,608.0692307692308,Mundur,15.7,Bawah Normal,20.6
+2007,Butuh,Mundur,16,Bawah Normal,17,12.0,423.54615384615386,Mundur,15.1,Bawah Normal,20.2
+2007,Gebang,Mundur,16,Bawah Normal,17,13.5,459.7307692307692,Mundur,15.1,Bawah Normal,20.3
+2007,Grabag,Mundur,13,Bawah Normal,17,11.0,332.58076923076925,Mundur,14.8,Bawah Normal,19.9
+2007,Kaligesing,Mundur,16,Bawah Normal,17,13.5,435.9153846153846,Mundur,15.1,Bawah Normal,20.2
+2007,Kemiri,Mundur,16,Bawah Normal,17,13.5,478.75,Mundur,15.0,Bawah Normal,20.3
+2007,Kutoarjo,Mundur,16,Bawah Normal,17,12.0,398.6192307692308,Mundur,15.1,Bawah Normal,20.1
+2007,Loano,Mundur,16,Bawah Normal,17,13.5,429.06538461538463,Mundur,15.1,Bawah Normal,20.2
+2007,Ngombol,Mundur,13,Bawah Normal,17,11.0,331.5,Mundur,14.7,Bawah Normal,19.9
+2007,Pituruh,Mundur,16,Bawah Normal,17,14.5,559.3423076923077,Mundur,15.3,Bawah Normal,20.8
+2007,Purwodadi,Mundur,13,Bawah Normal,17,11.5,341.81538461538463,Mundur,14.5,Bawah Normal,20.0
+2007,Purworejo,Mundur,16,Bawah Normal,17,12.0,396.0,Mundur,15.1,Bawah Normal,20.2
+2008,Bagelen,Maju,10,Bawah Normal,16,12.0,356.33076923076925,Mundur,13.3,Bawah Normal,17.7
+2008,Banyuurip,Maju,10,Bawah Normal,16,12.0,367.2192307692308,Mundur,13.4,Bawah Normal,17.7
+2008,Bayan,Maju,10,Bawah Normal,16,12.0,398.6192307692308,Mundur,13.7,Bawah Normal,17.7
+2008,Bener,Maju,12,Bawah Normal,16,14.0,456.09615384615387,Mundur,15.5,Bawah Normal,18.4
+2008,Bruno,Maju,12,Bawah Normal,17,15.0,608.0692307692308,Mundur,15.6,Bawah Normal,19.2
+2008,Butuh,Maju,10,Bawah Normal,16,12.0,423.54615384615386,Mundur,14.3,Bawah Normal,18.2
+2008,Gebang,Maju,12,Bawah Normal,16,13.5,459.7307692307692,Mundur,15.4,Bawah Normal,18.7
+2008,Grabag,Maju,10,Bawah Normal,16,11.0,332.58076923076925,Mundur,13.0,Bawah Normal,17.7
+2008,Kaligesing,Maju,12,Bawah Normal,16,13.5,435.9153846153846,Mundur,15.4,Bawah Normal,18.4
+2008,Kemiri,Maju,12,Bawah Normal,16,13.5,478.75,Mundur,15.4,Bawah Normal,18.8
+2008,Kutoarjo,Maju,10,Bawah Normal,16,12.0,398.6192307692308,Mundur,13.7,Bawah Normal,17.7
+2008,Loano,Maju,12,Bawah Normal,16,13.5,429.06538461538463,Mundur,15.3,Bawah Normal,18.2
+2008,Ngombol,Maju,10,Bawah Normal,16,11.0,331.5,Mundur,13.0,Bawah Normal,17.7
+2008,Pituruh,Maju,12,Bawah Normal,16,14.5,559.3423076923077,Mundur,15.6,Bawah Normal,19.2
+2008,Purwodadi,Maju,10,Bawah Normal,16,11.5,341.81538461538463,Mundur,13.0,Bawah Normal,17.7
+2008,Purworejo,Sama,12,Bawah Normal,16,12.0,396.0,Mundur,13.9,Bawah Normal,17.7
+2009,Bagelen,Mundur,16,Normal,17,12.0,356.33076923076925,Maju,11.1,Bawah Normal,18.1
+2009,Banyuurip,Mundur,16,Bawah Normal,18,12.0,367.2192307692308,Maju,11.1,Bawah Normal,18.9
+2009,Bayan,Mundur,17,Bawah Normal,18,12.0,398.6192307692308,Maju,11.4,Bawah Normal,19.3
+2009,Bener,Mundur,17,Normal,26,14.0,456.09615384615387,Maju,12.5,Bawah Normal,19.4
+2009,Bruno,Mundur,17,Normal,26,15.0,608.0692307692308,Maju,12.8,Bawah Normal,19.8
+2009,Butuh,Mundur,17,Bawah Normal,26,12.0,423.54615384615386,Maju,11.6,Bawah Normal,19.4
+2009,Gebang,Mundur,17,Normal,26,13.5,459.7307692307692,Maju,12.3,Bawah Normal,19.5
+2009,Grabag,Mundur,16,Bawah Normal,18,11.0,332.58076923076925,Maju,11.1,Bawah Normal,19.3
+2009,Kaligesing,Mundur,17,Normal,26,13.5,435.9153846153846,Maju,12.1,Bawah Normal,19.4
+2009,Kemiri,Mundur,17,Normal,26,13.5,478.75,Maju,12.3,Bawah Normal,19.5
+2009,Kutoarjo,Mundur,17,Bawah Normal,18,12.0,398.6192307692308,Maju,11.4,Bawah Normal,19.3
+2009,Loano,Mundur,17,Normal,18,13.5,429.06538461538463,Maju,12.1,Bawah Normal,19.4
+2009,Ngombol,Mundur,16,Bawah Normal,18,11.0,331.5,Maju,11.1,Bawah Normal,19.3
+2009,Pituruh,Mundur,17,Normal,26,14.5,559.3423076923077,Maju,12.8,Bawah Normal,19.8
+2009,Purwodadi,Mundur,16,Bawah Normal,17,11.5,341.81538461538463,Maju,11.1,Bawah Normal,19.3
+2009,Purworejo,Mundur,16,Normal,18,12.0,396.0,Maju,11.4,Bawah Normal,19.3
+2010,Bagelen,Mundur,17,Atas Normal,23,12.0,356.33076923076925,Mundur,11.7,Bawah Normal,18.6
+2010,Banyuurip,Mundur,17,Atas Normal,23,12.0,367.2192307692308,Mundur,11.7,Bawah Normal,18.7
+2010,Bayan,Mundur,18,Atas Normal,23,12.0,398.6192307692308,Mundur,11.7,Bawah Normal,19.4
+2010,Bener,Mundur,17,Atas Normal,23,14.0,456.09615384615387,Mundur,14.3,Bawah Normal,20.8
+2010,Bruno,Mundur,21,Atas Normal,21,15.0,608.0692307692308,Mundur,14.9,Bawah Normal,21.1
+2010,Butuh,Mundur,18,Atas Normal,18,12.0,423.54615384615386,Mundur,11.9,Bawah Normal,19.8
+2010,Gebang,Mundur,17,Atas Normal,23,13.5,459.7307692307692,Mundur,14.3,Bawah Normal,20.9
+2010,Grabag,Maju,10,Atas Normal,23,11.0,332.58076923076925,Mundur,11.7,Bawah Normal,18.6
+2010,Kaligesing,Mundur,17,Atas Normal,23,13.5,435.9153846153846,Mundur,14.2,Bawah Normal,20.7
+2010,Kemiri,Mundur,21,Atas Normal,23,13.5,478.75,Mundur,14.4,Bawah Normal,20.9
+2010,Kutoarjo,Mundur,18,Atas Normal,23,12.0,398.6192307692308,Mundur,11.7,Bawah Normal,19.4
+2010,Loano,Mundur,17,Atas Normal,23,13.5,429.06538461538463,Mundur,14.0,Bawah Normal,20.4
+2010,Ngombol,Maju,10,Atas Normal,23,11.0,331.5,Mundur,11.7,Bawah Normal,18.6
+2010,Pituruh,Mundur,21,Atas Normal,23,14.5,559.3423076923077,Mundur,14.7,Bawah Normal,21.1
+2010,Purwodadi,Maju,10,Atas Normal,23,11.5,341.81538461538463,Mundur,11.7,Bawah Normal,18.6
+2010,Purworejo,Mundur,17,Atas Normal,23,12.0,396.0,Mundur,11.6,Bawah Normal,19.2
+2011,Bagelen,Mundur,15,Bawah Normal,17,12.0,356.33076923076925,Mundur,13.7,Bawah Normal,17.8
+2011,Banyuurip,Mundur,15,Bawah Normal,17,12.0,367.2192307692308,Mundur,13.8,Bawah Normal,17.8
+2011,Bayan,Mundur,15,Bawah Normal,17,12.0,398.6192307692308,Mundur,15.6,Bawah Normal,18.0
+2011,Bener,Mundur,15,Bawah Normal,17,14.0,456.09615384615387,Mundur,15.8,Bawah Normal,18.5
+2011,Bruno,Sama,15,Bawah Normal,17,15.0,608.0692307692308,Mundur,16.2,Bawah Normal,19.5
+2011,Butuh,Mundur,15,Bawah Normal,17,12.0,423.54615384615386,Mundur,15.6,Bawah Normal,18.2
+2011,Gebang,Mundur,15,Bawah Normal,17,13.5,459.7307692307692,Mundur,15.6,Bawah Normal,18.7
+2011,Grabag,Mundur,15,Bawah Normal,17,11.0,332.58076923076925,Mundur,13.8,Bawah Normal,17.9
+2011,Kaligesing,Mundur,15,Bawah Normal,17,13.5,435.9153846153846,Mundur,15.7,Bawah Normal,18.2
+2011,Kemiri,Mundur,15,Bawah Normal,17,13.5,478.75,Mundur,15.6,Bawah Normal,18.8
+2011,Kutoarjo,Mundur,15,Bawah Normal,17,12.0,398.6192307692308,Mundur,15.6,Bawah Normal,18.0
+2011,Loano,Mundur,15,Bawah Normal,17,13.5,429.06538461538463,Mundur,15.7,Bawah Normal,18.2
+2011,Ngombol,Mundur,15,Bawah Normal,17,11.0,331.5,Mundur,13.7,Bawah Normal,17.9
+2011,Pituruh,Sama,15,Bawah Normal,17,14.5,559.3423076923077,Mundur,15.9,Bawah Normal,19.6
+2011,Purwodadi,Mundur,15,Bawah Normal,17,11.5,341.81538461538463,Mundur,13.7,Bawah Normal,17.8
+2011,Purworejo,Mundur,15,Bawah Normal,17,12.0,396.0,Mundur,15.6,Bawah Normal,17.9
+2012,Bagelen,Mundur,14,Bawah Normal,17,12.0,356.33076923076925,Sama,13.0,Bawah Normal,17.1
+2012,Banyuurip,Mundur,15,Bawah Normal,17,12.0,367.2192307692308,Sama,13.1,Bawah Normal,17.1
+2012,Bayan,Mundur,15,Bawah Normal,17,12.0,398.6192307692308,Sama,13.4,Bawah Normal,17.1
+2012,Bener,Mundur,15,Bawah Normal,17,14.0,456.09615384615387,Mundur,15.5,Bawah Normal,17.2
+2012,Bruno,Sama,15,Bawah Normal,17,15.0,608.0692307692308,Mundur,16.4,Bawah Normal,17.3
+2012,Butuh,Mundur,15,Bawah Normal,17,12.0,423.54615384615386,Sama,13.7,Bawah Normal,17.1
+2012,Gebang,Mundur,15,Bawah Normal,18,13.5,459.7307692307692,Sama,15.6,Bawah Normal,17.2
+2012,Grabag,Sama,11,Bawah Normal,17,11.0,332.58076923076925,Sama,12.7,Bawah Normal,17.1
+2012,Kaligesing,Mundur,15,Bawah Normal,26,13.5,435.9153846153846,Sama,15.3,Bawah Normal,17.1
+2012,Kemiri,Mundur,15,Bawah Normal,18,13.5,478.75,Sama,15.9,Bawah Normal,17.2
+2012,Kutoarjo,Mundur,15,Bawah Normal,17,12.0,398.6192307692308,Sama,13.4,Bawah Normal,17.1
+2012,Loano,Mundur,15,Bawah Normal,18,13.5,429.06538461538463,Sama,15.2,Bawah Normal,17.1
+2012,Ngombol,Mundur,14,Bawah Normal,17,11.0,331.5,Sama,12.7,Bawah Normal,17.1
+2012,Pituruh,Sama,15,Bawah Normal,25,14.5,559.3423076923077,Sama,16.1,Bawah Normal,17.3
+2012,Purwodadi,Mundur,14,Bawah Normal,17,11.5,341.81538461538463,Sama,12.8,Bawah Normal,17.1
+2012,Purworejo,Mundur,15,Bawah Normal,17,12.0,396.0,Sama,13.4,Bawah Normal,17.1
+2013,Bagelen,Sama,12,Atas Normal,26,12.0,356.33076923076925,Mundur,12.5,Bawah Normal,18.7
+2013,Banyuurip,Sama,12,Atas Normal,26,12.0,367.2192307692308,Mundur,12.6,Bawah Normal,18.7
+2013,Bayan,Sama,12,Atas Normal,26,12.0,398.6192307692308,Mundur,13.1,Bawah Normal,19.0
+2013,Bener,Mundur,21,Atas Normal,26,14.0,456.09615384615387,Mundur,13.6,Bawah Normal,19.3
+2013,Bruno,Mundur,21,Atas Normal,26,15.0,608.0692307692308,Mundur,14.1,Bawah Normal,19.6
+2013,Butuh,Sama,12,Atas Normal,26,12.0,423.54615384615386,Mundur,13.1,Bawah Normal,19.1
+2013,Gebang,Mundur,21,Atas Normal,26,13.5,459.7307692307692,Mundur,13.6,Bawah Normal,19.4
+2013,Grabag,Mundur,12,Atas Normal,26,11.0,332.58076923076925,Mundur,11.1,Bawah Normal,18.7
+2013,Kaligesing,Mundur,21,Atas Normal,26,13.5,435.9153846153846,Mundur,13.4,Bawah Normal,19.3
+2013,Kemiri,Mundur,21,Atas Normal,26,13.5,478.75,Mundur,13.9,Bawah Normal,19.6
+2013,Kutoarjo,Sama,12,Atas Normal,26,12.0,398.6192307692308,Mundur,13.1,Bawah Normal,19.0
+2013,Loano,Mundur,21,Atas Normal,26,13.5,429.06538461538463,Mundur,13.4,Bawah Normal,19.2
+2013,Ngombol,Mundur,12,Atas Normal,26,11.0,331.5,Mundur,11.1,Bawah Normal,18.7
+2013,Pituruh,Mundur,21,Atas Normal,26,14.5,559.3423076923077,Mundur,14.0,Bawah Normal,19.6
+2013,Purwodadi,Sama,12,Atas Normal,26,11.5,341.81538461538463,Mundur,11.1,Bawah Normal,18.7
+2013,Purworejo,Sama,12,Atas Normal,26,12.0,396.0,Mundur,13.1,Bawah Normal,18.9
+2014,Bagelen,Maju,10,Normal,16,12.0,356.33076923076925,Maju,10.7,Atas Normal,17.5
+2014,Banyuurip,Maju,10,Normal,16,12.0,367.2192307692308,Maju,10.8,Atas Normal,17.6
+2014,Bayan,Sama,12,Normal,16,12.0,398.6192307692308,Maju,10.8,Atas Normal,17.7
+2014,Bener,Mundur,15,Normal,26,14.0,456.09615384615387,Maju,12.0,Atas Normal,18.7
+2014,Bruno,Sama,15,Normal,26,15.0,608.0692307692308,Maju,13.5,Atas Normal,19.4
+2014,Butuh,Sama,12,Normal,16,12.0,423.54615384615386,Maju,10.9,Atas Normal,17.7
+2014,Gebang,Mundur,15,Normal,26,13.5,459.7307692307692,Maju,11.5,Atas Normal,18.9
+2014,Grabag,Maju,10,Atas Normal,16,11.0,332.58076923076925,Maju,10.6,Atas Normal,17.4
+2014,Kaligesing,Mundur,15,Normal,26,13.5,435.9153846153846,Maju,11.3,Atas Normal,18.6
+2014,Kemiri,Mundur,15,Normal,26,13.5,478.75,Maju,11.8,Atas Normal,19.1
+2014,Kutoarjo,Sama,12,Normal,16,12.0,398.6192307692308,Maju,10.8,Atas Normal,17.7
+2014,Loano,Mundur,15,Normal,26,13.5,429.06538461538463,Maju,11.3,Atas Normal,18.1
+2014,Ngombol,Maju,10,Normal,16,11.0,331.5,Maju,10.6,Atas Normal,17.4
+2014,Pituruh,Sama,15,Normal,26,14.5,559.3423076923077,Maju,13.2,Atas Normal,19.4
+2014,Purwodadi,Maju,10,Normal,16,11.5,341.81538461538463,Maju,10.6,Atas Normal,17.5
+2014,Purworejo,Maju,10,Normal,16,12.0,396.0,Maju,10.8,Atas Normal,17.6
+2015,Bagelen,Maju,10,Bawah Normal,17,12.0,356.33076923076925,Maju,10.8,Bawah Normal,16.5
+2015,Banyuurip,Maju,10,Bawah Normal,17,12.0,367.2192307692308,Maju,10.8,Bawah Normal,16.5
+2015,Bayan,Maju,10,Bawah Normal,17,12.0,398.6192307692308,Maju,11.4,Bawah Normal,16.5
+2015,Bener,Sama,14,Bawah Normal,17,14.0,456.09615384615387,Maju,12.4,Bawah Normal,16.6
+2015,Bruno,Maju,14,Bawah Normal,17,15.0,608.0692307692308,Maju,12.7,Bawah Normal,16.7
+2015,Butuh,Maju,10,Bawah Normal,17,12.0,423.54615384615386,Maju,11.7,Bawah Normal,16.5
+2015,Gebang,Maju,10,Bawah Normal,17,13.5,459.7307692307692,Maju,12.4,Bawah Normal,16.6
+2015,Grabag,Maju,10,Bawah Normal,17,11.0,332.58076923076925,Maju,10.8,Bawah Normal,16.5
+2015,Kaligesing,Maju,10,Bawah Normal,17,13.5,435.9153846153846,Maju,12.4,Bawah Normal,16.5
+2015,Kemiri,Maju,10,Bawah Normal,17,13.5,478.75,Maju,12.4,Bawah Normal,16.6
+2015,Kutoarjo,Maju,10,Bawah Normal,17,12.0,398.6192307692308,Maju,11.4,Bawah Normal,16.5
+2015,Loano,Maju,10,Bawah Normal,17,13.5,429.06538461538463,Maju,12.4,Bawah Normal,16.5
+2015,Ngombol,Maju,10,Bawah Normal,17,11.0,331.5,Maju,10.8,Bawah Normal,16.5
+2015,Pituruh,Sama,14,Bawah Normal,17,14.5,559.3423076923077,Maju,12.4,Bawah Normal,16.7
+2015,Purwodadi,Maju,10,Bawah Normal,17,11.5,341.81538461538463,Maju,10.8,Bawah Normal,16.5
+2015,Purworejo,Maju,10,Bawah Normal,17,12.0,396.0,Maju,11.3,Bawah Normal,16.5
+2016,Bagelen,Mundur,19,Atas Normal,25,12.0,356.33076923076925,Maju,11.6,Normal,19.0
+2016,Banyuurip,Mundur,19,Atas Normal,25,12.0,367.2192307692308,Maju,11.7,Normal,19.2
+2016,Bayan,Mundur,21,Atas Normal,25,12.0,398.6192307692308,Maju,12.1,Normal,20.6
+2016,Bener,Mundur,21,Atas Normal,21,14.0,456.09615384615387,Maju,13.5,Normal,21.5
+2016,Bruno,Mundur,21,Atas Normal,21,15.0,608.0692307692308,Maju,14.2,Normal,21.8
+2016,Butuh,Mundur,21,Atas Normal,25,12.0,423.54615384615386,Maju,12.3,Normal,20.9
+2016,Gebang,Mundur,21,Atas Normal,21,13.5,459.7307692307692,Maju,13.2,Normal,21.7
+2016,Grabag,Mundur,21,Atas Normal,25,11.0,332.58076923076925,Maju,10.8,Normal,18.8
+2016,Kaligesing,Mundur,21,Atas Normal,25,13.5,435.9153846153846,Maju,13.2,Normal,21.5
+2016,Kemiri,Mundur,21,Atas Normal,25,13.5,478.75,Maju,13.6,Normal,21.7
+2016,Kutoarjo,Mundur,21,Atas Normal,25,12.0,398.6192307692308,Maju,12.1,Normal,20.6
+2016,Loano,Mundur,21,Atas Normal,25,13.5,429.06538461538463,Maju,13.2,Normal,21.4
+2016,Ngombol,Mundur,21,Atas Normal,25,11.0,331.5,Maju,10.8,Normal,18.8
+2016,Pituruh,Mundur,21,Atas Normal,25,14.5,559.3423076923077,Maju,14.2,Normal,21.8
+2016,Purwodadi,Mundur,19,Atas Normal,25,11.5,341.81538461538463,Maju,10.8,Normal,18.8
+2016,Purworejo,Mundur,21,Atas Normal,25,12.0,396.0,Maju,12.1,Normal,19.9
+2017,Bagelen,Maju,11,Bawah Normal,26,12.0,356.33076923076925,Maju,13.3,Bawah Normal,17.1
+2017,Banyuurip,Maju,11,Bawah Normal,26,12.0,367.2192307692308,Maju,13.4,Bawah Normal,17.1
+2017,Bayan,Maju,11,Bawah Normal,26,12.0,398.6192307692308,Maju,13.6,Bawah Normal,17.1
+2017,Bener,Maju,11,Bawah Normal,26,14.0,456.09615384615387,Maju,13.3,Bawah Normal,17.6
+2017,Bruno,Maju,14,Bawah Normal,26,15.0,608.0692307692308,Maju,13.8,Bawah Normal,18.1
+2017,Butuh,Maju,11,Bawah Normal,26,12.0,423.54615384615386,Maju,13.5,Bawah Normal,17.5
+2017,Gebang,Maju,11,Bawah Normal,26,13.5,459.7307692307692,Maju,13.3,Bawah Normal,17.8
+2017,Grabag,Sama,11,Bawah Normal,16,11.0,332.58076923076925,Maju,13.1,Bawah Normal,17.1
+2017,Kaligesing,Maju,11,Bawah Normal,26,13.5,435.9153846153846,Maju,13.3,Bawah Normal,17.5
+2017,Kemiri,Maju,11,Bawah Normal,26,13.5,478.75,Maju,13.3,Bawah Normal,17.9
+2017,Kutoarjo,Maju,11,Bawah Normal,26,12.0,398.6192307692308,Maju,13.6,Bawah Normal,17.1
+2017,Loano,Maju,11,Bawah Normal,26,13.5,429.06538461538463,Maju,13.3,Bawah Normal,17.5
+2017,Ngombol,Sama,11,Bawah Normal,26,11.0,331.5,Maju,13.1,Bawah Normal,17.1
+2017,Pituruh,Maju,13,Bawah Normal,26,14.5,559.3423076923077,Maju,13.4,Bawah Normal,18.1
+2017,Purwodadi,Sama,11,Bawah Normal,26,11.5,341.81538461538463,Maju,13.1,Bawah Normal,17.1
+2017,Purworejo,Maju,11,Bawah Normal,26,12.0,396.0,Maju,13.6,Bawah Normal,17.1
+2018,Bagelen,Maju,11,Bawah Normal,16,12.0,356.33076923076925,Sama,11.7,Bawah Normal,17.5
+2018,Banyuurip,Maju,11,Bawah Normal,16,12.0,367.2192307692308,Sama,11.7,Bawah Normal,17.5
+2018,Bayan,Maju,11,Bawah Normal,16,12.0,398.6192307692308,Sama,11.8,Bawah Normal,17.5
+2018,Bener,Maju,12,Bawah Normal,16,14.0,456.09615384615387,Maju,13.3,Bawah Normal,18.0
+2018,Bruno,Maju,13,Bawah Normal,16,15.0,608.0692307692308,Maju,13.8,Bawah Normal,18.6
+2018,Butuh,Sama,12,Bawah Normal,16,12.0,423.54615384615386,Sama,12.1,Bawah Normal,17.7
+2018,Gebang,Sama,13,Bawah Normal,16,13.5,459.7307692307692,Maju,13.0,Bawah Normal,18.1
+2018,Grabag,Sama,11,Bawah Normal,16,11.0,332.58076923076925,Sama,11.6,Bawah Normal,17.5
+2018,Kaligesing,Maju,12,Bawah Normal,16,13.5,435.9153846153846,Maju,12.9,Bawah Normal,17.9
+2018,Kemiri,Sama,13,Bawah Normal,16,13.5,478.75,Maju,13.1,Bawah Normal,18.1
+2018,Kutoarjo,Maju,11,Bawah Normal,16,12.0,398.6192307692308,Sama,11.8,Bawah Normal,17.5
+2018,Loano,Maju,12,Bawah Normal,16,13.5,429.06538461538463,Maju,12.9,Bawah Normal,17.7
+2018,Ngombol,Sama,11,Bawah Normal,16,11.0,331.5,Sama,11.6,Bawah Normal,17.5
+2018,Pituruh,Maju,12,Bawah Normal,16,14.5,559.3423076923077,Maju,13.5,Bawah Normal,18.6
+2018,Purwodadi,Sama,11,Bawah Normal,16,11.5,341.81538461538463,Sama,11.7,Bawah Normal,17.5
+2018,Purworejo,Maju,11,Bawah Normal,16,12.0,396.0,Sama,11.8,Bawah Normal,17.5
+2019,Bagelen,Sama,12,Bawah Normal,17,12.0,356.33076923076925,Mundur,13.9,Atas Normal,24.0
+2019,Banyuurip,Sama,12,Bawah Normal,17,12.0,367.2192307692308,Mundur,13.9,Atas Normal,24.2
+2019,Bayan,Sama,12,Bawah Normal,17,12.0,398.6192307692308,Mundur,14.9,Atas Normal,24.9
+2019,Bener,Maju,12,Bawah Normal,17,14.0,456.09615384615387,Mundur,18.2,Atas Normal,24.9
+2019,Bruno,Maju,13,Bawah Normal,17,15.0,608.0692307692308,Mundur,19.4,Atas Normal,24.9
+2019,Butuh,Sama,12,Bawah Normal,17,12.0,423.54615384615386,Mundur,15.3,Atas Normal,24.9
+2019,Gebang,Maju,12,Bawah Normal,17,13.5,459.7307692307692,Mundur,18.2,Atas Normal,24.9
+2019,Grabag,Mundur,12,Bawah Normal,17,11.0,332.58076923076925,Maju,11.4,Atas Normal,23.1
+2019,Kaligesing,Maju,12,Bawah Normal,17,13.5,435.9153846153846,Mundur,18.1,Atas Normal,24.9
+2019,Kemiri,Sama,13,Bawah Normal,17,13.5,478.75,Mundur,18.9,Atas Normal,24.9
+2019,Kutoarjo,Sama,12,Bawah Normal,17,12.0,398.6192307692308,Mundur,14.9,Atas Normal,24.9
+2019,Loano,Maju,12,Bawah Normal,17,13.5,429.06538461538463,Mundur,18.0,Atas Normal,24.9
+2019,Ngombol,Mundur,12,Bawah Normal,17,11.0,331.5,Mundur,11.4,Atas Normal,23.0
+2019,Pituruh,Maju,13,Bawah Normal,17,14.5,559.3423076923077,Mundur,19.1,Atas Normal,24.9
+2019,Purwodadi,Sama,12,Bawah Normal,17,11.5,341.81538461538463,Maju,11.5,Atas Normal,23.9
+2019,Purworejo,Sama,12,Bawah Normal,17,12.0,396.0,Mundur,14.6,Atas Normal,24.8
+2020,Bagelen,Maju,11,Normal,17,12.0,356.33076923076925,Maju,10.6,Atas Normal,19.8
+2020,Banyuurip,Maju,11,Normal,16,12.0,367.2192307692308,Maju,10.6,Atas Normal,19.8
+2020,Bayan,Mundur,16,Normal,26,12.0,398.6192307692308,Maju,10.8,Atas Normal,19.8
+2020,Bener,Mundur,16,Normal,26,14.0,456.09615384615387,Maju,11.7,Atas Normal,21.1
+2020,Bruno,Mundur,16,Normal,26,15.0,608.0692307692308,Maju,12.4,Atas Normal,21.2
+2020,Butuh,Mundur,16,Normal,26,12.0,423.54615384615386,Maju,11.0,Atas Normal,19.9
+2020,Gebang,Mundur,16,Normal,26,13.5,459.7307692307692,Maju,11.5,Atas Normal,21.1
+2020,Grabag,Maju,10,Normal,16,11.0,332.58076923076925,Maju,10.6,Atas Normal,19.5
+2020,Kaligesing,Mundur,16,Normal,26,13.5,435.9153846153846,Maju,11.4,Atas Normal,20.8
+2020,Kemiri,Mundur,16,Normal,26,13.5,478.75,Maju,11.6,Atas Normal,21.1
+2020,Kutoarjo,Mundur,16,Normal,26,12.0,398.6192307692308,Maju,10.8,Atas Normal,19.8
+2020,Loano,Mundur,16,Normal,26,13.5,429.06538461538463,Maju,11.3,Atas Normal,20.6
+2020,Ngombol,Maju,10,Normal,16,11.0,331.5,Maju,10.6,Atas Normal,19.6
+2020,Pituruh,Mundur,16,Normal,26,14.5,559.3423076923077,Maju,12.2,Atas Normal,21.2
+2020,Purwodadi,Maju,10,Normal,16,11.5,341.81538461538463,Maju,10.6,Atas Normal,19.7
+2020,Purworejo,Mundur,16,Normal,26,12.0,396.0,Maju,10.9,Atas Normal,19.8
+2021,Bagelen,Sama,12,Atas Normal,16,12.0,356.33076923076925,Sama,13.2,Bawah Normal,19.8
+2021,Banyuurip,Sama,12,Atas Normal,16,12.0,367.2192307692308,Sama,13.3,Bawah Normal,19.9
+2021,Bayan,Sama,12,Atas Normal,16,12.0,398.6192307692308,Maju,13.5,Bawah Normal,21.2
+2021,Bener,Maju,12,Atas Normal,21,14.0,456.09615384615387,Maju,13.8,Bawah Normal,21.9
+2021,Bruno,Maju,12,Atas Normal,25,15.0,608.0692307692308,Maju,13.8,Bawah Normal,22.3
+2021,Butuh,Sama,12,Atas Normal,16,12.0,423.54615384615386,Maju,13.6,Bawah Normal,21.8
+2021,Gebang,Maju,12,Atas Normal,25,13.5,459.7307692307692,Maju,13.6,Bawah Normal,22.2
+2021,Grabag,Sama,11,Atas Normal,16,11.0,332.58076923076925,Sama,13.1,Bawah Normal,19.4
+2021,Kaligesing,Maju,12,Atas Normal,25,13.5,435.9153846153846,Maju,13.6,Bawah Normal,21.9
+2021,Kemiri,Maju,12,Atas Normal,25,13.5,478.75,Maju,13.6,Bawah Normal,22.2
+2021,Kutoarjo,Sama,12,Atas Normal,16,12.0,398.6192307692308,Maju,13.5,Bawah Normal,21.2
+2021,Loano,Maju,12,Atas Normal,21,13.5,429.06538461538463,Maju,13.6,Bawah Normal,21.8
+2021,Ngombol,Sama,11,Atas Normal,16,11.0,331.5,Sama,13.1,Bawah Normal,19.5
+2021,Pituruh,Maju,12,Atas Normal,25,14.5,559.3423076923077,Maju,13.8,Bawah Normal,22.3
+2021,Purwodadi,Sama,12,Atas Normal,16,11.5,341.81538461538463,Sama,13.1,Bawah Normal,19.7
+2021,Purworejo,Sama,12,Atas Normal,16,12.0,396.0,Maju,13.5,Bawah Normal,20.3
+2022,Bagelen,Mundur,17,Atas Normal,22,12.0,356.33076923076925,Maju,11.9,Bawah Normal,20.2
+2022,Banyuurip,Mundur,17,Atas Normal,22,12.0,367.2192307692308,Maju,11.9,Bawah Normal,20.2
+2022,Bayan,Mundur,18,Atas Normal,22,12.0,398.6192307692308,Maju,12.7,Bawah Normal,20.2
+2022,Bener,Mundur,18,Atas Normal,22,14.0,456.09615384615387,Maju,15.7,Bawah Normal,20.8
+2022,Bruno,Mundur,18,Atas Normal,22,15.0,608.0692307692308,Maju,16.4,Bawah Normal,21.1
+2022,Butuh,Mundur,18,Atas Normal,22,12.0,423.54615384615386,Maju,13.1,Bawah Normal,20.3
+2022,Gebang,Mundur,18,Atas Normal,22,13.5,459.7307692307692,Maju,15.4,Bawah Normal,20.9
+2022,Grabag,Mundur,18,Atas Normal,24,11.0,332.58076923076925,Maju,11.2,Bawah Normal,19.5
+2022,Kaligesing,Mundur,18,Atas Normal,22,13.5,435.9153846153846,Maju,15.2,Bawah Normal,20.8
+2022,Kemiri,Mundur,18,Atas Normal,22,13.5,478.75,Maju,15.5,Bawah Normal,20.9
+2022,Kutoarjo,Mundur,18,Atas Normal,22,12.0,398.6192307692308,Maju,12.7,Bawah Normal,20.2
+2022,Loano,Mundur,18,Atas Normal,22,13.5,429.06538461538463,Maju,15.0,Bawah Normal,20.8
+2022,Ngombol,Mundur,17,Atas Normal,22,11.0,331.5,Maju,11.2,Bawah Normal,20.0
+2022,Pituruh,Mundur,18,Atas Normal,22,14.5,559.3423076923077,Maju,16.1,Bawah Normal,21.1
+2022,Purwodadi,Mundur,17,Atas Normal,22,11.5,341.81538461538463,Maju,11.6,Bawah Normal,20.2
+2022,Purworejo,Mundur,18,Atas Normal,22,12.0,396.0,Maju,12.7,Bawah Normal,20.2
+2023,Bagelen,Mundur,14,Bawah Normal,16,12.0,356.33076923076925,Maju,12.2,Bawah Normal,16.5
+2023,Banyuurip,Mundur,14,Bawah Normal,16,12.0,367.2192307692308,Maju,12.2,Bawah Normal,16.5
+2023,Bayan,Mundur,14,Bawah Normal,18,12.0,398.6192307692308,Sama,12.6,Bawah Normal,16.6
+2023,Bener,Sama,14,Bawah Normal,16,14.0,456.09615384615387,Maju,12.9,Bawah Normal,17.4
+2023,Bruno,Maju,14,Bawah Normal,26,15.0,608.0692307692308,Maju,13.3,Bawah Normal,17.5
+2023,Butuh,Mundur,14,Bawah Normal,26,12.0,423.54615384615386,Mundur,12.7,Bawah Normal,16.6
+2023,Gebang,Sama,14,Bawah Normal,26,13.5,459.7307692307692,Mundur,12.8,Bawah Normal,17.4
+2023,Grabag,Mundur,14,Bawah Normal,16,11.0,332.58076923076925,Maju,11.9,Bawah Normal,16.4
+2023,Kaligesing,Sama,14,Bawah Normal,16,13.5,435.9153846153846,Mundur,12.8,Bawah Normal,17.3
+2023,Kemiri,Sama,14,Bawah Normal,26,13.5,478.75,Mundur,12.9,Bawah Normal,17.4
+2023,Kutoarjo,Mundur,14,Bawah Normal,18,12.0,398.6192307692308,Sama,12.6,Bawah Normal,16.6
+2023,Loano,Sama,14,Bawah Normal,16,13.5,429.06538461538463,Mundur,12.7,Bawah Normal,17.2
+2023,Ngombol,Mundur,14,Bawah Normal,16,11.0,331.5,Maju,11.9,Bawah Normal,16.4
+2023,Pituruh,Sama,14,Bawah Normal,26,14.5,559.3423076923077,Maju,13.3,Bawah Normal,17.6
+2023,Purwodadi,Mundur,14,Bawah Normal,16,11.5,341.81538461538463,Maju,12.0,Bawah Normal,16.5
+2023,Purworejo,Mundur,14,Bawah Normal,16,12.0,396.0,Sama,12.6,Bawah Normal,16.6
+2024,Bagelen,Mundur,13,Bawah Normal,18,12.0,356.33076923076925,Maju,13.4,Atas Normal,18.5
+2024,Banyuurip,Mundur,13,Bawah Normal,18,12.0,367.2192307692308,Maju,13.5,Atas Normal,18.7
+2024,Bayan,Mundur,13,Bawah Normal,26,12.0,398.6192307692308,Maju,14.6,Atas Normal,18.7
+2024,Bener,Maju,13,Bawah Normal,26,14.0,456.09615384615387,Maju,15.0,Atas Normal,20.0
+2024,Bruno,Maju,13,Bawah Normal,26,15.0,608.0692307692308,Maju,15.9,Atas Normal,20.7
+2024,Butuh,Mundur,13,Bawah Normal,26,12.0,423.54615384615386,Maju,14.9,Atas Normal,18.8
+2024,Gebang,Sama,13,Bawah Normal,26,13.5,459.7307692307692,Maju,15.1,Atas Normal,20.2
+2024,Grabag,Mundur,13,Bawah Normal,18,11.0,332.58076923076925,Maju,12.7,Atas Normal,18.3
+2024,Kaligesing,Sama,13,Bawah Normal,26,13.5,435.9153846153846,Maju,14.9,Atas Normal,20.0
+2024,Kemiri,Sama,13,Bawah Normal,26,13.5,478.75,Maju,15.4,Atas Normal,20.4
+2024,Kutoarjo,Mundur,13,Bawah Normal,26,12.0,398.6192307692308,Maju,14.6,Atas Normal,18.7
+2024,Loano,Sama,13,Bawah Normal,26,13.5,429.06538461538463,Maju,14.8,Atas Normal,19.6
+2024,Ngombol,Mundur,13,Bawah Normal,18,11.0,331.5,Maju,12.7,Atas Normal,18.2
+2024,Pituruh,Maju,13,Bawah Normal,26,14.5,559.3423076923077,Maju,15.9,Atas Normal,20.7
+2024,Purwodadi,Mundur,13,Bawah Normal,18,11.5,341.81538461538463,Maju,12.4,Atas Normal,18.3
+2024,Purworejo,Mundur,13,Bawah Normal,18,12.0,396.0,Maju,14.6,Atas Normal,18.7
+2025,Bagelen,Maju,10,Atas Normal,16,12.0,356.33076923076925,Maju,11.8,Normal,22.0
+2025,Banyuurip,Maju,10,Atas Normal,20,12.0,367.2192307692308,Maju,12.0,Normal,22.3
+2025,Bayan,Maju,10,Atas Normal,17,12.0,398.6192307692308,Maju,12.6,Normal,23.9
+2025,Bener,Maju,10,Atas Normal,17,14.0,456.09615384615387,Maju,13.3,Normal,24.5
+2025,Bruno,Mundur,16,Atas Normal,18,15.0,608.0692307692308,Maju,13.4,Normal,24.5
+2025,Butuh,Maju,10,Atas Normal,18,12.0,423.54615384615386,Maju,12.9,Normal,23.9
+2025,Gebang,Maju,11,Atas Normal,18,13.5,459.7307692307692,Maju,13.2,Normal,24.5
+2025,Grabag,Maju,10,Atas Normal,16,11.0,332.58076923076925,Maju,11.6,Normal,21.7
+2025,Kaligesing,Maju,11,Atas Normal,17,13.5,435.9153846153846,Maju,13.2,Normal,24.5
+2025,Kemiri,Maju,11,Atas Normal,18,13.5,478.75,Maju,13.3,Normal,24.5
+2025,Kutoarjo,Maju,10,Atas Normal,17,12.0,398.6192307692308,Maju,12.6,Normal,23.9
+2025,Loano,Maju,10,Atas Normal,18,13.5,429.06538461538463,Maju,13.2,Normal,24.4
+2025,Ngombol,Maju,10,Atas Normal,16,11.0,331.5,Maju,11.6,Normal,21.6
+2025,Pituruh,Mundur,16,Atas Normal,25,14.5,559.3423076923077,Maju,13.4,Normal,24.5
+2025,Purwodadi,Maju,10,Atas Normal,16,11.5,341.81538461538463,Maju,11.6,Normal,21.9
+2025,Purworejo,Maju,10,Atas Normal,17,12.0,396.0,Maju,12.5,Normal,23.2
